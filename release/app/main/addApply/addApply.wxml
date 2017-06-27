@@ -1,0 +1,43 @@
+<import src='/pages/index/common.wxml' />
+
+<template is="add-category" data="{{categoryModel}}">
+</template>
+
+<template is="cell-notice" data="{{noticeStr}}">
+</template>
+
+<template is="time-start" data="{{startDateModel}}">
+</template>
+
+<template is="time-end" data="{{endDateModel}}">
+</template>
+
+<template is="apply-person" data="{{tempApprove}}">
+</template>
+
+<template wx:if="{{!isCard}}" is="time-length" data="{{hour}}">
+
+
+</template>
+
+<template is="reason" data="{{reason}}">
+</template>
+
+<template is="cell-pricture-title" data="{{imageShowArr}}">
+</template>
+
+<template is="cell-picture" data="{{files}}">
+
+</template>
+<template is="cell-submit-modify">
+</template>
+
+
+
+
+
+
+
+
+
+  

@@ -1,0 +1,70 @@
+<div data-bind='component: {
+     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}
+}'>
+
+</div>
+
+
+<!-- row -->
+<div class="row">
+
+	<!-- NEW WIDGET START -->
+	<article class="col-sm-12 col-md-12 col-lg-12">
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>类型</th>
+					<th>开始时间</th>
+					<th>结束时间</th>
+					<th>时长</th>
+					<th>状态</th>
+					<th colspan="2">操作</th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th>
+						<!-- Single button -->
+						<div class="btn-group">
+							<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <!-- ko text:model.selectedCategory --> <!-- /ko --> <span class="caret"></span>
+  </button>
+							<ul class="dropdown-menu" data-bind="foreach:model.vacationCategory">
+								<li><a href="#" data-bind="text:$data,click:function(){$root.categoryFilterClick($index)}"></a></li>
+							</ul>
+						</div>
+					</th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th><button type="button" class="btn btn-default btn-block" data-bind="click:goToAddApplying">新增</button></th>
+				</tr>
+			</thead>
+
+			<tbody data-bind="foreach:model.data">
+				<tr>
+					<td data-bind="text:C3_533398158705">1</td>
+					<td data-bind="text:C3_541449959569 + '日' + C3_541450006047 + C3_541450072499 + ':' + C3_541450107087"></td>
+					<td data-bind="text:C3_541449974021 + '日' + C3_541450008801 + C3_541450084259 + ':' + C3_541450125786"></td>
+					<td data-bind='text:C3_541449935726'></td>
+					<td data-bind='text:C3_533407351131'></td>
+					<td>
+						<button class="btn btn-primary btn-block" data-bind="visible:((!(C3_541449606438=='Y')&&C3_541449538456=='Y') && C3_545927244809 == 'Y' ),click:$root.newp">附件</button>
+                            <button class="btn btn-primary btn-block" data-bind="visible:(C3_541449606438=='Y'||(C3_541449538456==null||C3_541449538456=='N')),click:$root.submite">提交</button>
+						</td>
+					<td>
+
+						<button class="btn btn-primary btn-block" data-bind="visible:(!(C3_541449606438=='Y')&&C3_541449538456=='Y')">详情</button>
+                            <button class="btn btn-primary btn-block" data-bind="visible:(C3_541449606438=='Y'||(C3_541449538456==null||C3_541449538456=='N'))">修改</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</article>
+	<!-- WIDGET END -->
+
+</div>
+
+<!-- end row -->
