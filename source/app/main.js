@@ -11,9 +11,10 @@ requirejs.config({
         'realsun': '../lib/realsun/js',
         'calendar': '../lib/fullcalendar',
         'components':'components',
-        'mobiscroll':'../lib/mobiscorll/mobiscroll.2.13.2',
-        // 'mobiscroll':'../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min'
-        'common':'common/common'
+        // 'mobiscroll':'../lib/mobiscorll/mobiscroll.2.13.2',
+        'mobiscroll':'../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min',
+        'common':'common/common',
+        'until':'until/until'
         
     }
      

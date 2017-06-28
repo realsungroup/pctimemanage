@@ -18,6 +18,7 @@
 
                   //配置所有类型
                 self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
+                self.model.vacationCategory(self.model.vacationCategory().unshift('全部'))
                 self.model.selectedCategory = ko.observable(appConfig.app.vacationCategory[0])
 
 

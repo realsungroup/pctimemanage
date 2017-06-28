@@ -21,7 +21,7 @@ function fixDataWithMethod(data, method) {
   data.dynlogin = 1;
 
  data.user = '18356288459';
-  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4NTU1NjEyLCJleHAiOjE0OTg2NDIwMTIsIm5iZiI6MTQ5ODU1NTYxMiwianRpIjoiYzZlOWU0YjItZTNlNi00MWRkLWIyYmQtYzVhYzI0Yjg1NDJhIn0.eenMY9qfDEUSS_Ipm89q54-ZFY57Jh08G6L7RFKoVyE';
+  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4NjQzMDY4LCJleHAiOjE0OTg3Mjk0NjgsIm5iZiI6MTQ5ODY0MzA2OCwianRpIjoiMDFiZTk4NDMtNDA4Yi00NjkxLWIzMjMtYTQzN2E1YzI0NGQ0In0.wa1eiFILAGIJPBQO_OV_PPHD81kNb5g6rsYLXU-S2-I';
   // data.AccessToken = appConfig.app.userInfo.AccessToken;
 
   //获取主表数据
@@ -129,6 +129,7 @@ function getPendingData(params, doSuccess, doFail){
   baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
 }
 
+//获取假期类型
 function getVacationHttpCategory( doSuccess, doFail){
   var params = {
       'resid': 542128856156,
@@ -139,6 +140,7 @@ function getVacationHttpCategory( doSuccess, doFail){
   baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
 }
 
+// 获取审批人
 function getTeamHttpApprove( doSuccess, doFail){
   var params = {
       'resid': 542225544503,
@@ -149,10 +151,33 @@ function getTeamHttpApprove( doSuccess, doFail){
   baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
 }
 
+// 获取退回类型
 function getRefuseHttpData(params,doSuccess, doFail){
  
   baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
 }
+
+// 添加请假数据
+function addApply(params, doSuccess, doFail) {
+   
+    params.resid = 541502768110;
+  baseRequest("GET",path.getData, params, 2, doSuccess, doFail);
+}
+
+// 保存请假数据
+function saveApply(params, doSuccess, doFail) {
+  var params = {
+    'resid': 541502768110,
+    'data': data
+  }
+  baseRequest("GET",path.getData, params, 2, doSuccess, doFail);
+}
+
+//计算时长
+function hourCalculate(params, doSuccess, doFail) {
+  baseRequest("GET",path.getData, params, 2, doSuccess, doFail);
+}
+
 
 var httpService = {
   accountLogin:accountLogin,
@@ -160,7 +185,10 @@ var httpService = {
   getPendingData:getPendingData,
   getVacationHttpCategory:getVacationHttpCategory,
   getTeamHttpApprove:getTeamHttpApprove,
-  getRefuseHttpData:getRefuseHttpData
+  getRefuseHttpData:getRefuseHttpData,
+  addApply:addApply,
+  saveApply:saveApply,
+  hourCalculate:hourCalculate
 }
 
 // //图片上传

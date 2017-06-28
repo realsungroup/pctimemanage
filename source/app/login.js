@@ -65,7 +65,6 @@
         for (var i = 0; i < dataArr.length; i++) {
           tmpArr.push(dataArr[i].C3_533402301362);
         }
-        tmpArr.unshift("全部");
         appConfig.app.rule = dataArr;
         appConfig.app.vacationCategory = tmpArr;
         self.data.vacationCategorySuccess = true
