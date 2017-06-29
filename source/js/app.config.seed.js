@@ -125,14 +125,15 @@ var root = this,
 
 routeTypeList = ["main","one"]
 
-
 routeList = [
-	{ route: '', title: 'applying', moduleId: 'main/viewmodels/applying', nav: true,chash:"#applying", type: "main" },
+	{ route: ['','applying'], title: 'applying', moduleId: 'main/viewmodels/applying', nav: true,chash:"#applying", type: "main" },
 	{ route: 'pending', title: 'pending', moduleId: 'main/viewmodels/pending', nav: true,chash:"#pending", type: "one" },
-	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false,chash:"#false"}
+	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false,chash:"#false"},
+	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false,chash:"#false"},
+
 ]
 
-
+localDebug = true;
 /*
  * END APP.CONFIG
  */

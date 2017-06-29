@@ -1,18 +1,19 @@
 define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService', 'mobiscroll', 'main/viewmodels/applying', 'common', 'until'], function (app, ko, router, http, mobi, applying, co) {
+  'httpService', 'mobiscroll', 'main/viewmodels/applying', 'common', 'until','components/cellReadonlyCpt'], function (app, ko, router, http, mobi, applying, co) {
     var self;
     return {
       model: {
         title: '我的申请',
         subTitle: '添加申请',
         vacationCategory: [],
-        selectedCategory: '',
-        noticeStr: ko.observable(''),
+        selectedCategory: ko.observable(''),
+        noticeStr: ko.observable(''),//提示
         imgShowArr: ko.observableArray(),
-        data: ko.observable({}),
-        isDraft: false
+        data: null,
+        isDraft: false,//是否草稿
+        isCard:ko.observable(false)
       },
       activate: function (e) {
         self = this;
@@ -24,6 +25,8 @@ define(['durandal/app',
           var idx = parseInt(e.index);
           self.model.isDraft = true;
           var passData = applying.model.data()[idx];
+          
+          self.model.selectedCategory(passData.C3_533398158705);
           self.model.data(passData);
         }
 
@@ -33,9 +36,12 @@ define(['durandal/app',
 
       },
       init: function () {
+        self.model.data = ko.observable({});
+
         //配置所有类型
         self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
-        self.model.data().C3_533398158705 = ko.observable(appConfig.app.vacationCategory[0]);
+        self.model.selectedCategory(appConfig.app.vacationCategory[0]);
+        self.model.selectedCategory('病假');
         // self.model.data( self.model.data());
 
         ko.computed(self.kvoSelectCategory);
@@ -114,10 +120,10 @@ define(['durandal/app',
 
 
 
-        if (self.model.data().C3_533398158705() != '补打卡') optEnd.default.min = defaultNow;
+        if (!self.model.isCard()) optEnd.default.min = defaultNow;
 
 
-        var itemTitle = self.model.data().C3_533398158705();//获取当前类型
+        var itemTitle = self.model.data().C3_533398158705;//获取当前类型
         var hor = 1, mte = 30;
         if (itemTitle == '事假' ||
           itemTitle == '病假' ||
@@ -162,14 +168,63 @@ define(['durandal/app',
         //   }
         // });
 
+        
+
       },
       deactivate: function () {
         self = undefined;
       },
+      selectImgChange: function(index,data,event){
+        index = index();
+        var src, url = window.URL || window.webkitURL || window.mozURL, files = event.target.files;
+            for (var i = 0, len = files.length; i < len; ++i) {
+                var file = files[i];
+
+                // if (url) {
+                //     src = url.createObjectURL(file);
+                // } else {
+                //     src = e.target.result;
+                // }
+
+                // $uploaderFiles.append($(tmpl.replace('#url#', src)));
+        
+                console.log(src);
+                httpService.uploadImg(file,function(imgUrl){
+                  if (index == 0) {
+                            self.model.data().C3_541450276993 = imgUrl;
+                        } else if (index == 1) {
+                            self.model.data().C3_545771156108 = imgUrl;
+                        } else if (index == 2) {
+                            self.model.data().C3_545771157350 = imgUrl;
+                        } else {
+                            self.model.data().C3_545771158420 = imageurl;
+                        }
+                        self.model.data(self.model.data());
+                })
+            }
+      },
+
+      imgClick:function(index){
+        index = index();
+
+        $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
+        // $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+      },
+      galleryClick:function(){
+        $gallery = $("#gallery");
+         $gallery.fadeOut(100);
+      },
 
       //监听选择出对应的注意事项
       kvoSelectCategory: function () {
-        var currentCategory = self.model.data().C3_533398158705();
+        self.model.data().C3_533398158705 = self.model.selectedCategory();
+        var currentCategory = self.model.data().C3_533398158705;
+
+        if(currentCategory == '补打卡') 
+        self.model.isCard(true)
+        else
+        self.model.isCard(false)
 
         var tmpNoticeStr = common.getRule(currentCategory);
         self.model.noticeStr(tmpNoticeStr);
@@ -178,6 +233,8 @@ define(['durandal/app',
         var tmpImgShowArr = common.getCarmeShow(tmpVacationObj);
         self.model.imgShowArr(tmpImgShowArr)
 
+
+      
       },
 
 
@@ -186,7 +243,7 @@ define(['durandal/app',
         var data1 = {
           "C3_546130034510": self.model.data().C3_533143179815,
           "C3_546130034799": self.model.data().C3_533143217561,
-          "C3_546130035036": self.model.data().C3_533398158705(),
+          "C3_546130035036": self.model.data().C3_533398158705,
           "C3_546181010461": appConfig.app.userInfo.data.Dep1Code
         }
 
@@ -198,7 +255,7 @@ define(['durandal/app',
         var data2 = {
           "C3_545822726730": self.model.data().C3_533143179815,
           "C3_545822726977": self.model.data().C3_533143217561,
-          "C3_545822727444": self.model.data().C3_533398158705()
+          "C3_545822727444": self.model.data().C3_533398158705
 
         }
 
@@ -235,30 +292,47 @@ define(['durandal/app',
           }
         }
         console.log(tmpData);
-
-        if (self.model.isDraft) {
-          // httpService.
-        } else {
-          if (action == 'save') tmpData.C3_541449538456 = "N"
+        if (action == 'save') tmpData.C3_541449538456 = "N"
           else tmpData.C3_541449538456 = "Y"
-
-          var param = {
+        var param = {
             'data': tmpData
           }
-          httpService.addApply(param, function (resData) {
+
+        if (self.model.isDraft) {
+          httpService.saveApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-              alert("success");
+              cmAlert("success");
               var returnData = resData.data[0];
               applying.model.data().unshift(returnData);
               applying.model.data(applying.model.data());
               router.navigateBack();
 
             }else{
-              alert("error");
+              cmAlert("error");
             }
 
           },function(){
-            alert("fail");
+            cmAlert("fail");
+          });
+
+        } else {
+          
+
+          
+          httpService.addApply(param, function (resData) {
+            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+              cmAlert("success");
+              var returnData = resData.data[0];
+              applying.model.data().unshift(returnData);
+              applying.model.data(applying.model.data());
+              router.navigateBack();
+
+            }else{
+              cmAlert("error");
+            }
+
+          },function(){
+            cmAlert("fail");
           });
         }
       }

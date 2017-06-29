@@ -7,3 +7,91 @@
     height: auto !important;
     min-height: 34px;
 }
+
+.img-gallery{
+    display: block;
+    width: inherit;
+    height: inherit;
+}
+
+/*审批流*/
+
+.cgsp{
+    background-image: url(../../../images/)
+}
+
+.spjl{
+background-image: url(../../../images/wangjingli.png)
+}
+
+.spzg{
+background-image: url(../../../images/zhangzhuguan.png)
+}
+
+.spzz{
+background-image: url(../../../images/lizhuzhang.png)
+}
+
+/*审批流cell*/
+.pendend-cell{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    min-height: 28px;
+    position: relative;
+  -webkit-box-align: center;
+  -webkit-align-items:center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.pended-process{
+    -webkit-box-flex: 0 0 51px;
+    -webkit-flex:0 0 51px;
+    flex: 0 0 51px;
+    height: 51px;
+    background-size: 51px 51px;
+    margin-left: 33px;
+}
+
+.pended-process-person{
+    -webkit-box-flex: 1 1 auto;
+    -webkit-flex:1 1 auto;
+    flex: 1 1 auto;
+    text-indent: 10px;
+    line-height: 51px;
+    font-size: 14px;
+
+}
+.pended-process-state{
+    -webkit-box-flex: 0 0 20px;
+    -webkit-flex:0 0 20px;
+    flex: 0 0 20px;
+    height: 20px;
+    background-size: 20px 20px;
+}
+
+.pended-process-date{
+    -webkit-box-flex:  0 0 120px;
+    -webkit-flex: 0 0 120px;
+    flex: 0 0 120px;
+    font-size: 12px;
+    margin-right: 10px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.cancel{
+  color: white !important;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  background-color: #EE2A15;
+}
+
+.col-red-line{/*审批流红线*/
+  width: 2px;
+  height: 20px;
+  position: absolute;
+  left: 58px;
+  bottom: 0;
+}

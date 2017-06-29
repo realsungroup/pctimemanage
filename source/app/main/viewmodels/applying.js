@@ -17,9 +17,10 @@
                 
 
                   //配置所有类型
-                self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
-                self.model.vacationCategory(self.model.vacationCategory().unshift('全部'))
-                self.model.selectedCategory = ko.observable(appConfig.app.vacationCategory[0])
+                  var allVacationCategory = ['全部'];
+                  allVacationCategory = allVacationCategory.concat(appConfig.app.vacationCategory)
+                self.model.vacationCategory = ko.observable(allVacationCategory);
+                self.model.selectedCategory = ko.observable(allVacationCategory[0])
 
 
                 self.getData(0);
@@ -89,6 +90,15 @@
             categoryFilterClick:function(index){
                 self.model.selectedCategory(self.model.vacationCategory()[index()]);
                 self.getData(0);
+            },
+            goToEditPage:function(index){
+
+                router.navigate("#addApply?index=" + index());
+            },
+            goToApplyDetailPage:function(index){
+                var tmpData = self.model.data()[index()];
+                var tmpJsonData = JSON.stringify(tmpData);
+                router.navigate("#applyDetail?data=" + tmpJsonData);
             }
         };
     }); 

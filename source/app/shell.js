@@ -13,6 +13,7 @@
             var tmpArr = new Array();
             routeTypeList.forEach(function (item) {
                 tmpArr.push(router.routes.filter(function (val) {
+                    if(val.hash == '#') return false;
                     return val.type == item;
                 }))
             })

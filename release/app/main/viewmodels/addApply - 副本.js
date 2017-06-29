@@ -1,7 +1,7 @@
 define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService', 'mobiscroll', 'main/viewmodels/applying', 'common', 'until','components/cellReadonlyCpt'], function (app, ko, router, http, mobi, applying, co) {
+  'httpService', 'mobiscroll', 'main/viewmodels/applying', 'common', 'until'], function (app, ko, router, http, mobi, applying, co) {
     var self;
     return {
       model: {

@@ -7,9 +7,12 @@
         </div>
     </div>
 
-     <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->
-                                                                                       
-    <!--/ko-->
+    <div class="form-group">
+        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">注意事项</label>
+        <div class=" col-sm-10 col-md-10 col-lg-10">
+            <p class="form-control height-auto" data-bind="text:model.noticeStr"></p>
+        </div>
+    </div>
 
     <div class="form-group">
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">开始时间</label>
@@ -25,10 +28,13 @@
         </div>
     </div>
 
-    <!--审批人cellApprovePersonCpt-->
-    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->
-                                                                                       
-    <!--/ko-->
+    <!--审批人-->
+    <div class="form-group">
+        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">审批人</label>
+        <div class=" col-sm-10 col-md-10 col-lg-10">
+            <input type="text" class="form-control" data-bind="value:model.approver" readonly/>
+        </div>
+    </div>
 
     <!--时长-->
     <div class="form-group" data-bind="visible:!model.isCard()">

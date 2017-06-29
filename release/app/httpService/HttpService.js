@@ -21,7 +21,7 @@ function fixDataWithMethod(data, method) {
   data.dynlogin = 1;
 
  data.user = '18356288459';
-  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4NjQzMDY4LCJleHAiOjE0OTg3Mjk0NjgsIm5iZiI6MTQ5ODY0MzA2OCwianRpIjoiMDFiZTk4NDMtNDA4Yi00NjkxLWIzMjMtYTQzN2E1YzI0NGQ0In0.wa1eiFILAGIJPBQO_OV_PPHD81kNb5g6rsYLXU-S2-I';
+  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4NzI5ODUxLCJleHAiOjE0OTg4MTYyNTEsIm5iZiI6MTQ5ODcyOTg1MSwianRpIjoiMzgyZDMyYjktYTI2Yy00MjUwLWIyZTctMDAwNWE3YTFmMjA0In0.VHNBRdkKI8oYx4X5CqLXwTYE5KDYsGUEMNx-n07SwJs';
   // data.AccessToken = appConfig.app.userInfo.AccessToken;
 
   //获取主表数据
@@ -166,16 +166,65 @@ function addApply(params, doSuccess, doFail) {
 
 // 保存请假数据
 function saveApply(params, doSuccess, doFail) {
-  var params = {
-    'resid': 541502768110,
-    'data': data
-  }
-  baseRequest("GET",path.getData, params, 2, doSuccess, doFail);
+  params.resid = 541502768110;
+  baseRequest("GET",path.getData, params, 4, doSuccess, doFail);
 }
 
 //计算时长
 function hourCalculate(params, doSuccess, doFail) {
   baseRequest("GET",path.getData, params, 2, doSuccess, doFail);
+}
+
+// 上传图片
+function uploadImg(param,doSuccess, doFail) {
+   var xhr = new XMLHttpRequest();
+                var uploadFileUrl = 'http://kingofdinner.realsun.me:8081/rispweb/rispservice/SvcUploadFile2.aspx'
+                httppath = "http://kingofdinner.realsun.me:8081/rispweb/upfiles"
+                  var upUrlStr = uploadFileUrl+ '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//alert(upUrlStr);
+                  xhr.open('POST', upUrlStr);
+                  xhr.onload = function () {
+                        var data = JSON.parse(xhr.response);
+                        if (xhr.status === 200) {
+                              alert("上传成功");
+                              var imgUrl = data.httpfilename;
+                              console.log(imgUrl);
+                              if(doSuccess) doSuccess(imgUrl);
+                        } else {
+                              if(doFail) doFail();
+                              // 处理错误
+                              alert('error==' + data);
+                        }
+                  };
+
+
+                  var fd = new FormData();
+                  fd.append("file", param, 'hello.png');//新建formdata提交，png格式
+                  xhr.send(fd);
+}
+
+//获取审批流
+function getPendingPepleData(paramREC_ID,doSuccess, doFail){
+   var params = {
+      'resid': 541502768110,
+      'subresid': 541521075674,
+      'cmswhere': '',
+      'hostrecid': paramREC_ID,
+      'cmsorder': ''
+    }
+    baseRequest("GET",path.getData, params, 3, doSuccess, doFail);
+}
+
+
+//撤销
+function cancelApply(data,doSuccess, doFail) {
+  data.C3_541449646638 = 'Y';
+  var params = {
+    'resid': 541502768110,
+    'data': data
+  }
+
+  customLoading();
+  baseRequest("GET",path.getData, params, 4, doSuccess, doFail);
 }
 
 
@@ -188,76 +237,8 @@ var httpService = {
   getRefuseHttpData:getRefuseHttpData,
   addApply:addApply,
   saveApply:saveApply,
-  hourCalculate:hourCalculate
+  hourCalculate:hourCalculate,
+  uploadImg:uploadImg,
+  getPendingPepleData:getPendingPepleData,
+  cancelApply:cancelApply
 }
-
-// //图片上传
-// function uploadImg(tempFilePath,callback){
-//   //res.tempFilePaths[0]
-//     wx.uploadFile({
-//       url: getApp().Config.uploadImgPath + tempFilePath,
-//       filePath: tempFilePath,
-//       name: 'file',
-//       success: function (e) {
-//         var data = e.data;
-//         console.log("image-====>" + e.data);
-//         var imgModel = JSON.parse(e.data);
-//         if (imgModel.Data) {
-//           callback(getApp().Config.basePath + imgModel.Data)
-//         } else {
-//           wx.showModal({
-//             title: '注意',
-//             content: '上传错误',
-//           })
-//         }
-
-//       },
-//       fail: function (e) {
-//         wx.showModal({
-//           title: '注意',
-//           content: '图片上传失败',
-//         })
-//       }
-//     })
-
-
-// }
-
-/*
-//获取openid unionid
-function customLogin(params, doSuccess, doFail) {
-  getRequest(path.dataLogin, params, doSuccess, doFail);
-}
-
-//发送验证码
-function sendValidMsg(params, doSuccess, doFail) {
-  // params.openid = wx.getStorageSync('openid');
-  // params.unionid = wx.getStorageSync('unionid');
-  getRequest(path.sendValiateCode, params, doSuccess, doFail);
-}
-
-//验证
-function authClient(params, doSuccess, doFail) {
-  // params.openid = wx.getStorageSync('openid');
-  // params.unionid = wx.getStorageSync('unionid');
-  getRequest(path.authCode, params, doSuccess, doFail);
-}
-
-// module.exports = {
-//   customWxLogin: customWxLogin,
-//   getApplyData: getApplyData,
-//   hourCalculate: hourCalculate,
-//   addApply: addApply,
-//   getSubData: getSubData,
-//   saveData: saveData,
-//   addData: addData,
-//   getData:getData,
-//   saveDataArr:saveDataArr,
-//   uploadImg: uploadImg,
-//   customLogin: customLogin,
-//   sendValidMsg: sendValidMsg,
-//   authClient: authClient
-// }
-
-
-*/

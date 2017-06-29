@@ -1,4 +1,4 @@
-﻿define(['durandal/app','knockout','plugins/router','httpService','cellBody'], function (app,ko,router) {
+﻿define(['durandal/app','knockout','plugins/router','httpService'], function (app,ko,router) {
     var self;
     return {
         model:{
@@ -6,7 +6,7 @@
         },
         activate:function(e){
             self = this;
-            self.getData(0);
+            // self.getData(0);
           
         },
         attached:function(){

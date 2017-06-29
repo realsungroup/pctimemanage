@@ -56,8 +56,8 @@
 						</td>
 					<td>
 
-						<button class="btn btn-primary btn-block" data-bind="visible:(!(C3_541449606438=='Y')&&C3_541449538456=='Y')">详情</button>
-                            <button class="btn btn-primary btn-block" data-bind="visible:(C3_541449606438=='Y'||(C3_541449538456==null||C3_541449538456=='N'))">修改</button>
+						<button class="btn btn-primary btn-block" data-bind="visible:(!(C3_541449606438=='Y')&&C3_541449538456=='Y'),click:function(){$root.goToApplyDetailPage($index)}">详情</button>
+                            <button class="btn btn-primary btn-block" data-bind="visible:(C3_541449606438=='Y'||(C3_541449538456==null||C3_541449538456=='N')),click:function(){$root.goToEditPage($index)}">修改</button>
 					</td>
 				</tr>
 			</tbody>

@@ -17,3 +17,11 @@ Date.prototype.format = function (format)
   ("00"+ o[k]).substr((""+ o[k]).length));
   return format;
  }  
+
+ function cmAlert(title){
+    alert(title);
+ }
+
+ function customLoading(){
+     
+ }

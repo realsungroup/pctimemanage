@@ -2,17 +2,14 @@
     <div class="form-group">
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">申请类别</label>
         <div class=" col-sm-10 col-md-10 col-lg-10 dropdown">
-            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.data().C3_533398158705">
+            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.selectedCategory">
             </select>
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">注意事项</label>
-        <div class=" col-sm-10 col-md-10 col-lg-10">
-            <p class="form-control height-auto" data-bind="text:model.noticeStr"></p>
-        </div>
-    </div>
+     <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->
+                                                                                       
+    <!--/ko-->
 
     <div class="form-group">
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">开始时间</label>
@@ -28,16 +25,13 @@
         </div>
     </div>
 
-    <!--审批人-->
-    <div class="form-group">
-        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">审批人</label>
-        <div class=" col-sm-10 col-md-10 col-lg-10">
-            <input type="text" class="form-control" data-bind="value:model.approver" readonly/>
-        </div>
-    </div>
+    <!--审批人cellApprovePersonCpt-->
+    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->
+                                                                                       
+    <!--/ko-->
 
     <!--时长-->
-    <div class="form-group">
+    <div class="form-group" data-bind="visible:!model.isCard()">
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">时长</label>
         <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">
             <input type="text" class="form-control" data-bind="value:model.data().C3_541449935726" readonly aria-describedby="aria-time" />
@@ -62,7 +56,9 @@
         <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">
             <input type="text" class="form-control" data-bind="text:$data[1]" readonly aria-describedby="aria-time" />
             <!--<span class="input-group-addon" id="aria-time">选择文件</span>-->
-            <span class="input-group-addon" id="aria-time"><input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple/>选择文件</span>
+            <span class="input-group-addon" id="aria-time">
+                <input id="uploaderInput" class="weui-uploader__input"  data-bind="event:{change:function(data,event){$root.selectImgChange($index,data,event)}}" type="file" accept="image/*"/>
+                选择文件</span>
             
         </div>
     </div>
@@ -71,14 +67,16 @@
     <!--<div data-bind="text:model.data().C3_541450276993">
        
     </div>-->
-    <div class="form-group" data-bind="foreach:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]">
+    <!--<div class="form-group" data-bind="foreach:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]">
         <img data-bind="attr:{src:$data}" alt="">
-    </div>
+    </div>-->
 
     <div class="form-group">
            <div class="weui-uploader__bd">
                             <ul class="weui-uploader__files" id="uploaderFiles" data-bind="foreach:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]">
-                                <li class="weui-uploader__file" data-bind="css:{'background-image':'url(' + $data +')'},visible:$data"></li>
+                                <!--<li class="weui-uploader__file" data-bind="css:{'background-image':'url(' + $data +')'},visible:$data"></li>-->
+                                <!--<li class="weui-uploader__file" > <img class="img-gallery" data-bind="attr:{src:$data},visible:$data,click:function(){imgClick($index)}" alt=""></li>-->
+                                <li class="weui-uploader__file" data-bind="style:{backgroundImage:'url('+ 'http://kingofdinner.realsun.me:8081/rispweb/upfiles/552058584375.png' + ')'},click:function(){$root.imgClick($index)}"></li>
                             </ul>
                         </div>
     </div>
@@ -94,3 +92,13 @@
 
 
 </form>
+
+<div class="weui-gallery" id="gallery" data-bind="click:galleryClick">
+            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:'url('+ 'http://kingofdinner.realsun.me:8081/rispweb/upfiles/552058584375.png' + ')'}" >
+            </span>
+            <!--<div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>-->
+        </div>
