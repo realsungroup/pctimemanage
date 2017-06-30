@@ -21,7 +21,7 @@ function fixDataWithMethod(data, method) {
   data.dynlogin = 1;
 
  data.user = '18356288459';
-  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4NzI5ODUxLCJleHAiOjE0OTg4MTYyNTEsIm5iZiI6MTQ5ODcyOTg1MSwianRpIjoiMzgyZDMyYjktYTI2Yy00MjUwLWIyZTctMDAwNWE3YTFmMjA0In0.VHNBRdkKI8oYx4X5CqLXwTYE5KDYsGUEMNx-n07SwJs';
+  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4ODE2NzcyLCJleHAiOjE0OTg5MDMxNzIsIm5iZiI6MTQ5ODgxNjc3MiwianRpIjoiYjFiMDY2ZTEtNWY1OC00ZWEyLTkwMTEtMjliYTE1ZDAyN2VjIn0.UuOGzm773owHc_SM2LuItE1NmWNJ-ICiCZ_ysiUUua4';
   // data.AccessToken = appConfig.app.userInfo.AccessToken;
 
   //获取主表数据
@@ -227,6 +227,33 @@ function cancelApply(data,doSuccess, doFail) {
   baseRequest("GET",path.getData, params, 4, doSuccess, doFail);
 }
 
+// 获取已审核数据
+function getAppledData(params, doSuccess, doFail){
+  params.resid = 541518522808
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
+
+//退回修改数据 
+function getFixSubmitData(params, doSuccess, doFail){
+  params.resid = 543000345781
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
+
+
+// 我的申请历史记录
+function getApplyHistoryData(params, doSuccess, doFail){
+  params.resid = 541518678060
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
+
+//审批
+function approveDataArr(param, doSuccess, doFail) {
+   var params = {
+      'resid': 541518842754,
+      'data': param
+    }
+  baseRequest("GET",path.getData, params, 5, doSuccess, doFail);
+}
 
 var httpService = {
   accountLogin:accountLogin,
@@ -240,5 +267,9 @@ var httpService = {
   hourCalculate:hourCalculate,
   uploadImg:uploadImg,
   getPendingPepleData:getPendingPepleData,
-  cancelApply:cancelApply
+  cancelApply:cancelApply,
+  getAppledData:getAppledData,
+  getFixSubmitData:getFixSubmitData,
+  getApplyHistoryData:getApplyHistoryData,
+  approveDataArr:approveDataArr
 }

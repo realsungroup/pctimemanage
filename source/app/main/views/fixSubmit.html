@@ -1,0 +1,80 @@
+<form class="form-horizontal">
+
+    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--结束时间cellEndTimeReadonlyCpt-->
+    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--审批人cellApprovePersonCpt-->
+    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--时长 cellTimeLenghtReadonlyCpt-->
+    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--事由 cellReasonEdit-->
+    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--退回理由-->
+    <div class='form-group'>
+        <label for='' class='col-sm-2 col-md-2 col-lg-2 control-label'>退回理由</label>
+        <div class=' col-sm-10 col-md-10 col-lg-10'>
+            <p class='form-control height-auto' data-bind="text:model.data().C3_541451198969 == '其他' ? model.data().C3_547719838514 : model.data().C3_541451198969"></p>
+        </div>
+    </div>
+
+    <!-- 拍照 -->
+    <!-- ko foreach:model.imgShowArr -->
+         <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->
+                                                                                       
+         <!--/ko-->
+    <!-- /ko -->
+
+    <!--附件 cellAttachCpt-->
+     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->
+                                                                                       
+    <!--/ko-->
+
+     <!--审批流 cellPendPersonCpt-->
+    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->
+    <!--/ko-->
+    
+    <!--保存提交cellSubmitBtnCpt-->
+     <!--ko component: "cellSubmitBtnCpt"-->
+                                                                                       
+    <!--/ko-->
+
+    <!--撤销 cellCancelBtnCpt-->
+     <!--ko component: "cellCancelBtnCpt"-->
+                                                                                       
+    <!--/ko-->
+
+
+
+
+<!--cellPictureCpt-->
+<!--ko component: { name: "cellPictureCpt",params:{src:model.galleryImgUrl()} }-->
+                                                                                       
+    <!--/ko-->
+</form>
+
+
+
+

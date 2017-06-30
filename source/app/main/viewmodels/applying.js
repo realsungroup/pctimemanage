@@ -2,7 +2,7 @@
     'knockout',
     'plugins/router',
     'httpService',
-    'components/headerCpt'], function (app, ko, router) {
+    'components/headerCpt','components/cellMainCpt'], function (app, ko, router) {
         var self;
         return {
             model: {
@@ -10,7 +10,8 @@
                 subTitle:'申请中',
                 data: ko.observableArray(),
                 vacationCategory:[],
-                selectedCategory:''
+                selectedCategory:'',
+                pageIndex:0
             },
             activate: function (e) {
                 self = this;
@@ -53,8 +54,8 @@
 
                 } else {//加载
                     // param.pageIndex = self.data.dataArr[self.data.pageIndex].length;
-                    var indx = Math.ceil(self.data.dataArr[self.data.pageIndex].length / param.pageSize);
-                    param.pageIndex = indx;
+                    // var indx = Math.ceil(self.data.dataArr[self.data.pageIndex].length / param.pageSize);
+                    param.pageIndex = self.model.pageIndex;
                 }
 
 
@@ -99,6 +100,17 @@
                 var tmpData = self.model.data()[index()];
                 var tmpJsonData = JSON.stringify(tmpData);
                 router.navigate("#applyDetail?data=" + tmpJsonData);
+            },
+
+
+            pageUp:function(){
+                self.model.pageIndex --;
+                // if(self.model.pageIndex <= 0)
+                self.getData(1);
+            },
+            pageDown:function(){
+                self.model.pageIndex ++;
+                self.getData(1);
             }
         };
     }); 

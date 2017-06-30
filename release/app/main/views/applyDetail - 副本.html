@@ -1,0 +1,74 @@
+<form class="form-horizontal">
+
+    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--结束时间cellEndTimeReadonlyCpt-->
+    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--审批人cellApprovePersonCpt-->
+    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--时长 cellTimeLenghtReadonlyCpt-->
+    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--事由-->
+    <div class="form-group">
+        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">事由</label>
+        <div class=" col-sm-10 col-md-10 col-lg-10">
+            <p class="form-control height-auto" data-bind="value:model.data().C3_533143291117"></p>
+        </div>
+    </div>
+
+    <!--附件 cellAttachCpt-->
+     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->
+                                                                                       
+    <!--/ko-->
+
+    <!--审批流-->
+    <div class="form-group">
+        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">审批流</label>
+        <!--ko foreach:model.pendedProcessData-->
+        <div class="pendend-cell col-sm-10 col-md-10 col-lg-10">
+            <image data-bind="attr:{src:C3_543790707188}" class="pended-process"></image>
+            <div class="pended-process-person" data-bind="text:C3_541450392920"></div>
+            <image data-bind="attr:{src:C3_541450438440}" class="pended-process-state"></image>
+            <div class="pended-process-date" data-bind="text:C3_541450449702 ? C3_541450449702 : '未审核'"></div>
+        </div>
+        <!--/ko-->
+    </div>
+
+
+
+    
+
+    <div class="from-group">
+        <button class="form-control w45 ccg rf" data-bind="click:cancelClick">撤销</button>
+    </div>
+
+
+
+
+
+
+</form>
+
+<div class="weui-gallery" id="gallery" data-bind="click:galleryClick">
+    <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:'url('+ 'http://kingofdinner.realsun.me:8081/rispweb/upfiles/552058584375.png' + ')'}">
+            </span>
+</div>

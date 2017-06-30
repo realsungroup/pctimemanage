@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">申请类别</label>
         <div class=" col-sm-10 col-md-10 col-lg-10 dropdown">
-            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.selectedCategory">
+            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.selectedCategory,event:{change:kvoSelectCategory}">
             </select>
         </div>
     </div>
@@ -38,67 +38,102 @@
             <span class="input-group-addon"  data-bind="click:hourCalculate"  id="aria-time">获取时长</span>
         </div>
     </div>
-    </div>
 
-    <!--事由-->
-    <div class="form-group">
-        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">事由</label>
-        <div class=" col-sm-10 col-md-10 col-lg-10">
-            <!--<input type="text" class="form-control" />-->
-            <textarea class="form-control" data-bind="value:model.data().C3_533143291117" rows="3"></textarea>
-        </div>
-    </div>
+    <!--事由 cellReasonEdit-->
+    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->
+                                                                                       
+    <!--/ko-->
 
     <!-- 拍照 -->
     <!-- ko foreach:model.imgShowArr -->
-    <div class="form-group" data-bind="visible:$data[0]">
-        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label " data-bind="text:$data[2]"></label>
-        <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">
-            <input type="text" class="form-control" data-bind="text:$data[1]" readonly aria-describedby="aria-time" />
-            <!--<span class="input-group-addon" id="aria-time">选择文件</span>-->
-            <span class="input-group-addon" id="aria-time">
-                <input id="uploaderInput" class="weui-uploader__input"  data-bind="event:{change:function(data,event){$root.selectImgChange($index,data,event)}}" type="file" accept="image/*"/>
-                选择文件</span>
-            
-        </div>
-    </div>
+         <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->
+                                                                                       
+         <!--/ko-->
     <!-- /ko -->
 
-    <!--<div data-bind="text:model.data().C3_541450276993">
-       
-    </div>-->
-    <!--<div class="form-group" data-bind="foreach:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]">
-        <img data-bind="attr:{src:$data}" alt="">
-    </div>-->
 
-    <div class="form-group">
-           <div class="weui-uploader__bd">
-                            <ul class="weui-uploader__files" id="uploaderFiles" data-bind="foreach:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]">
-                                <!--<li class="weui-uploader__file" data-bind="css:{'background-image':'url(' + $data +')'},visible:$data"></li>-->
-                                <!--<li class="weui-uploader__file" > <img class="img-gallery" data-bind="attr:{src:$data},visible:$data,click:function(){imgClick($index)}" alt=""></li>-->
-                                <li class="weui-uploader__file" data-bind="style:{backgroundImage:'url('+ 'http://kingofdinner.realsun.me:8081/rispweb/upfiles/552058584375.png' + ')'},click:function(){$root.imgClick($index)}"></li>
-                            </ul>
-                        </div>
-    </div>
-
-    <div class="from-group">
-          <button class="form-control w45 tjb lf" data-bind="click:function(){saveOrsubmitClick('submit')}">提交</button>
-          <button class="form-control w45 ccg rf" data-bind="click:function(){saveOrsubmitClick('save')}">保存</button> 
-    </div>
-      
-      
-      
+    <!--附件 cellAttachCpt-->
+     <!--ko component: { name: "cellAttachCpt",params:{srcs:model.attachUrlArray} }-->
+                                                                                       
+    <!--/ko-->
 
 
+     <!--保存提交cellSubmitBtnCpt-->
+     <!--ko component: "cellSubmitBtnCpt"-->
+                                                                                       
+    <!--/ko-->
 
+<!-- 图片浏览cellPictureCpt-->
+ <!--ko component: { name: "cellPictureCpt",params:{src:model.galleryImgUrl()} }-->
+                                                                                       
+<!--/ko-->
 </form>
 
-<div class="weui-gallery" id="gallery" data-bind="click:galleryClick">
-            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:'url('+ 'http://kingofdinner.realsun.me:8081/rispweb/upfiles/552058584375.png' + ')'}" >
-            </span>
-            <!--<div class="weui-gallery__opr">
-                <a href="javascript:" class="weui-gallery__del">
-                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
-                </a>
-            </div>-->
+
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element, as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+        <div class="pswp__container">
+            <!-- don't modify these 3 pswp__item elements, data is added later on -->
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
         </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+</div>

@@ -123,13 +123,23 @@ var root = this,
 
 //router
 
-routeTypeList = ["main","one"]
+routeTypeList = ["我的申请","我的审批"]
 
 routeList = [
-	{ route: ['','applying'], title: 'applying', moduleId: 'main/viewmodels/applying', nav: true,chash:"#applying", type: "main" },
-	{ route: 'pending', title: 'pending', moduleId: 'main/viewmodels/pending', nav: true,chash:"#pending", type: "one" },
-	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false,chash:"#false"},
-	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false,chash:"#false"},
+	{ route: ['','applying'], title: '申请中', moduleId: 'main/viewmodels/applying', nav: true, type: "我的申请" },
+	{ route: 'appled', title: '已审核', moduleId: 'main/viewmodels/appled', nav: true, type: "我的申请" },
+	{ route: 'applyRefuse', title: '已退回', moduleId: 'main/viewmodels/applyRefuse', nav: true, type: "我的申请" },
+	{ route: 'applyHistory', title: '历史记录', moduleId: 'main/viewmodels/applyHistory', nav: true, type: "我的申请" },
+
+	
+	{ route: 'pending', title: '审批中', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
+	{ route: 'pending', title: '已审批', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
+	{ route: 'pending', title: '已退回', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
+	{ route: 'pending', title: '历史记录', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
+
+	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
+	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},
+	{ route: 'fixSubmit', title: 'fixSubmit', moduleId: 'main/viewmodels/fixSubmit', nav: false},
 
 ]
 

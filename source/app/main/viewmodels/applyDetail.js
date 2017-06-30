@@ -17,7 +17,10 @@ define(['durandal/app',
         imgShowArr: ko.observableArray(),
         data: null,
         isCard: ko.observable(false),
-        pendedProcessData: ko.observableArray()//审批流
+        pendedProcessData: ko.observableArray(),//审批流
+        refuseArr:ko.observableArray(),
+        reasonInput:ko.observable(''),//退回原因
+        galleryImgUrl: ko.observable('')
       },
       activate: function (e) {
         self = this;
@@ -29,6 +32,8 @@ define(['durandal/app',
 
           self.model.selectedCategory(passData.C3_533398158705);
           self.model.data(passData);
+
+          self.model.data().C3_541451198969 = ko.observable(self.model.data().C3_541451198969)
 
           self.getPendingData();
         }
@@ -52,6 +57,8 @@ define(['durandal/app',
         // getRule
         //设置审批人
         self.model.approver = ko.observable(appConfig.app.teamApprove);
+
+        self.model.refuseArr(appConfig.app.refuseArr)
       },
       attached: function () {
 
@@ -63,9 +70,10 @@ define(['durandal/app',
       imgClick: function (index) {
         index = index();
 
-        $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
-          // $galleryImg.attr("style", this.getAttribute("style"));
-          $gallery.fadeIn(100);
+        var imgSrcArray = [self.model.data().C3_541450276993, self.model.data().C3_545771156108, self.model.data().C3_545771157350, self.model.data().C3_545771158420]
+        $gallery = $("#gallery"), $galleryImg = $("#galleryImg")
+        self.model.galleryImgUrl(imgSrcArray[index])
+        $gallery.fadeIn(100);
       },
       galleryClick: function () {
         $gallery = $("#gallery");
@@ -128,7 +136,25 @@ define(['durandal/app',
           cmAlert('撤销失败');
         })
       }
+,
+  refuseClick:function(e){//退回
+    // C3_541449606438
+    var tmpData = until.transformFuncToVal(self.model.data());
+    if( tmpData.C3_541451198969 == '其他'){
+      tmpData.C3_547719838514 = self.model.reasonInput();
+    }
+    tmpData.C3_541449606438 = 'Y';
 
+    // common.reSaveAndSubmit(item,function(){
+    //   cmAlert("退回成功");
+    //   // app.notification.emit("dataReoperation", item);
+    // },function(){
+    //   self.model.data().C3_541449606438 = '';
+    // });
+  },
+  reasonInputChange:function(){
+
+  }
 
 
 

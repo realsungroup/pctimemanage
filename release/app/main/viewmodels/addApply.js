@@ -1,7 +1,10 @@
 define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService', 'mobiscroll', 'main/viewmodels/applying', 'common', 'until','components/cellReadonlyCpt'], function (app, ko, router, http, mobi, applying, co) {
+  'httpService', 'mobiscroll',
+  'main/viewmodels/applying', 'common', 'until',
+  'components/cellReadonlyCpt',
+  'components/cellEditCpt'], function (app, ko, router, http, mobi, applying, co) {
     var self;
     return {
       model: {
@@ -13,7 +16,9 @@ define(['durandal/app',
         imgShowArr: ko.observableArray(),
         data: null,
         isDraft: false,//是否草稿
-        isCard:ko.observable(false)
+        isCard: ko.observable(false),
+        galleryImgUrl: ko.observable(''),
+        attachUrlArray: ko.observableArray()
       },
       activate: function (e) {
         self = this;
@@ -25,15 +30,14 @@ define(['durandal/app',
           var idx = parseInt(e.index);
           self.model.isDraft = true;
           var passData = applying.model.data()[idx];
-          
+
           self.model.selectedCategory(passData.C3_533398158705);
+          self.kvoSelectCategory('draft')
           self.model.data(passData);
+
+
         }
-
-
-
-
-
+        self.bindProperty();
       },
       init: function () {
         self.model.data = ko.observable({});
@@ -42,16 +46,199 @@ define(['durandal/app',
         self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
         self.model.selectedCategory(appConfig.app.vacationCategory[0]);
         self.model.selectedCategory('病假');
-        // self.model.data( self.model.data());
-
-        ko.computed(self.kvoSelectCategory);
-
+        self.kvoSelectCategory();
 
         // getRule
         //设置审批人
         self.model.approver = ko.observable(appConfig.app.teamApprove);
       },
       attached: function () {
+        self.setTimeControl();
+
+
+
+
+
+
+
+      },
+      deactivate: function () {
+        self = undefined;
+      },
+      selectImgChange: function (index, data, event) {
+        index = index();
+        var src, url = window.URL || window.webkitURL || window.mozURL, files = event.target.files;
+        for (var i = 0, len = files.length; i < len; ++i) {
+          var file = files[i];
+
+          // if (url) {
+          //     src = url.createObjectURL(file);
+          // } else {
+          //     src = e.target.result;
+          // }
+
+          // $uploaderFiles.append($(tmpl.replace('#url#', src)));
+
+          console.log(src);
+          httpService.uploadImg(file, function (imgUrl) {
+            if (index == 0) {
+              self.model.data().C3_541450276993 = imgUrl;
+            } else if (index == 1) {
+              self.model.data().C3_545771156108 = imgUrl;
+            } else if (index == 2) {
+              self.model.data().C3_545771157350 = imgUrl;
+            } else {
+              self.model.data().C3_545771158420 = imageurl;
+            }
+
+            // self.model.data(self.model.data());
+            var tmpImgUrlArray = [self.model.data().C3_541450276993,
+            self.model.data().C3_545771156108,
+            self.model.data().C3_545771157350,
+            self.model.data().C3_545771158420]
+
+            self.model.attachUrlArray(tmpImgUrlArray)
+          })
+        }
+      },
+
+      imgClick: function (index) {
+        index = index();
+
+        var imgSrcArray = [self.model.data().C3_541450276993, self.model.data().C3_545771156108, self.model.data().C3_545771157350, self.model.data().C3_545771158420]
+        $gallery = $("#gallery"), $galleryImg = $("#galleryImg")
+        self.model.galleryImgUrl(imgSrcArray[index])
+        $gallery.fadeIn(100);
+
+      },
+      galleryClick: function () {
+        $gallery = $("#gallery");
+        $gallery.fadeOut(100);
+      },
+
+      //监听选择出对应的注意事项(切换类型需要清除数据，而草稿数据第一次不能清除数据)
+      kvoSelectCategory: function (str) {
+        self.model.data().C3_533398158705 = self.model.selectedCategory();
+        var currentCategory = self.model.data().C3_533398158705;
+
+        if (currentCategory == '补打卡')
+          self.model.isCard(true)
+        else
+          self.model.isCard(false)
+
+        var tmpNoticeStr = common.getRule(currentCategory);
+        self.model.noticeStr(tmpNoticeStr);
+
+        var tmpVacationObj = common.getVactionObject(currentCategory);
+        var tmpImgShowArr = common.getCarmeShow(tmpVacationObj);
+        self.model.imgShowArr(tmpImgShowArr)
+
+        self.setTimeControl();
+        if (str != 'draft') self.resetData();
+      },
+
+
+      //计算时长
+      hourCalculate: function () {
+        var data1 = {
+          "C3_546130034510": self.model.data().C3_533143179815,
+          "C3_546130034799": self.model.data().C3_533143217561,
+          "C3_546130035036": self.model.data().C3_533398158705,
+          "C3_546181010461": appConfig.app.userInfo.data.Dep1Code
+        }
+
+        var param = {
+          'resid': 546129993686,
+          'data': data1
+        }
+
+        var data2 = {
+          "C3_545822726730": self.model.data().C3_533143179815,
+          "C3_545822726977": self.model.data().C3_533143217561,
+          "C3_545822727444": self.model.data().C3_533398158705
+
+        }
+
+        var param2 = {
+          'resid': 545822693342,
+          'data': data2
+        }
+
+        httpService.hourCalculate(param, function (data) {
+          if (data && data.data && data.data[0]) {
+            param2.data.C3_546180817741 = data.data[0].C3_546130076462;
+            httpService.hourCalculate(param2, function (data) {
+
+              self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
+              self.model.data(self.model.data());
+
+            }, function () {
+            });
+
+          } else self.setData({ data: [] });
+
+        }, function () {
+
+        });
+
+      },
+
+      // 提交
+      saveOrsubmitClick: function (action) {
+        var tmpData = until.transformFuncToVal(self.model.data());
+
+        console.log(tmpData);
+        if (action == 'save') tmpData.C3_541449538456 = "N"
+        else tmpData.C3_541449538456 = "Y"
+
+        var validateData = self.valiateForm(tmpData);
+        if (!validateData) return;
+
+        var param = {
+          'data': tmpData
+        }
+
+        if (self.model.isDraft) {
+          httpService.saveApply(param, function (resData) {
+            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+              cmAlert("success");
+              var returnData = resData.data[0];
+              applying.model.data().unshift(returnData);
+              applying.model.data(applying.model.data());
+              router.navigateBack();
+
+            } else {
+              cmAlert("error");
+            }
+
+          }, function () {
+            cmAlert("fail");
+          });
+
+        } else {
+
+
+
+          httpService.addApply(param, function (resData) {
+            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+              cmAlert("success");
+              var returnData = resData.data[0];
+              applying.model.data().unshift(returnData);
+              applying.model.data(applying.model.data());
+              router.navigateBack();
+
+            } else {
+              cmAlert("error");
+            }
+
+          }, function () {
+            cmAlert("fail");
+          });
+        }
+      },
+
+
+      setTimeControl: function () {
         var currYear = (new Date()).getFullYear();
         var optStart = {}, optEnd = {};
         optStart.default = {
@@ -73,10 +260,10 @@ define(['durandal/app',
             optEnd.default.min = now;
             $($(".appDate")[1]).mobiscroll($.extend(optEnd['date'], optEnd['default']));
 
-            // var tempFormData = work.editform.formdata();
-            // tempFormData['C3_533143217561'] = '';
-            // tempFormData['C3_541449935726'] = '';
-            // work.editform.formdata(tempFormData);
+            var tempFormData = self.model.data();
+            tempFormData['C3_533143217561'] = '';
+            tempFormData['C3_541449935726'] = '';
+            self.model.data(tempFormData);
           }
         };
 
@@ -146,195 +333,92 @@ define(['durandal/app',
 
         $($(".appDate")[0]).mobiscroll($.extend(optStart['date'], optStart['default']));
         $($(".appDate")[1]).mobiscroll($.extend(optEnd['date'], optEnd['default']));
-
-
-
-        // $('.start-time-select').mobiscroll().select({
-        //   theme: 'ios',      // Specify theme like: theme: 'ios' or omit setting to use default
-        //   lang: 'zh',   // Specify language like: lang: 'pl' or omit setting to use default
-        //   display: 'center',  // Specify display mode like: display: 'bottom' or omit setting to use default
-        //   mode: 'scroller',        // More info about mode: https://docs.mobiscroll.com/3-0-0_beta2/select#!opt-mode
-        //   minWidth: 100,                  // More info about minWidth: https://docs.mobiscroll.com/3-0-0_beta2/select#!opt-minWidth
-        //   onSet: function (event, inst) {
-        //     var tempFormData = work.editform.formdata();
-        //     tempFormData['C3_533143179815'] = '';
-        //     tempFormData['C3_533143217561'] = '';
-        //     tempFormData['C3_541449935726'] = '';
-        //     tempFormData['C3_541450276993'] = '';
-        //     tempFormData['C3_545771156108'] = '';
-        //     tempFormData['C3_545771157350'] = '';
-        //     tempFormData['C3_545771158420'] = '';
-        //     work.editform.formdata(tempFormData);
-        //   }
-        // });
-
-        
-
-      },
-      deactivate: function () {
-        self = undefined;
-      },
-      selectImgChange: function(index,data,event){
-        index = index();
-        var src, url = window.URL || window.webkitURL || window.mozURL, files = event.target.files;
-            for (var i = 0, len = files.length; i < len; ++i) {
-                var file = files[i];
-
-                // if (url) {
-                //     src = url.createObjectURL(file);
-                // } else {
-                //     src = e.target.result;
-                // }
-
-                // $uploaderFiles.append($(tmpl.replace('#url#', src)));
-        
-                console.log(src);
-                httpService.uploadImg(file,function(imgUrl){
-                  if (index == 0) {
-                            self.model.data().C3_541450276993 = imgUrl;
-                        } else if (index == 1) {
-                            self.model.data().C3_545771156108 = imgUrl;
-                        } else if (index == 2) {
-                            self.model.data().C3_545771157350 = imgUrl;
-                        } else {
-                            self.model.data().C3_545771158420 = imageurl;
-                        }
-                        self.model.data(self.model.data());
-                })
-            }
       },
 
-      imgClick:function(index){
-        index = index();
-
-        $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
-        // $galleryImg.attr("style", this.getAttribute("style"));
-            $gallery.fadeIn(100);
+      resetData: function () {
+        var tempFormData = self.model.data();
+        tempFormData['C3_533143179815'] = '';
+        tempFormData['C3_533143217561'] = '';
+        tempFormData['C3_541449935726'] = '';
+        tempFormData['C3_541450276993'] = '';
+        tempFormData['C3_545771156108'] = '';
+        tempFormData['C3_545771157350'] = '';
+        tempFormData['C3_545771158420'] = '';
+        self.model.data(tempFormData)
       },
-      galleryClick:function(){
-        $gallery = $("#gallery");
-         $gallery.fadeOut(100);
-      },
+      valiateForm: function (data) {//验证提交数据
 
-      //监听选择出对应的注意事项
-      kvoSelectCategory: function () {
-        self.model.data().C3_533398158705 = self.model.selectedCategory();
-        var currentCategory = self.model.data().C3_533398158705;
-
-        if(currentCategory == '补打卡') 
-        self.model.isCard(true)
-        else
-        self.model.isCard(false)
-
-        var tmpNoticeStr = common.getRule(currentCategory);
-        self.model.noticeStr(tmpNoticeStr);
-
-        var tmpVacationObj = common.getVactionObject(currentCategory);
-        var tmpImgShowArr = common.getCarmeShow(tmpVacationObj);
-        self.model.imgShowArr(tmpImgShowArr)
-
-
-      
-      },
-
-
-      //计算时长
-      hourCalculate: function () {
-        var data1 = {
-          "C3_546130034510": self.model.data().C3_533143179815,
-          "C3_546130034799": self.model.data().C3_533143217561,
-          "C3_546130035036": self.model.data().C3_533398158705,
-          "C3_546181010461": appConfig.app.userInfo.data.Dep1Code
-        }
-
-        var param = {
-          'resid': 546129993686,
-          'data': data1
-        }
-
-        var data2 = {
-          "C3_545822726730": self.model.data().C3_533143179815,
-          "C3_545822726977": self.model.data().C3_533143217561,
-          "C3_545822727444": self.model.data().C3_533398158705
-
-        }
-
-        var param2 = {
-          'resid': 545822693342,
-          'data': data2
-        }
-
-        httpService.hourCalculate(param, function (data) {
-          if (data && data.data && data.data[0]) {
-            param2.data.C3_546180817741 = data.data[0].C3_546130076462;
-            httpService.hourCalculate(param2, function (data) {
-
-              self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
-              self.model.data(self.model.data());
-
-            }, function () {
-            });
-
-          } else self.setData({ data: [] });
-
-        }, function () {
-
-        });
-
-      },
-
-      // 提交
-      saveOrsubmitClick: function (action) {
-        var tmpData = self.model.data();
-        for (var key in tmpData) {
-          if (typeof tmpData[key] == 'function') {
-            tmpData[key] = tmpData[key]();
+        if (data.C3_533398158705 != '补打卡') {//非补打卡时长的验证
+          if (data.C3_541449935726 == undefined || data.C3_541449935726 == '') {
+            cmAlert("时长不能为空！");
+            return false;
           }
         }
-        console.log(tmpData);
-        if (action == 'save') tmpData.C3_541449538456 = "N"
-          else tmpData.C3_541449538456 = "Y"
-        var param = {
-            'data': tmpData
+
+        var selectRuleM = common.getVactionObject(data.C3_533398158705);
+
+        var cameraNeccesseryArr = [selectRuleM.C3_545770982165,
+        selectRuleM.C3_545770982361,
+        selectRuleM.C3_545770982566,
+        selectRuleM.C3_545770990395];
+
+
+
+
+        var addressArr = [data.C3_541450276993, data.C3_545771156108, data.C3_545771157350, data.C3_545771158420];
+        for (var i = 0; i < addressArr.length; i++) {
+          if (i >= cameraNeccesseryArr.length) { alert(cameraNeccesseryArr); return false; }
+          if (cameraNeccesseryArr[i] == 'Y' && (addressArr[i] == undefined || addressArr[i] == '' || addressArr[i] == null)) {
+            cmAlert("请上传必需附件！");
+            return false;
           }
-
-        if (self.model.isDraft) {
-          httpService.saveApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-              cmAlert("success");
-              var returnData = resData.data[0];
-              applying.model.data().unshift(returnData);
-              applying.model.data(applying.model.data());
-              router.navigateBack();
-
-            }else{
-              cmAlert("error");
-            }
-
-          },function(){
-            cmAlert("fail");
-          });
-
-        } else {
-          
-
-          
-          httpService.addApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-              cmAlert("success");
-              var returnData = resData.data[0];
-              applying.model.data().unshift(returnData);
-              applying.model.data(applying.model.data());
-              router.navigateBack();
-
-            }else{
-              cmAlert("error");
-            }
-
-          },function(){
-            cmAlert("fail");
-          });
         }
+        return true;
+      },
+
+
+      bindProperty: function () {
+
+        self.model.data().C3_533143291117 = ko.observable(self.model.data().C3_533143291117);
+
+
+        var tmpImgUrlArray = [self.model.data().C3_541450276993,
+        self.model.data().C3_545771156108,
+        self.model.data().C3_545771157350,
+        self.model.data().C3_545771158420]
+
+        self.model.attachUrlArray(tmpImgUrlArray)
+      },
+      attachClick: function () {
+        var pswpElement = document.querySelectorAll('.pswp')[0];
+
+        // build items array
+        var items = [
+          {
+            src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
+            w: 964,
+            h: 1024
+          },
+          {
+            src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
+            w: 1024,
+            h: 683
+          }
+        ];
+
+        // define options (if needed)
+        var options = {
+          // history & focus options are disabled on CodePen        
+          history: false,
+          focus: false,
+
+          showAnimationDuration: 0,
+          hideAnimationDuration: 0
+
+        };
+
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
       }
     };
   }); 
