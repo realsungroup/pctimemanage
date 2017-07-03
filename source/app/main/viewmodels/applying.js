@@ -2,24 +2,28 @@
     'knockout',
     'plugins/router',
     'httpService',
-    'components/headerCpt','components/cellMainCpt'], function (app, ko, router) {
+    'components/headerCpt',
+    'components/cellMainCpt',
+    'until',
+    'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'], function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe) {
         var self;
         return {
             model: {
                 title: '我的申请',
-                subTitle:'申请中',
+                subTitle: '申请中',
                 data: ko.observableArray(),
-                vacationCategory:[],
-                selectedCategory:'',
-                pageIndex:0
+                vacationCategory: [],
+                selectedCategory: '',
+                pageIndex: 0,
+                noMore: false
             },
             activate: function (e) {
                 self = this;
+                self.init();
                 
-
-                  //配置所有类型
-                  var allVacationCategory = ['全部'];
-                  allVacationCategory = allVacationCategory.concat(appConfig.app.vacationCategory)
+                //配置所有类型
+                var allVacationCategory = ['全部'];
+                allVacationCategory = allVacationCategory.concat(appConfig.app.vacationCategory)
                 self.model.vacationCategory = ko.observable(allVacationCategory);
                 self.model.selectedCategory = ko.observable(allVacationCategory[0])
 
@@ -27,18 +31,67 @@
                 self.getData(0);
             },
             attached: function () {
+                // var url = 'https://kingofdinner.realsun.me:9092/api/100/table/Retrieve'
+                // var data = {
+                //     'resid' : 541502768110
+                // }
+                // $.ajax({
+                //     url: url,
+                //     data: data,
+                //     dataType: "json",
+                //     type: 'GET',
+                //     success: function (res) {
+                //         if (res.statusCode == 401) {
 
+                //         } else if (res.statusCode == 404) {
+                //             wx.showToast({
+                //                 title: '请求出错',
+                //                 icon: 'loading'
+                //             });
+                //         } else {
+
+                //             if (typeof doSuccess == "function") {
+
+                //                 if (res != '' && 'error' in res) {
+
+                //                     if (res.error == 0) {
+                //                         doSuccess(res);
+                //                     } else {
+
+                //                         if (res.message) alert(res.message);
+                //                         doFail();
+                //                     }
+
+                //                 } else {
+                //                     doSuccess(res);
+                //                 }
+                //             }
+
+
+
+                //         }
+                //     },
+                //     error: function (e) {
+                //         if (typeof doFail == "function") {
+                //             doFail();
+                //         }
+                //     }
+                // });
             },
             deactivate: function () {
                 self = undefined;
             },
-
+            init:function(){
+                self.model.noMore = false;
+                self.model.pageIndex = 0;
+                self.model.data([]);
+            },
             //获取数据
             getData: function (type) {
                 var keyStr = '';
                 // if (self.data.selectDataIndex < self.data.selectDataArr.length) {
-                  keyStr = self.model.selectedCategory();
-                  keyStr = keyStr == '全部' ? '' : keyStr;
+                keyStr = self.model.selectedCategory();
+                keyStr = keyStr == '全部' ? '' : keyStr;
                 // }
 
                 var param = {
@@ -53,9 +106,7 @@
                     param.pageIndex = 0;
 
                 } else {//加载
-                    // param.pageIndex = self.data.dataArr[self.data.pageIndex].length;
-                    // var indx = Math.ceil(self.data.dataArr[self.data.pageIndex].length / param.pageSize);
-                    param.pageIndex = self.model.pageIndex;
+                     param.pageIndex = self.model.pageIndex;
                 }
 
 
@@ -66,14 +117,9 @@
                         var dataArr = data.data;
                         self.model.data(dataArr);
 
-                        // if (dataArr.length < param.pageSize) self.setData({ noMore: true });
-                        // else self.setData({ noMore: false });
+                        if (dataArr.length < param.pageSize) self.model.noMore = true;
+                        else self.model.noMore = false;
 
-                        // if (type == 1) {//加载
-                        //   var oldDataArr = self.data.dataArr[self.data.pageIndex];
-                        //   oldDataArr = oldDataArr.concat(dataArr);
-                        //   dataArr = oldDataArr;
-                        // }
 
                     } else {
                         // self.setData({ data: [] });
@@ -83,34 +129,65 @@
 
                 });
             },
-            goToAddApplying:function(){
+            goToAddApplying: function () {
                 router.navigate("#addApply");
             },
 
             //类型筛选
-            categoryFilterClick:function(index){
+            categoryFilterClick: function (index) {
                 self.model.selectedCategory(self.model.vacationCategory()[index()]);
                 self.getData(0);
             },
-            goToEditPage:function(index){
+            goToEditPage: function (index) {
 
                 router.navigate("#addApply?index=" + index());
             },
-            goToApplyDetailPage:function(index){
+            goToApplyDetailPage: function (index) {
                 var tmpData = self.model.data()[index()];
                 var tmpJsonData = JSON.stringify(tmpData);
-                router.navigate("#applyDetail?data=" + tmpJsonData);
+                router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
+            },
+            //附件
+            showAttach: function (index) {
+                index = index();
+                var tmpData = self.model.data()[index];
+                var imgUrlArr = [tmpData.C3_541450276993, tmpData.C3_545771156108, tmpData.C3_545771157350, tmpData.C3_545771158420];
+                attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default);
             },
 
-
-            pageUp:function(){
-                self.model.pageIndex --;
-                // if(self.model.pageIndex <= 0)
+            pageUp: function () {
+                if (self.model.pageIndex <= 0) self.model.pageIndex = 0
+                else self.model.pageIndex--;
                 self.getData(1);
             },
-            pageDown:function(){
-                self.model.pageIndex ++;
+            pageDown: function () {
+                if (self.model.noMore) return;
+                self.model.pageIndex++;
                 self.getData(1);
+            },
+            //提交
+            submit: function (index) {
+                index = index()
+                var tmpData = self.model.data()[index];
+                tmpData.C3_541449538456 = "Y"
+
+                var param = {
+                    'data': tmpData
+                }
+
+                httpService.saveApply(param, function (resData) {
+                    if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+                        cmAlert("");
+                        var returnData = resData.data[0];
+                        self.model.data()[index] = returnData;
+                        self.model.data(self.model.data());
+                    } else {
+                        cmAlert("error");
+                    }
+
+                }, function () {
+                    
+                });
             }
         };
     }); 

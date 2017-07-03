@@ -1,18 +1,25 @@
+
+
 // 发起get请求
 const path = {
-  baseUrl: 'https://kingofmall.realsun.me/',
-  // baseUrl:'https://kingofdinner.realsun.me:9092/',
-  config: '/config',
-  // login: 'api/Account/Login',
+  // baseUrl: 'https://kingofmall.realsun.me/',
+  baseUrl:'http://kingofdinner.realsun.me:8081/',
 
-  login: 'rispweb/rispservice/apiSvrLogin.aspx',
+  config: '/config',
+  // login:'rispweb/risphost/data/AjaxService.aspx',
+  login: 'https://kingofdinner.realsun.me:9092/api/Account/Login',
   getData: 'rispweb/risphost/data/AjaxService.aspx',
+
 
   apply: 'rispweb/risphost/data/AjaxService.aspx',
   dataLogin: 'kingofweixin/WxOpen/loginService',
   sendValiateCode: 'kingofweixin/rsauth/SendValidMsg',
   authCode: 'kingofweixin/rsauth/AuthClient'
 }
+
+define([
+  'until'
+], function(until) {
 
 function fixDataWithMethod(data, method) {
   if (method == 0) return data;
@@ -21,7 +28,7 @@ function fixDataWithMethod(data, method) {
   data.dynlogin = 1;
 
  data.user = '18356288459';
-  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk4ODE2NzcyLCJleHAiOjE0OTg5MDMxNzIsIm5iZiI6MTQ5ODgxNjc3MiwianRpIjoiYjFiMDY2ZTEtNWY1OC00ZWEyLTkwMTEtMjliYTE1ZDAyN2VjIn0.UuOGzm773owHc_SM2LuItE1NmWNJ-ICiCZ_ysiUUua4';
+  data.AccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODM1NjI4ODQ1OSIsImlzcyI6IkxpbmtlZFlvdSIsImF1ZCI6Imh0dHA6Ly93d3cubGlua2VkeW91LmNuIiwiaWF0IjoxNDk5MDQ2MDAwLCJleHAiOjE0OTkxMzI0MDAsIm5iZiI6MTQ5OTA0NjAwMCwianRpIjoiN2M2YTU1OWQtNzE5Mi00YWMyLThjMTQtOTBlMGNmM2Y5YzUzIn0.w8Kqr7tcRlNwoRruqu8Gm6xXHbk8coOhLPjeBXJ3SiI';
   // data.AccessToken = appConfig.app.userInfo.AccessToken;
 
   //获取主表数据
@@ -66,10 +73,13 @@ function printUrl(url,data){
 //ajax请求
 function baseRequest(type, url, data,method, doSuccess, doFail) {
   data = fixDataWithMethod(data,method);
+  if(url != path.login) {
+    url = path.baseUrl + url;
+    printUrl(url,data);
+  }
 
-  printUrl(url,data);
   $.ajax({
-    url: path.baseUrl + url,
+    url:url,
     data: data,
     dataType: "json",
     type: type,
@@ -77,10 +87,7 @@ function baseRequest(type, url, data,method, doSuccess, doFail) {
       if (res.statusCode == 401) {
 
       } else if (res.statusCode == 404) {
-        wx.showToast({
-          title: '请求出错',
-          icon: 'loading'
-        });
+        cmAlert('请求出错');
       } else {
         
          if (typeof doSuccess == "function") {
@@ -91,7 +98,7 @@ function baseRequest(type, url, data,method, doSuccess, doFail) {
               doSuccess(res);
             } else {
 
-              if (res.message)  alert(res.message);
+              if (res.message)  cmAlert(res.message);
               doFail();
             }
 
@@ -180,19 +187,19 @@ function uploadImg(param,doSuccess, doFail) {
    var xhr = new XMLHttpRequest();
                 var uploadFileUrl = 'http://kingofdinner.realsun.me:8081/rispweb/rispservice/SvcUploadFile2.aspx'
                 httppath = "http://kingofdinner.realsun.me:8081/rispweb/upfiles"
-                  var upUrlStr = uploadFileUrl+ '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//alert(upUrlStr);
+                  var upUrlStr = uploadFileUrl+ '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//cmAlert(upUrlStr);
                   xhr.open('POST', upUrlStr);
                   xhr.onload = function () {
                         var data = JSON.parse(xhr.response);
                         if (xhr.status === 200) {
-                              alert("上传成功");
+                              cmAlert("上传成功");
                               var imgUrl = data.httpfilename;
                               console.log(imgUrl);
                               if(doSuccess) doSuccess(imgUrl);
                         } else {
                               if(doFail) doFail();
                               // 处理错误
-                              alert('error==' + data);
+                              cmAlert('error==' + data);
                         }
                   };
 
@@ -217,7 +224,6 @@ function getPendingPepleData(paramREC_ID,doSuccess, doFail){
 
 //撤销
 function cancelApply(data,doSuccess, doFail) {
-  data.C3_541449646638 = 'Y';
   var params = {
     'resid': 541502768110,
     'data': data
@@ -255,6 +261,23 @@ function approveDataArr(param, doSuccess, doFail) {
   baseRequest("GET",path.getData, params, 5, doSuccess, doFail);
 }
 
+//已审批数据
+function getPendedData(params, doSuccess, doFail){
+  params.resid = 541518986783
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
+
+//审批退回数据
+function getPendedRefuseData(params, doSuccess, doFail){
+  params.resid = 541519417864
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
+
+//审批历史记录数据
+function getPendedHistoryData(params, doSuccess, doFail){
+  params.resid = 541520707421
+  baseRequest("GET",path.getData, params, 1, doSuccess, doFail);
+}
 var httpService = {
   accountLogin:accountLogin,
   getApplyingData:getApplyingData,
@@ -271,5 +294,10 @@ var httpService = {
   getAppledData:getAppledData,
   getFixSubmitData:getFixSubmitData,
   getApplyHistoryData:getApplyHistoryData,
-  approveDataArr:approveDataArr
+  approveDataArr:approveDataArr,
+  getPendedData:getPendedData,
+getPendedRefuseData:getPendedRefuseData,
+getPendedHistoryData:getPendedHistoryData
 }
+  return httpService
+});

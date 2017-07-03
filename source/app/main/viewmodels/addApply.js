@@ -4,7 +4,9 @@ define(['durandal/app',
   'httpService', 'mobiscroll',
   'main/viewmodels/applying', 'common', 'until',
   'components/cellReadonlyCpt',
-  'components/cellEditCpt'], function (app, ko, router, http, mobi, applying, co) {
+  'components/cellEditCpt',
+  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'], 
+  function (app, ko, router, httpService, mobi, applying, co,ut,cellReadCpt,cellEdit,PhotoSwipeUI_Default, PhotoSwipe) {
     var self;
     return {
       model: {
@@ -45,7 +47,7 @@ define(['durandal/app',
         //配置所有类型
         self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
         self.model.selectedCategory(appConfig.app.vacationCategory[0]);
-        self.model.selectedCategory('病假');
+        if(localDebug)self.model.selectedCategory('病假');
         self.kvoSelectCategory();
 
         // getRule
@@ -103,12 +105,12 @@ define(['durandal/app',
       },
 
       imgClick: function (index) {
-        index = index();
 
-        var imgSrcArray = [self.model.data().C3_541450276993, self.model.data().C3_545771156108, self.model.data().C3_545771157350, self.model.data().C3_545771158420]
-        $gallery = $("#gallery"), $galleryImg = $("#galleryImg")
-        self.model.galleryImgUrl(imgSrcArray[index])
-        $gallery.fadeIn(100);
+        //附件
+        index = index();
+        var tmpData = self.model.data();
+        var imgUrlArr = [tmpData.C3_541450276993, tmpData.C3_545771156108, tmpData.C3_545771157350, tmpData.C3_545771158420];
+        attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default);
 
       },
       galleryClick: function () {
@@ -201,18 +203,18 @@ define(['durandal/app',
         if (self.model.isDraft) {
           httpService.saveApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-              cmAlert("success");
+              cmAlert("保存成功");
               var returnData = resData.data[0];
               applying.model.data().unshift(returnData);
               applying.model.data(applying.model.data());
               router.navigateBack();
 
             } else {
-              cmAlert("error");
+              cmAlert("保存错误");
             }
 
           }, function () {
-            cmAlert("fail");
+            cmAlert("保存失败");
           });
 
         } else {
@@ -221,18 +223,18 @@ define(['durandal/app',
 
           httpService.addApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-              cmAlert("success");
+              cmAlert("添加成功");
               var returnData = resData.data[0];
               applying.model.data().unshift(returnData);
               applying.model.data(applying.model.data());
               router.navigateBack();
 
             } else {
-              cmAlert("error");
+              cmAlert("添加错误");
             }
 
           }, function () {
-            cmAlert("fail");
+            cmAlert("添加失败");
           });
         }
       },
@@ -344,7 +346,14 @@ define(['durandal/app',
         tempFormData['C3_545771156108'] = '';
         tempFormData['C3_545771157350'] = '';
         tempFormData['C3_545771158420'] = '';
+        
         self.model.data(tempFormData)
+        var tmpImgUrlArray = [self.model.data().C3_541450276993,
+            self.model.data().C3_545771156108,
+            self.model.data().C3_545771157350,
+            self.model.data().C3_545771158420]
+
+            self.model.attachUrlArray(tmpImgUrlArray)
       },
       valiateForm: function (data) {//验证提交数据
 
@@ -388,37 +397,6 @@ define(['durandal/app',
         self.model.data().C3_545771158420]
 
         self.model.attachUrlArray(tmpImgUrlArray)
-      },
-      attachClick: function () {
-        var pswpElement = document.querySelectorAll('.pswp')[0];
-
-        // build items array
-        var items = [
-          {
-            src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
-            w: 964,
-            h: 1024
-          },
-          {
-            src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
-            w: 1024,
-            h: 683
-          }
-        ];
-
-        // define options (if needed)
-        var options = {
-          // history & focus options are disabled on CodePen        
-          history: false,
-          focus: false,
-
-          showAnimationDuration: 0,
-          hideAnimationDuration: 0
-
-        };
-
-        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-        gallery.init();
       }
     };
   }); 

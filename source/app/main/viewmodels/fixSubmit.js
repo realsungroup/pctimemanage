@@ -5,7 +5,9 @@ define(['durandal/app',
    'mobiscroll', 
    'common',
     'until',
-    'components/cellReadonlyCpt','components/cellEditCpt'], function (app, ko, router, http, mobi, co) {
+    'components/cellReadonlyCpt','components/cellEditCpt',
+    'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
+     function (app, ko, router, httpService, mobi, co,ut,cellReadonly,cellEdit,PhotoSwipeUI_Default, PhotoSwipe) {
     var self;
     return {
       model: {
@@ -34,7 +36,7 @@ define(['durandal/app',
 
           self.getPendingData();
         }
-
+         self.model.data().C3_533143291117 = ko.observable(self.model.data().C3_533143291117);
 
 
 
@@ -65,13 +67,11 @@ define(['durandal/app',
       },
 
       imgClick: function (index) {
+        //附件
         index = index();
-        var imgSrcArray = [self.model.data().C3_541450276993,self.model.data().C3_545771156108,self.model.data().C3_545771157350,self.model.data().C3_545771158420]
-        $gallery = $("#gallery"), $galleryImg = $("#galleryImg")
-        self.model.galleryImgUrl(imgSrcArray[index])
-        console.log(imgSrcArray[index])
-          // $galleryImg.attr("style", this.getAttribute("style"));
-          $gallery.fadeIn(100);
+        var tmpData = self.model.data();
+        var imgUrlArr = [tmpData.C3_541450276993, tmpData.C3_545771156108, tmpData.C3_545771157350, tmpData.C3_545771158420];
+        attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default);
       },
       galleryClick: function () {
         $gallery = $("#gallery");
@@ -122,31 +122,20 @@ define(['durandal/app',
 
       // 撤销
       cancelClick: function () {
-        httpService.cancelApply(self.model.data(), function (data) {
+        var tmpData = until.transformFuncToVal(self.model.data());
+        tmpData.C3_541449646638 = 'Y';
+        httpService.cancelApply(tmpData, function (data) {
           if (data.error == 0) {
             cmAlert('撤销成功')
-
+            router.navigateBack();
           } else {
             cmAlert(data.message)
-            data.C3_541449646638 = 'N';
           }
         }, function () {
           cmAlert('撤销失败');
         })
       }
 ,
-  refuseClick:function(e){//退回
-    // C3_541449606438
-    self.model.data(until.transformFuncToVal(self.model.data()));
-    self.model.data().C3_541449606438 = 'Y';
-    var item = self.model.data();
-    common.reSaveAndSubmit(item,function(){
-      cmAlert("退回成功");
-      // app.notification.emit("dataReoperation", item);
-    },function(){
-      self.model.data().C3_541449606438 = '';
-    });
-  },
       selectImgChange: function(index,data,event){
         index = index();
         var src, url = window.URL || window.webkitURL || window.mozURL, files = event.target.files;
@@ -175,7 +164,38 @@ define(['durandal/app',
                         self.model.data(self.model.data());
                 })
             }
-      }
+      },// 提交
+      saveOrsubmitClick: function (action) {
+        var tmpData = until.transformFuncToVal(self.model.data());
+
+        console.log(tmpData);
+        // if (action == 'save') tmpData.C3_541449538456 = "N"
+        // else tmpData.C3_541449538456 = "Y"
+
+         if (action == 'save') tmpData.C3_541449606438 = 'Y';
+        else tmpData.C3_541449606438 = 'N';
+
+
+        var param = {
+          'data': tmpData
+        }
+          httpService.saveApply(param, function (resData) {
+            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+              cmAlert("保存成功");
+              var returnData = resData.data[0];
+              // applying.model.data().unshift(returnData);
+              // applying.model.data(applying.model.data());
+              router.navigateBack();
+
+            } else {
+              cmAlert("保存错误");
+            }
+
+          }, function () {
+            cmAlert("保存失败");
+          });
+
+      },
 
 
 

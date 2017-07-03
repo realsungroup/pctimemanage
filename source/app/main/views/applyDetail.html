@@ -40,10 +40,11 @@
                                                                                        
     <!--/ko-->
 
-    <!--退回 cellRefuseCpt-->
-    <!--ko component: { name: "cellRefuseCpt",params:{title:model.refuseArr,subTitle:model.data().C3_541451198969,reason:model.reasonInput} }-->
+    <!--退回 cellRefuseCpt  willRefuse-->
+    <div data-bind="component: { name: 'cellRefuseCpt',params:{title:model.refuseArr,subTitle:model.data().C3_541451198969,reason:model.reasonInput} },visible:model.willRefuse">
+    </div>
                                                                                        
-    <!--/ko-->
+   
 
     <!--审批流 cellPendPersonCpt-->
     <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->
@@ -51,9 +52,8 @@
 
     
     <!--撤销 cellCancelBtnCpt-->
-     <!--ko component: "cellCancelBtnCpt"-->
-                                                                                       
-    <!--/ko-->
+    <div data-bind="component: 'cellCancelBtnCpt',visible:model.willCancel"></div>
+     
 
 
 

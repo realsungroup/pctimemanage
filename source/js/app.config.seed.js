@@ -133,9 +133,9 @@ routeList = [
 
 	
 	{ route: 'pending', title: '审批中', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
-	{ route: 'pending', title: '已审批', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
-	{ route: 'pending', title: '已退回', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
-	{ route: 'pending', title: '历史记录', moduleId: 'main/viewmodels/pending', nav: true, type: "我的审批" },
+	{ route: 'pended', title: '已审批', moduleId: 'main/viewmodels/pended', nav: true, type: "我的审批" },
+	{ route: 'pendRefuse', title: '已退回', moduleId: 'main/viewmodels/pendRefuse', nav: true, type: "我的审批" },
+	{ route: 'pendHistory', title: '历史记录', moduleId: 'main/viewmodels/pendHistory', nav: true, type: "我的审批" },
 
 	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
 	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},

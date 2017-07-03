@@ -1,0 +1,41 @@
+
+
+<div data-bind='component: {
+     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}
+}'>
+
+</div>
+
+
+<!-- row -->
+<div class="row">
+
+	<!-- NEW WIDGET START -->
+	<article class="col-sm-12 col-md-12 col-lg-12">
+		<table class="table table-hover table-bordered">
+			<!--ko component:"cellMainCategory"-->
+			<!--/ko-->
+
+			
+			<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,isPend:false}}-->
+			<!--/ko-->
+
+			<tbody data-bind="foreach:model.data">
+				<tr>
+					<!--ko component:{name:"cellMainData",params:{item:$data}}-->
+					<!--/ko-->
+					<!--ko component:{name:"cellMainHistoryState",params:{item:$data}}-->
+					<!--/ko-->
+				</tr>
+			</tbody>
+		</table>
+	</article>
+	<!-- WIDGET END -->
+
+	<!-- 分页pageSelectCpt-->
+		<!--ko component:"pageSelectCpt"-->
+			<!--/ko-->
+
+</div>
+
+<!-- end row -->

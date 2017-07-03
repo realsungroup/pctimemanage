@@ -11,15 +11,16 @@ requirejs.config({
         'realsun': '../lib/realsun/js',
         'calendar': '../lib/fullcalendar',
         'components':'components',
-        // 'mobiscroll':'../lib/mobiscorll/mobiscroll.2.13.2',
         'mobiscroll':'../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min',
         'common':'common/common',
-        'until':'until/until'
+        'until':'until/until',
+        'photoswipe':'../lib/photoswipe'
         
     }
      
 });
-define(['durandal/system', 'durandal/app', 'durandal/viewLocator','realsun/common' ],  function (system, app, viewLocator,common) {
+
+define(['durandal/system', 'durandal/app', 'durandal/viewLocator','realsun/common','plugins/dialog' ],  function (system, app, viewLocator,common) {
   
     app.title = 'HRM';
     app.configurePlugins({

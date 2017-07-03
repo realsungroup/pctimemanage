@@ -2,7 +2,7 @@ define(['durandal/app',
     'knockout',
     'plugins/router',
     'httpService',
-    'components/headerCpt','components/cellMainCpt'], function (app, ko, router) {
+    'components/headerCpt','components/cellMainCpt'], function (app, ko, router,httpService) {
         var self;
         return {
             model: {
@@ -10,11 +10,13 @@ define(['durandal/app',
                 subTitle:'历史记录',
                 data: ko.observableArray(),
                 vacationCategory:[],
-                selectedCategory:''
+                selectedCategory:'',
+                pageIndex: 0,
+                noMore: false
             },
             activate: function (e) {
                 self = this;
-                
+                self.init();
 
                   //配置所有类型
                   var allVacationCategory = ['全部'];
@@ -31,7 +33,11 @@ define(['durandal/app',
             deactivate: function () {
                 self = undefined;
             },
-
+            init:function(){
+                self.model.noMore = false;
+                self.model.pageIndex = 0;
+                self.model.data([]);
+            },
             //获取数据
             getData: function (type) {
                 var keyStr = '';
@@ -52,9 +58,7 @@ define(['durandal/app',
                     param.pageIndex = 0;
 
                 } else {//加载
-                    // param.pageIndex = self.data.dataArr[self.data.pageIndex].length;
-                    var indx = Math.ceil(self.data.dataArr[self.data.pageIndex].length / param.pageSize);
-                    param.pageIndex = indx;
+                    param.pageIndex = self.model.pageIndex;
                 }
 
 
@@ -65,14 +69,8 @@ define(['durandal/app',
                         var dataArr = data.data;
                         self.model.data(dataArr);
 
-                        // if (dataArr.length < param.pageSize) self.setData({ noMore: true });
-                        // else self.setData({ noMore: false });
-
-                        // if (type == 1) {//加载
-                        //   var oldDataArr = self.data.dataArr[self.data.pageIndex];
-                        //   oldDataArr = oldDataArr.concat(dataArr);
-                        //   dataArr = oldDataArr;
-                        // }
+                        if (dataArr.length < param.pageSize) self.model.noMore = true;
+                        else self.model.noMore = false;
 
                     } else {
                         // self.setData({ data: [] });
@@ -99,6 +97,16 @@ define(['durandal/app',
                 var tmpData = self.model.data()[index()];
                 var tmpJsonData = JSON.stringify(tmpData);
                 router.navigate("#applyDetail?data=" + tmpJsonData);
+            },
+            pageUp: function () {
+                if (self.model.pageIndex <= 0) self.model.pageIndex = 0
+                else self.model.pageIndex--;
+                self.getData(1);
+            },
+            pageDown: function () {
+                if (self.model.noMore) return;
+                self.model.pageIndex++;
+                self.getData(1);
             }
         };
     }); 

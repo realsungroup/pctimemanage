@@ -15,7 +15,7 @@
 			<!--/ko-->
 
 			
-			<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory}}-->
+			<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->
 			<!--/ko-->
 
 			<tbody data-bind="foreach:model.data">
@@ -27,9 +27,17 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<!-- 分页pageSelectCpt-->
+		<!--ko component:"pageSelectCpt"-->
+			<!--/ko-->
 	</article>
 	<!-- WIDGET END -->
 
 </div>
 
 <!-- end row -->
+
+
+
+

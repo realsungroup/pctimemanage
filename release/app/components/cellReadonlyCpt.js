@@ -1,5 +1,6 @@
 var ko = require('knockout');
 
+//类型
 ko.components.register('cellCategoryReadonly', {
     viewModel: function(params) {
         // this.text = ko.observable(params && params.initialText || '');
@@ -13,7 +14,7 @@ ko.components.register('cellCategoryReadonly', {
     </div>"
 });
  
-
+//开始时间
  ko.components.register('cellStartTimeReadonlyCpt', {
     viewModel: function(params) {
         this.title = params && params.title || '';
@@ -26,6 +27,7 @@ ko.components.register('cellCategoryReadonly', {
     </div>"
 });
  
+ //结束时间
 ko.components.register('cellEndTimeReadonlyCpt', {
     viewModel: function(params) {
         this.title = params && params.title || '';
@@ -38,6 +40,8 @@ ko.components.register('cellEndTimeReadonlyCpt', {
     </div>"
 });
  
+
+ //请假提示
 ko.components.register('cellNoticeCpt', {
     viewModel: function(params) {
         this.title = params && params.title || '';
@@ -50,6 +54,7 @@ ko.components.register('cellNoticeCpt', {
     </div>"
 });
 
+//审批人
 ko.components.register('cellApprovePersonCpt', {
     viewModel: function(params) {
         this.title = params && params.title || '';
@@ -62,6 +67,7 @@ ko.components.register('cellApprovePersonCpt', {
     </div>"
 });
  
+ //时长
 ko.components.register('cellTimeLenghtReadonlyCpt', {
     viewModel: function(params) {
         this.title = params && params.title || '';
@@ -80,7 +86,7 @@ ko.components.register('cellTimeLenghtReadonlyCpt', {
     viewModel: function(params) {
         this.item = params && params.item || '';
     },
-    template:`<div class="form-group" data-bind="visible:item[0]">\
+    template:'<div class="form-group" data-bind="visible:item[0]">\
         <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label " data-bind="text:item[2]"></label>\
         <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">\
             <input type="text" class="form-control" data-bind="value:item[1]" readonly aria-describedby="aria-time" />\
@@ -88,7 +94,7 @@ ko.components.register('cellTimeLenghtReadonlyCpt', {
                 <input id="uploaderInput" class="weui-uploader__input"  data-bind="event:{change:function(data,event){$root.selectImgChange($index,data,event)}}" type="file" accept="image/*"/>\
                 选择文件</span>\
         </div>\
-    </div>`
+    </div>'
 });
  
  //附件
@@ -104,8 +110,6 @@ ko.components.register('cellTimeLenghtReadonlyCpt', {
         </div>\
     </div>"
 });
- 
-
 
 
  //退回
@@ -139,10 +143,10 @@ ko.components.register('cellSubmitBtnCpt', {
     viewModel: function(params) {
         // this.srcs = params && params.srcs || '';
     },
-    template:`<div class="from-group">
-          <button class="form-control w45 tjb lf" data-bind="click:function(){$root.saveOrsubmitClick('submit')}">提交</button>
-          <button class="form-control w45 ccg rf" data-bind="click:function(){$root.saveOrsubmitClick('save')}">保存</button> 
-    </div>`
+    template:'<div class="from-group">\
+          <button class="form-control w45 tjb lf" data-bind="click:function(){$root.saveOrsubmitClick(\'submit\')}">提交</button>\
+          <button class="form-control w45 ccg rf" data-bind="click:function(){$root.saveOrsubmitClick(\'save\')}">保存</button> \
+    </div>'
 });
 
 //撤销按钮
@@ -150,9 +154,9 @@ ko.components.register('cellCancelBtnCpt', {
     viewModel: function(params) {
         // this.srcs = params && params.srcs || '';
     },
-    template:`<div class="from-group">
-        <button class="form-control w45 ccg rf" data-bind="click:$root.cancelClick">撤销</button>
-    </div>`
+    template:'<div class="from-group">\
+        <button class="form-control w45 ccg rf" data-bind="click:$root.cancelClick">撤销</button>\
+    </div>'
 });
 
 //浏览图片
@@ -160,13 +164,13 @@ ko.components.register('cellPictureCpt', {
     viewModel: function(params) {
         this.src = params && params.src || '';
     },
-    template:`<div class="weui-gallery" id="gallery" data-bind="click:$root.galleryClick">
-            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:'url('+ src + ')'}" >
-            </span>
-</div><div class="weui-gallery" id="gallery" data-bind="click:$root.galleryClick">
-            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:'url('+ src + ')'}" >
-            </span>
-</div>`
+    template:'<div class="weui-gallery" id="gallery" data-bind="click:$root.galleryClick">\
+            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:\'url(\'+ src + \')\'}" >\
+            </span>\
+</div><div class="weui-gallery" id="gallery" data-bind="click:$root.galleryClick">\
+            <span class="weui-gallery__img" id="galleryImg" data-bind="style:{backgroundImage:\'url(\'+ src + \')\'}" >\
+            </span>\
+</div>'
 });
 
 //审批流
@@ -174,16 +178,16 @@ ko.components.register('cellPendPersonCpt', {
     viewModel: function(params) {
         this.item = params && params.item || '';
     },
-    template:`<div class="form-group">
-        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">审批流</label>
-        <div class="col-sm-10 col-md-10 col-lg-10" data-bind="foreach:item">
-        <div class="pendend-cell">
-            <image data-bind="attr:{src:C3_543790707188}" class="pended-process"></image>
-            <div class="pended-process-person" data-bind="text:C3_541450392920"></div>
-            <image data-bind="attr:{src:C3_541450438440}" class="pended-process-state"></image>
-            <div class="pended-process-date" data-bind="text:C3_541450449702 ? C3_541450449702 : '未审核'"></div>
-        </div>
-        </div>
-    </div>`
+    template:'<div class="form-group">\
+        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">审批流</label>\
+        <div class="col-sm-10 col-md-10 col-lg-10" data-bind="foreach:item">\
+        <div class="pendend-cell">\
+            <div data-bind="css:C3_543790707188" class="pended-process"></div>\
+            <div class="pended-process-person" data-bind="text:C3_541450392920"></div>\
+            <image data-bind="css:C3_541450438440 == \'Y\' ? \'pend-Y\' : \'pend-N\'" class="pended-process-state"></image>\
+            <div class="pended-process-date" data-bind="text:C3_541450449702 ? C3_541450449702 : \'未审核\'"></div>\
+        </div>\
+        </div>\
+    </div>'
 });
 

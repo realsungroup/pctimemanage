@@ -15,7 +15,14 @@
 			<!--/ko-->
 
 			
-			<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,allSelected:model.allSelected}}-->
+			<!--ko component:{
+				name:"cellMainFilterSearch",
+				params:{
+					title:model.selectedCategory,
+					subTitle:model.vacationCategory,
+					inputVal:model.inputVal,
+					allSelected:model.allSelected,
+					isPend:true}}-->
 			<!--/ko-->
 
 			<tbody data-bind="foreach:model.data">
@@ -30,6 +37,10 @@
 	</article>
 	<!-- WIDGET END -->
 
+	<!-- 分页pageSelectCpt-->
+		<!--ko component:"pageSelectCpt"-->
+			<!--/ko-->
+			
 </div>
 
 <!-- end row -->

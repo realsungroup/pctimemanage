@@ -17,19 +17,27 @@
 /*审批流*/
 
 .cgsp{
-    background-image: url(../../../images/)
+    background-image: url(../img/img/)
 }
 
 .spjl{
-background-image: url(../../../images/wangjingli.png)
+background-image: url(../img/img/wangjingli.png)
 }
 
 .spzg{
-background-image: url(../../../images/zhangzhuguan.png)
+background-image: url(../img/img/zhangzhuguan.png)
 }
 
 .spzz{
-background-image: url(../../../images/lizhuzhang.png)
+background-image: url(../img/img/lizhuzhang.png)
+}
+
+.pend-Y{
+    background-image: url(../img/img/gouxuankuang-2.png)
+}
+
+.pend-N{
+    background-image: url(../img/img/gouxuankuang-1.png)
 }
 
 /*审批流cell*/
