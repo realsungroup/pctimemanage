@@ -7,7 +7,7 @@
     return {
       model: {
         title: '我的审批',
-        subTitle: '审批中',
+        subTitle: '已退回',
         data: ko.observableArray(),
         vacationCategory: [],
         selectedCategory: '',

@@ -5,8 +5,8 @@ define(['durandal/app',
   'main/viewmodels/applying', 'common', 'until',
   'components/cellReadonlyCpt',
   'components/cellEditCpt',
-  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'], 
-  function (app, ko, router, httpService, mobi, applying, co,ut,cellReadCpt,cellEdit,PhotoSwipeUI_Default, PhotoSwipe) {
+  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
+  function (app, ko, router, httpService, mobi, applying, co, ut, cellReadCpt, cellEdit, PhotoSwipeUI_Default, PhotoSwipe) {
     var self;
     return {
       model: {
@@ -36,8 +36,6 @@ define(['durandal/app',
           self.model.selectedCategory(passData.C3_533398158705);
           self.kvoSelectCategory('draft')
           self.model.data(passData);
-
-
         }
         self.bindProperty();
       },
@@ -47,7 +45,7 @@ define(['durandal/app',
         //配置所有类型
         self.model.vacationCategory = ko.observable(appConfig.app.vacationCategory);
         self.model.selectedCategory(appConfig.app.vacationCategory[0]);
-        if(localDebug)self.model.selectedCategory('病假');
+        if (localDebug) self.model.selectedCategory('病假');
         self.kvoSelectCategory();
 
         // getRule
@@ -56,13 +54,6 @@ define(['durandal/app',
       },
       attached: function () {
         self.setTimeControl();
-
-
-
-
-
-
-
       },
       deactivate: function () {
         self = undefined;
@@ -73,11 +64,6 @@ define(['durandal/app',
         for (var i = 0, len = files.length; i < len; ++i) {
           var file = files[i];
 
-          // if (url) {
-          //     src = url.createObjectURL(file);
-          // } else {
-          //     src = e.target.result;
-          // }
 
           // $uploaderFiles.append($(tmpl.replace('#url#', src)));
 
@@ -90,7 +76,7 @@ define(['durandal/app',
             } else if (index == 2) {
               self.model.data().C3_545771157350 = imgUrl;
             } else {
-              self.model.data().C3_545771158420 = imageurl;
+              self.model.data().C3_545771158420 = imgUrl;
             }
 
             // self.model.data(self.model.data());
@@ -110,7 +96,7 @@ define(['durandal/app',
         index = index();
         var tmpData = self.model.data();
         var imgUrlArr = [tmpData.C3_541450276993, tmpData.C3_545771156108, tmpData.C3_545771157350, tmpData.C3_545771158420];
-        attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default);
+        attachShow(imgUrlArr, PhotoSwipe, PhotoSwipeUI_Default);
 
       },
       galleryClick: function () {
@@ -346,14 +332,15 @@ define(['durandal/app',
         tempFormData['C3_545771156108'] = '';
         tempFormData['C3_545771157350'] = '';
         tempFormData['C3_545771158420'] = '';
-        
-        self.model.data(tempFormData)
-        var tmpImgUrlArray = [self.model.data().C3_541450276993,
-            self.model.data().C3_545771156108,
-            self.model.data().C3_545771157350,
-            self.model.data().C3_545771158420]
 
-            self.model.attachUrlArray(tmpImgUrlArray)
+        self.model.data(tempFormData)
+
+        var tmpImgUrlArray = [self.model.data().C3_541450276993,
+        self.model.data().C3_545771156108,
+        self.model.data().C3_545771157350,
+        self.model.data().C3_545771158420]
+
+        self.model.attachUrlArray(tmpImgUrlArray)
       },
       valiateForm: function (data) {//验证提交数据
 
@@ -371,9 +358,6 @@ define(['durandal/app',
         selectRuleM.C3_545770982566,
         selectRuleM.C3_545770990395];
 
-
-
-
         var addressArr = [data.C3_541450276993, data.C3_545771156108, data.C3_545771157350, data.C3_545771158420];
         for (var i = 0; i < addressArr.length; i++) {
           if (i >= cameraNeccesseryArr.length) { alert(cameraNeccesseryArr); return false; }
@@ -387,9 +371,7 @@ define(['durandal/app',
 
 
       bindProperty: function () {
-
         self.model.data().C3_533143291117 = ko.observable(self.model.data().C3_533143291117);
-
 
         var tmpImgUrlArray = [self.model.data().C3_541450276993,
         self.model.data().C3_545771156108,

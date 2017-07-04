@@ -13,9 +13,8 @@ function (app, ko, router,httpService,ut) {
       var passWordStr = $("#passWord").val();
 
       console.log("--------->" + userStr + passWordStr)
-      var url = "https://kingofdinner.realsun.me:9092/api/Account/Login"
-      var data = { "Code": "demo1", "Password": "kingofdinner@2017", "unionid": "" };
-      // var data = { "Code": userStr, "Password": passWordStr, "unionid": "" };
+      var data = { "Code": userStr, "Password": passWordStr, "unionid": "" };
+      if(localDebug)  data = { "Code": "18356288459", "Password": "123456", "unionid": "" };
       httpService.accountLogin(data, function (e) {
         if (e.OpResult == 'Y') {
           cmAlert("登录成功",function(){});
@@ -86,7 +85,7 @@ function (app, ko, router,httpService,ut) {
     },
     getTeamApprove: function () {
       httpService.getTeamHttpApprove(function (data) {
-        if (data && data.data) {
+        if (data && data.data && data.data[0]) {
           var dataArr = data.data;
 
           if (dataArr[0].C3_541450807755 == dataArr[0].C3_541450797951) {

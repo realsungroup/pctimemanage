@@ -52,7 +52,7 @@
 	</div>
 
 	<!-- #PROJECTS: projects dropdown -->
-	<div class="project-context hidden-xs">
+	<div class="project-context hidden-xs" style="display: none">
 
 		<span class="label">Projects:</span>
 		<span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
@@ -127,7 +127,7 @@
 		<!-- end logout button -->
 
 		<!-- search mobile button (this is hidden till mobile view port) -->
-		<div id="search-mobile" class="btn-header transparent pull-right">
+		<div id="search-mobile" style="display: none"  class="btn-header transparent pull-right">
 			<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
 		</div>
 		<!-- end search mobile button -->
@@ -209,9 +209,9 @@
 				-->
 
 		<ul>
-			<li class="">
+			<!--<li class="">
 				<a href="#" title="blank_"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Blank</span></a>
-			</li>
+			</li>-->
 			<!--ko foreach: routersModel -->
 			<li >
 				<!--<a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent" data-bind="text:$data[0].type">Outlook</span> <span class="badge pull-right inbox-badge margin-right-13">14</span></a>-->

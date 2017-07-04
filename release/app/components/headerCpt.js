@@ -11,7 +11,7 @@ ko.components.register('headerCpt', {
 		<h1 class='page-title txt-color-blueDark'><i class='fa-fw fa fa-home'></i>\
 			<!-- ko text:title-->\
 			<!-- /ko -->\
-		  <span data-bind='text:'>' + subTitle()'></span></h1>\
+		  <span data-bind='text:\">\" + subTitle()'></span></h1>\
 	</div>\
 </div>"
 });
