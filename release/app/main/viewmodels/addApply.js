@@ -28,10 +28,10 @@ define(['durandal/app',
 
         self.init();
 
-        if (e && e.index) {
-          var idx = parseInt(e.index);
+        if (e && e.data) {
+          // var idx = parseInt(e.d);
           self.model.isDraft = true;
-          var passData = applying.model.data()[idx];
+          var passData = JSON.parse(e.data);
 
           self.model.selectedCategory(passData.C3_533398158705);
           self.kvoSelectCategory('draft')
@@ -190,9 +190,9 @@ define(['durandal/app',
           httpService.saveApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
               cmAlert("保存成功");
-              var returnData = resData.data[0];
-              applying.model.data().unshift(returnData);
-              applying.model.data(applying.model.data());
+              // var returnData = resData.data[0];
+              // applying.model.data().unshift(returnData);
+              // applying.model.data(applying.model.data());
               router.navigateBack();
 
             } else {

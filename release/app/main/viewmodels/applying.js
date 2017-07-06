@@ -31,52 +31,6 @@ define(['durandal/app',
                 self.getData(0);
             },
             attached: function () {
-                // var url = 'https://kingofdinner.realsun.me:9092/api/100/table/Retrieve'
-                // var data = {
-                //     'resid' : 541502768110
-                // }
-                // $.ajax({
-                //     url: url,
-                //     data: data,
-                //     dataType: "json",
-                //     type: 'GET',
-                //     success: function (res) {
-                //         if (res.statusCode == 401) {
-
-                //         } else if (res.statusCode == 404) {
-                //             wx.showToast({
-                //                 title: '请求出错',
-                //                 icon: 'loading'
-                //             });
-                //         } else {
-
-                //             if (typeof doSuccess == "function") {
-
-                //                 if (res != '' && 'error' in res) {
-
-                //                     if (res.error == 0) {
-                //                         doSuccess(res);
-                //                     } else {
-
-                //                         if (res.message) alert(res.message);
-                //                         doFail();
-                //                     }
-
-                //                 } else {
-                //                     doSuccess(res);
-                //                 }
-                //             }
-
-
-
-                //         }
-                //     },
-                //     error: function (e) {
-                //         if (typeof doFail == "function") {
-                //             doFail();
-                //         }
-                //     }
-                // });
             },
             deactivate: function () {
                 self = undefined;
@@ -139,8 +93,9 @@ define(['durandal/app',
                 self.getData(0);
             },
             goToEditPage: function (index) {
-
-                router.navigate("#addApply?index=" + index());
+                index = index();
+                var tmpData = self.model.data()[index];
+                router.navigate("#addApply?data=" + JSON.stringify(tmpData));
             },
             goToApplyDetailPage: function (index) {
                 var tmpData = self.model.data()[index()];
