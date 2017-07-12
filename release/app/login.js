@@ -14,7 +14,8 @@ function (app, ko, router,httpService,ut) {
 
       console.log("--------->" + userStr + passWordStr)
       var data = { "Code": userStr, "Password": passWordStr, "unionid": "" };
-      if(localDebug)  data = { "Code": "18356288459", "Password": "123456", "unionid": "" };
+      if(localDebug)  data = { "Code": "18356288459", "Password": "", "unionid": "" };
+      // if(localDebug)  data = { "Code": "demo1", "Password": "kingofdinner@2017", "unionid": "" };
       httpService.accountLogin(data, function (e) {
         if (e.OpResult == 'Y') {
           cmAlert("登录成功",function(){});
@@ -39,29 +40,6 @@ function (app, ko, router,httpService,ut) {
         cmAlert('系统错误');
       })
 
-
-      // var param = {
-      //     'apitoken': 'KingOfDinner123456789',
-      //     'clienttype': 'mobile',
-      //     'openid': 'oqWaVwKG0Yj0_8cbsSB3b9R31YcA'
-      //   }
-      // httpService.accountLogin(param, function (e) {
-      //      if (e.error == 0) {
-      //                 // cmAlert("success");   
-      //                 appConfig.app.userInfo = e;
-      //                 self.getVacationCategory();
-      //       self.getTeamApprove();
-      //       self.getRefuseData();
-
-
-
-      //             } else {
-      //                 cmAlert(e.ErrorMsg);
-      //             }
-      // }, function () {
-      //     cmAlert('doWindowlogin:系统错误');
-      // })
-
     },
 
     getVacationCategory: function () {
@@ -85,6 +63,7 @@ function (app, ko, router,httpService,ut) {
     },
     getTeamApprove: function () {
       httpService.getTeamHttpApprove(function (data) {
+        if(localDebug) data.data = ['11'];
         if (data && data.data && data.data[0]) {
           var dataArr = data.data;
 

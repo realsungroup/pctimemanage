@@ -3,123 +3,62 @@
   'plugins/router',
   'httpService',
   'components/headerCpt', 'components/cellMainCpt',
-  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
-   function (app, ko, router,httpService,hCpt,cellMainCpt,PhotoSwipeUI_Default, PhotoSwipe) {
-    var self;
-    return {
-      model: {
-        title: '我的审批',
-        subTitle: '已审批',
-        data: ko.observableArray(),
-        vacationCategory: [],
-        selectedCategory: '',
-        inputVal: ko.observable(''),
-        pageIndex: 0,
-        noMore: false
-      },
-      activate: function (e) {
-        self = this;
-        self.init();
+  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min', 'baseVM'],
+  function (app, ko, router, httpService, hCpt, cellMainCpt, PhotoSwipeUI_Default, PhotoSwipe, baseVM) {
 
-        //配置所有类型
-        var allVacationCategory = ['全部'];
-        allVacationCategory = allVacationCategory.concat(appConfig.app.vacationCategory)
-        self.model.vacationCategory = ko.observable(allVacationCategory);
-        self.model.selectedCategory = ko.observable(allVacationCategory[0])
+    var selfVM = new baseVM();
+
+    selfVM.getData = function (type) {
+      var self = selfVM;
+      var keyStr = '';
+      // if (self.data.selectDataIndex < self.data.selectDataArr.length) {
+      keyStr = self.model.selectedCategory();
+      keyStr = keyStr == '全部' ? '' : "C3_533398158705 ='" + keyStr + "'"
+      // }
+
+      var param = {
+        'subresid': '',
+        'cmswhere': keyStr,
+        'key': self.model.inputVal() ? self.model.inputVal() : ''
+      }
 
 
-        self.getData(0);
-      },
-      attached: function () {
 
-      },
-      deactivate: function () {
-        self = undefined;
-      },
-      init: function () {
-        self.model.noMore = false;
-        self.model.pageIndex = 0;
-        self.model.data([]);
-      },
-      //获取数据
-      getData: function (type) {
-        var keyStr = '';
-        // if (self.data.selectDataIndex < self.data.selectDataArr.length) {
-        keyStr = self.model.selectedCategory();
-        keyStr = keyStr == '全部' ? '' : "C3_533398158705 ='" + keyStr + "'"
-        // }
+      param.pageSize = 10;
+      if (!type) {//刷新
+        param.pageIndex = 0;
 
-        var param = {
-          'subresid': '',
-          'cmswhere': keyStr,
-          'key': self.model.inputVal() ? self.model.inputVal() : ''
+      } else {//加载
+        param.pageIndex = self.model.pageIndex;
+      }
+
+
+
+      httpService.getPendedData(param, function (data) {
+
+        if (data && data.data) {
+          var dataArr = data.data;
+          dataArr.forEach(function (val) {
+            val.selected = true
+          })
+          self.model.data(dataArr);
+
+          if (dataArr.length < param.pageSize) self.model.noMore = true;
+          else self.model.noMore = false;
+
+        } else {
+          // self.setData({ data: [] });
+          // self.setData({ noMore: true });
         }
+      }, function () {
+
+      });
+    }
+
+
+    return selfVM;
 
 
 
-        param.pageSize = 10;
-        if (!type) {//刷新
-          param.pageIndex = 0;
 
-        } else {//加载
-          param.pageIndex = self.model.pageIndex;
-        }
-
-
-
-        httpService.getPendedData(param, function (data) {
-
-          if (data && data.data) {
-            var dataArr = data.data;
-            dataArr.forEach(function (val) {
-              val.selected = true
-            })
-            self.model.data(dataArr);
-
-            if (dataArr.length < param.pageSize) self.model.noMore = true;
-            else self.model.noMore = false;
-
-          } else {
-            // self.setData({ data: [] });
-            // self.setData({ noMore: true });
-          }
-        }, function () {
-
-        });
-      },
-      //附件
-            showAttach: function (index) {
-                index = index();
-                var tmpData = self.model.data()[index];
-
-                var imgUrlArr = [tmpData.C3_541450276993, tmpData.C3_545771156108, tmpData.C3_545771157350, tmpData.C3_545771158420];
-                attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default);
-            },
-      //类型筛选
-      categoryFilterClick: function (index) {
-        self.model.selectedCategory(self.model.vacationCategory()[index()]);
-        self.getData(0);
-      },
-      goToApplyDetailPage: function (index) {
-        var tmpData = self.model.data()[index()];
-        var tmpJsonData = JSON.stringify(tmpData);
-        router.navigate("#applyDetail?data=" + tmpJsonData);
-      },
-      kvoInput: function () {
-        // ko.computed(function(){
-        self.getData(0);
-        //   return self.model.inputVal()
-        // })
-      },
-      pageUp: function () {
-        if (self.model.pageIndex <= 0) self.model.pageIndex = 0
-        else self.model.pageIndex--;
-        self.getData(1);
-      },
-      pageDown: function () {
-        if (self.model.noMore) return;
-        self.model.pageIndex++;
-        self.getData(1);
-      },
-    };
-  }); 
+  });

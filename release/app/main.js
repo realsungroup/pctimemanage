@@ -14,8 +14,8 @@ requirejs.config({
         'mobiscroll':'../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min',
         'common':'common/common',
         'until':'until/until',
-        'photoswipe':'../lib/photoswipe'
-        
+        'photoswipe':'../lib/photoswipe',
+        'baseVM':'main/base/baseViewModel'
     }
      
 });
