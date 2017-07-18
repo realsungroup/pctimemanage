@@ -12,7 +12,8 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
             selectedCategory: '',
             inputVal: ko.observable(''),
             pageIndex: 0,
-            noMore: false
+            noMore: false,
+            isLoading:false
         }
 
         this.activate = function (e) {
@@ -69,17 +70,20 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
         }
 
         this.pageUp = function () {
+            if(self.model.isLoading) {console.log("loading"); return;};//判断当前是否处于加载数据中 
             if (self.model.pageIndex <= 0) self.model.pageIndex = 0
             else self.model.pageIndex--;
             self.getData(1);
         }
 
         this.pageDown = function () {
-            // var self = this;
+            if(self.model.isLoading) {console.log("loading"); return;}//判断当前是否处于加载数据中 
             if (self.model.noMore) return;
             self.model.pageIndex++;
             self.getData(1);
         }
+
+        
 
     }
 

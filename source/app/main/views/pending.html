@@ -11,13 +11,14 @@
 	<!-- NEW WIDGET START -->
 	<article class="col-sm-12 col-md-12 col-lg-12">
 		<table class="table table-hover table-bordered">
-			<!--ko component:"cellMainCategory"-->
+			<!--ko component:{name:"cellMainCategory",params:{colspan:3}}-->
 			<!--/ko-->
 
 			
 			<!--ko component:{
 				name:"cellMainFilterSearch",
 				params:{
+					colspan:8,
 					title:model.selectedCategory,
 					subTitle:model.vacationCategory,
 					inputVal:model.inputVal,

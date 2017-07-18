@@ -1,3 +1,16 @@
+
+html,body,#applicationHost,#main-login{
+    height: 100% !important;
+}
+
+
+
+
+.clear-margin-rl{
+    margin-right: 0 !important;
+    margin-left:  0 !important;
+}
+
 .padding-lf-12{
     padding-left: 14px !important;
     padding-right: 14px !important;
@@ -14,6 +27,11 @@
     height: inherit;
 }
 
+/*用户名*/
+#userName{
+    text-indent: 5px;
+}
+
 /*审批流*/
 
 .cgsp{
@@ -21,15 +39,15 @@
 }
 
 .spjl{
-background-image: url(../img/img/wangjingli.png)
+    background-image: url(../img/img/wangjingli.png)
 }
 
 .spzg{
-background-image: url(../img/img/zhangzhuguan.png)
+    background-image: url(../img/img/zhangzhuguan.png)
 }
 
 .spzz{
-background-image: url(../img/img/lizhuzhang.png)
+    background-image: url(../img/img/lizhuzhang.png)
 }
 
 .pend-Y{
@@ -96,10 +114,80 @@ background-image: url(../img/img/lizhuzhang.png)
   background-color: #EE2A15;
 }
 
+/*保存提交*/
+.btn-save-submit{
+    width: 39%;
+    margin: 0 5%;
+}
+
+.btn-cancel-edit{
+    margin-top: 30px;
+    width: 88.3%;
+    margin-left: 5%;
+}
+
 .col-red-line{/*审批流红线*/
   width: 2px;
   height: 20px;
   position: absolute;
   left: 58px;
   bottom: 0;
+}
+
+
+.width-min-50{
+    width: 50px;
+}
+
+/*////////////////////////login////////////////////////////*/
+#login-form{
+    box-shadow: 0px 20px 60px rgba(0,0,0,0.4),0px 0px 150px rgba(0,0,0,0.4);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#login-form fieldset{
+    padding-top: 50px;
+}
+
+#login-form fieldset,
+#login-form footer{
+    background-color: rgba(255,255,255,0.75) !important;
+}
+
+#main-login .mg-top{
+    margin-top: 150px;
+}
+
+#main-login{
+    background-size: cover;
+}
+
+
+.login-from-container{
+    width: 360px;
+    margin: 7% auto;
+}
+
+@media (max-width:768px){
+    .login-from-container{
+        width: 90%;
+        margin-top: 20px
+    }
+}
+
+/*//////////////////////分页控制器///////////////////////////*/
+.page-control-nav{
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: calc(100% - 205px);
+    margin-left: -webkit-calc(100% - 205px);
+}
+
+.page-control-nav a{
+    width: 80px;
+}
+
+.page-control-nav li:nth-child(1) a{
+    margin-right: 30px;
 }

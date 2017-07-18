@@ -200,7 +200,7 @@ define(['durandal/app',
             }
 
           }, function () {
-            cmAlert("保存失败");
+            // cmAlert("保存失败");
           });
 
         } else {
@@ -220,7 +220,7 @@ define(['durandal/app',
             }
 
           }, function () {
-            cmAlert("添加失败");
+            // cmAlert("添加失败");
           });
         }
       },

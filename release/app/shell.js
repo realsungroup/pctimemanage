@@ -1,5 +1,8 @@
 define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko) {
     return {
+        data:{
+            userName:appConfig.app.userInfo.Data
+        },
         router: router,
         routersModel:ko.observableArray(),
         search: function () {

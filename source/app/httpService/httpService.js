@@ -2,20 +2,12 @@
 
 // 发起get请求
 var path = {
-  // baseUrl:'http://kingofdinner.realsun.me:8081/',
-  // getData: 'rispweb/risphost/data/AjaxService.aspx',
-  config: '/config',
-
-
   baseUrl: 'http://kingofdinner.realsun.me:9091/',
+  loginBaseUrl:'http://kingofdinner.realsun.me:9091/',
   getData: 'api/100/table/Retrieve',
   getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
   saveData: 'api/100/table/Save',
-  login: 'api/Account/Login',
-
-  // login: 'https://kingofdinner.realsun.me:9092/api/Account/Login',
-
-
+  login: 'api/Account/Login'
 }
 
 define([
@@ -23,21 +15,20 @@ define([
 ], function (until) {
 
   function fixDataWithMethod(data, method) {
-    if (method == 0) return data;
+    if (method == 0) {//登录
+      data.loginMethod = "badgeno";//工号
+      data.enterprisecode = enterprisecode;
+      return data;
+    };
 
     data.uiver = 200;
     data.dynlogin = 1;
 
-    // data.user = '18356288459';
-    // data.AccessToken = appConfig.app.userInfo.AccessToken;
-
     //获取主表数据
     if (method == 1) {
-      // data.method = 'ShowHostTableDatas_Ajax';
 
       //增 改 数据
     } else if (method == 2 || method == 4) {
-      // data.method = 'SaveData_Ajax';
       data.data._id = 1;
 
       if (method == 2) {
@@ -51,11 +42,9 @@ define([
 
       //获取附表数据
     } else if (method == 3) {
-      // data.method = 'ajax_GetRelTableByHostRecord';
 
       //修改多条数据
     } else if (method == 5) {
-      // data.method = 'SaveData_Ajax';
       data.data = JSON.stringify(data.data);
     }
     return data;
@@ -71,23 +60,26 @@ define([
   }
 
   function getHeader(str) {
-    if (str != path.login) {
+    if (str != path.baseUrl + path.login) {
       var headers = {
         "userCode": appConfig.app.userInfo.UserCode,
-        "accessToken": appConfig.app.userInfo.AccessToken
+        "accessToken": appConfig.app.userInfo.AccessToken,
+        "loginmethod": "badgeno",
+        "badgeno": globBadgeno,
+        "enterprisecode": enterprisecode,
+        "unionid": "11"
       }
       return headers
-      
+
     } else return {}
   }
 
   //ajax请求
   function baseRequest(type, url, data, method, doSuccess, doFail) {
     data = fixDataWithMethod(data, method);
-    printUrl(url,data);
+    printUrl(url, data);
     var headers = getHeader(url);
-    url = path.baseUrl + url;
-    
+
 
     $.ajax({
       url: url,
@@ -111,6 +103,7 @@ define([
               } else {
 
                 if (res.message) cmAlert(res.message);
+                else cmAlert("操作失败");
                 doFail();
               }
 
@@ -130,65 +123,72 @@ define([
 
   //账户登录
   function accountLogin(params, doSuccess, doFail) {
-    baseRequest("POST", path.login, params, 0, doSuccess, doFail);
+    var url = path.loginBaseUrl + path.login;
+    baseRequest("POST", url, params, 0, doSuccess, doFail);
   }
 
   //获取申请中数据
   function getApplyingData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     params.resid = 541502768110
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批中数据
   function getPendingData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     params.resid = 541518842754
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取假期类型
   function getVacationHttpCategory(doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     var params = {
       'resid': 542128856156,
       'subresid': '',
       'cmswhere': '',
       'key': ''
     }
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   // 获取审批人
   function getTeamHttpApprove(doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     var params = {
       'resid': 542225544503,
       'subresid': '',
       'cmswhere': '',
       'key': ''
     }
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   // 获取退回类型
   function getRefuseHttpData(params, doSuccess, doFail) {
-
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   // 添加请假数据
   function addApply(params, doSuccess, doFail) {
-
+    var url = path.baseUrl + path.saveData;
     params.resid = 541502768110;
-    baseRequest("POST", path.saveData, params, 2, doSuccess, doFail);
+    baseRequest("POST", url, params, 2, doSuccess, doFail);
   }
 
   // 保存请假数据
   function saveApply(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.saveData;
     params.resid = 541502768110;
-    baseRequest("POST", path.saveData, params, 4, doSuccess, doFail);
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   //计算时长
   function hourCalculate(params, doSuccess, doFail) {
-    baseRequest("POST", path.saveData, params, 2, doSuccess, doFail);
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params, 2, doSuccess, doFail);
   }
 
   // 上传图片
@@ -227,7 +227,8 @@ define([
       'hostrecid': paramREC_ID,
       // 'cmsorder': ""
     }
-    baseRequest("GET", path.getSubData, params, 3, doSuccess, doFail);
+    var url = path.baseUrl + path.getSubData;
+    baseRequest("GET", url, params, 3, doSuccess, doFail);
   }
 
 
@@ -237,28 +238,31 @@ define([
       'resid': 541502768110,
       'data': data
     }
-
+    var url = path.baseUrl + path.saveData;
     customLoading();
-    baseRequest("POST", path.saveData, params, 4, doSuccess, doFail);
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   // 获取已审核数据
   function getAppledData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     params.resid = 541518522808
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取退回修改数据 
   function getFixSubmitData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     params.resid = 543000345781
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
 
   // 获取我的申请历史记录
   function getApplyHistoryData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.getData;
     params.resid = 541518678060
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批
@@ -267,25 +271,29 @@ define([
       'resid': 541518842754,
       'data': param
     }
-    baseRequest("POST", path.saveData, params, 5, doSuccess, doFail);
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
   //已审批数据
   function getPendedData(params, doSuccess, doFail) {
     params.resid = 541518986783
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批退回数据
   function getPendedRefuseData(params, doSuccess, doFail) {
     params.resid = 541519417864
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批历史记录数据
   function getPendedHistoryData(params, doSuccess, doFail) {
     params.resid = 541520707421
-    baseRequest("GET", path.getData, params, 1, doSuccess, doFail);
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
   var httpService = {
     accountLogin: accountLogin,

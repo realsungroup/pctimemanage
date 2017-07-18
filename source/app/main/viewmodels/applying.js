@@ -15,11 +15,10 @@
 
         //获取数据
         selfVM.getData = function (type) {
+            selfVM.model.isLoading = true;
             var keyStr = '';
-            // if (self.data.selectDataIndex < self.data.selectDataArr.length) {
             keyStr = self.model.selectedCategory();
             keyStr = keyStr == '全部' ? '' : keyStr;
-            // }
 
             var param = {
                 'subresid': '',
@@ -52,8 +51,9 @@
                     // self.setData({ data: [] });
                     // self.setData({ noMore: true });
                 }
+                selfVM.model.isLoading = false;
             }, function () {
-
+                selfVM.model.isLoading = false;
             });
         }
         selfVM.goToAddApplying = function () {
@@ -63,6 +63,8 @@
         selfVM.goToEditPage = function (index) {
             index = index();
             var tmpData = self.model.data()[index];
+            
+            // alert(JSON.stringify(tmpData).length)
             router.navigate("#addApply?data=" + JSON.stringify(tmpData));
         }
 

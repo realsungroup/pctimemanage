@@ -33,7 +33,7 @@ define(['durandal/app',
                 }
 
 
-
+                selfVM.model.isLoading = true;
                 httpService.getFixSubmitData(param, function (data) {
 
                     if (data && data.data) {
@@ -47,8 +47,9 @@ define(['durandal/app',
                         // self.setData({ data: [] });
                         // self.setData({ noMore: true });
                     }
+                    selfVM.model.isLoading = false;
                 }, function () {
-
+                    selfVM.model.isLoading = false;
                 });
             },
            

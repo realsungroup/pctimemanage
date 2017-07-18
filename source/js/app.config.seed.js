@@ -121,6 +121,10 @@ var root = this,
 	ignore_key_elms = ["#header, #left-panel, #right-panel, #main, div.page-footer, #shortcut, #divSmallBoxes, #divMiniIcons, #divbigBoxes, #voiceModal, script, .ui-chatbox"];
 
 
+enterprisecode = '9063'
+
+globBadgeno = null;
+
 //router
 
 routeTypeList = ["我的申请","我的审批"]
@@ -143,7 +147,7 @@ routeList = [
 
 ]
 
-localDebug = true;
+localDebug = false;
 /*
  * END APP.CONFIG
  */

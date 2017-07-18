@@ -10,11 +10,10 @@
 
     selfVM.getData = function (type) {
       var self = selfVM;
+      
       var keyStr = '';
-      // if (self.data.selectDataIndex < self.data.selectDataArr.length) {
       keyStr = self.model.selectedCategory();
       keyStr = keyStr == '全部' ? '' : "C3_533398158705 ='" + keyStr + "'"
-      // }
 
       var param = {
         'subresid': '',
@@ -33,7 +32,7 @@
       }
 
 
-
+      selfVM.model.isLoading = true;
       httpService.getPendedData(param, function (data) {
 
         if (data && data.data) {
@@ -46,12 +45,11 @@
           if (dataArr.length < param.pageSize) self.model.noMore = true;
           else self.model.noMore = false;
 
-        } else {
-          // self.setData({ data: [] });
-          // self.setData({ noMore: true });
-        }
+        } 
+        
+        selfVM.model.isLoading = false;
       }, function () {
-
+        selfVM.model.isLoading = false;
       });
     }
 

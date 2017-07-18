@@ -33,7 +33,7 @@
         }
 
 
-
+        selfVM.model.isLoading = true;
         httpService.getPendedRefuseData(param, function (data) {
 
           if (data && data.data) {
@@ -46,12 +46,10 @@
             if (dataArr.length < param.pageSize) self.model.noMore = true;
             else self.model.noMore = false;
 
-          } else {
-            // self.setData({ data: [] });
-            // self.setData({ noMore: true });
-          }
+          } 
+          selfVM.model.isLoading = false;
         }, function () {
-
+          selfVM.model.isLoading = false;
         });
       }
 
