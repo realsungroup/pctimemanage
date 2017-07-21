@@ -1,10 +1,10 @@
 ﻿define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService',
+  'httpServiceRE',
   'components/headerCpt',
   'components/cellMainCpt',
-  'until', 'baseVM'],
+  'untilRE', 'baseVM'],
   function (app, ko, router, httpService, headerCpt, cellMainCpt, ut, baseVM) {
     var selfVM = new baseVM();
     var self = selfVM;
@@ -56,8 +56,11 @@
 
     selfVM.goToApplyDetailPage = function (index) {
       var tmpData = self.model.data()[index()];
-      var tmpJsonData = JSON.stringify(tmpData);
-      router.navigate("#applyDetail?data=" + tmpJsonData + '&willRefuse=true');
+      // var tmpJsonData = JSON.stringify(tmpData);
+      // router.navigate("#applyDetail?data=" + tmpJsonData + '&willRefuse=true');
+
+      globSingleData = JSON.stringify(tmpData);
+      router.navigate("#applyDetail?willRefuse=true");
     }
 
 

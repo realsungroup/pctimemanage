@@ -1,14 +1,14 @@
 ﻿define(['durandal/app',
     'knockout',
     'plugins/router',
-    'httpService',
+    'httpServiceRE',
     'components/headerCpt',
     'components/cellMainCpt',
-    'until',
-    'photoswipe/photoswipe-ui-default.min',
-    'photoswipe/photoswipe.min',
-    'baseVM'],
-    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM) {
+    'untilRE',
+    'photoswipeRE/photoswipe-ui-default.min',
+    'photoswipeRE/photoswipe.min',
+    'baseVM',"durandal/viewEngine"],
+    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM,viewEngine) {
         var selfVM = new baseVM();
         selfVM.model.subTitle = '申请中'
         var self = selfVM;
@@ -63,15 +63,19 @@
         selfVM.goToEditPage = function (index) {
             index = index();
             var tmpData = self.model.data()[index];
-            
-            // alert(JSON.stringify(tmpData).length)
-            router.navigate("#addApply?data=" + JSON.stringify(tmpData));
+            // router.navigate("#addApply?data=" + JSON.stringify(tmpData));
+
+            globSingleData = JSON.stringify(tmpData);
+            router.navigate("#addApply");
         }
 
         selfVM.goToApplyDetailPage = function (index) {
                 var tmpData = self.model.data()[index()];
-                var tmpJsonData = JSON.stringify(tmpData);
-                router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
+                // var tmpJsonData = JSON.stringify(tmpData);
+                // router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
+
+                globSingleData = JSON.stringify(tmpData);
+                router.navigate("#applyDetail?willCancel=true");
             }
 
         //提交

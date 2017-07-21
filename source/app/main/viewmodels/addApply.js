@@ -1,11 +1,11 @@
 define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService', 'mobiscroll',
-  'main/viewmodels/applying', 'common', 'until',
+  'httpServiceRE', 'mobiscroll',
+  'main/viewmodels/applying', 'commonRE', 'untilRE',
   'components/cellReadonlyCpt',
   'components/cellEditCpt',
-  'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
+  'photoswipeRE/photoswipe-ui-default.min', 'photoswipeRE/photoswipe.min'],
   function (app, ko, router, httpService, mobi, applying, co, ut, cellReadCpt, cellEdit, PhotoSwipeUI_Default, PhotoSwipe) {
     var self;
     return {
@@ -27,7 +27,9 @@ define(['durandal/app',
         console.log('aaaaaaaaa' + applying.model.data());
 
         self.init();
-
+        if(e) e.data =globSingleData
+        else  e = {"data": globSingleData}
+        globSingleData = null;
         if (e && e.data) {
           // var idx = parseInt(e.d);
           self.model.isDraft = true;

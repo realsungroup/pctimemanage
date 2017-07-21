@@ -1,9 +1,9 @@
 ﻿define(['durandal/app',
     'knockout',
     'plugins/router',
-    'httpService',
+    'httpServiceRE',
     'components/headerCpt', 'components/cellMainCpt',
-    'until','photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min','baseVM'],
+    'untilRE','photoswipeRE/photoswipe-ui-default.min', 'photoswipeRE/photoswipe.min','baseVM'],
     function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe,baseVM) {
          var selfVM = new baseVM();
             selfVM.model.subTitle = '已审核'

@@ -1,4 +1,4 @@
-﻿define(['durandal/app', 'knockout', 'plugins/router', 'httpService', 'until'],
+﻿define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'],
   function (app, ko, router, httpService, ut) {
     var self;
     return {
@@ -20,8 +20,9 @@
         var passWordStr = $("#passWord").val();
 
         console.log("--------->" + userStr + passWordStr)
+         if (localDebug) userStr = "80881" 
         var data = { "badgeno": userStr, "Password": passWordStr };
-        if (localDebug) data = { "badgeno": "80881", "Password": "", "unionid": "" };
+       
         // if(localDebug)  data = { "Code": "demo1", "Password": "kingofdinner@2017", "unionid": "" };
         httpService.accountLogin(data, function (e) {
           if (e.OpResult == 'Y') {

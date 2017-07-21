@@ -1,21 +1,23 @@
 ﻿
 requirejs.config({
     paths: {
-        'httpService':"httpService/httpService",
+        'httpServiceRE':"../app/httpService/httpService",
         'text': '../lib/require/text',
         'durandal':'../lib/durandal/js',
         'plugins' : '../lib/durandal/js/plugins',
         'transitions' : '../lib/durandal/js/transitions',
         'knockout': '../lib/knockout/knockout-3.4.0',
-        'jQuery':'../lib/jquery/jquery-1.9.1',
+        // 'jQuery':'../lib/jquery/jquery-1.9.1',
+        'jquery':'../lib/jquery/jquery-1.9.1',
         'realsun': '../lib/realsun/js',
         'calendar': '../lib/fullcalendar',
         'components':'components',
         'mobiscroll':'../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min',
-        'common':'common/common',
-        'until':'until/until',
-        'photoswipe':'../lib/photoswipe',
+        'commonRE':'../app/common/common',
+        'untilRE':'until/until',
+        'photoswipeRE':'../lib/photoswipe',
         'baseVM':'main/base/baseViewModel'
+        
     }
      
 });

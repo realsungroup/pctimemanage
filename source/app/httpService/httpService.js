@@ -3,7 +3,7 @@
 // 发起get请求
 var path = {
   baseUrl: 'http://kingofdinner.realsun.me:9091/',
-  loginBaseUrl:'http://kingofdinner.realsun.me:9091/',
+  loginBaseUrl: 'http://kingofdinner.realsun.me:9091/',
   getData: 'api/100/table/Retrieve',
   getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
   saveData: 'api/100/table/Save',
@@ -11,7 +11,7 @@ var path = {
 }
 
 define([
-  'until'
+  'untilRE'
 ], function (until) {
 
   function fixDataWithMethod(data, method) {
@@ -295,6 +295,34 @@ define([
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
+
+  //获取时间选项
+  function getDayOptions(params, doSuccess, doFail) {
+    params.cmswhere = '';
+    params.resid = '543946502584';
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //获取当月排班
+  function getMonthWorkData(params, doSuccess, doFail) {
+    params.resid = '543666594803';
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //获取考勤日报
+  function getDayReportData(params, doSuccess, doFail){
+    getMonthWorkData(params, doSuccess, doFail)
+  }
+
+  //获取考勤月报
+  function getMonthReportData(params, doSuccess, doFail) {
+    params.resid = '543666672286';
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -314,7 +342,11 @@ define([
     approveDataArr: approveDataArr,
     getPendedData: getPendedData,
     getPendedRefuseData: getPendedRefuseData,
-    getPendedHistoryData: getPendedHistoryData
+    getPendedHistoryData: getPendedHistoryData,
+    getDayOptions:getDayOptions,
+    getMonthWorkData:getMonthWorkData,
+    getDayReportData:getDayReportData,
+    getMonthReportData:getMonthReportData
   }
   return httpService
 });

@@ -184,7 +184,6 @@ var calc_navbar_height = function() {
 						if (ButtonPressed == "Yes") {
 							$.root_.addClass('animated fadeOutUp');
 							setTimeout(logout, 1000);
-							
 						}
 					});
 					function logout() {
@@ -311,6 +310,16 @@ var calc_navbar_height = function() {
 			    }  
 			   
 			};
+
+			$.root_.on('click', '[data-action="userLogout"]', function(e) {
+				var $this = $(this);
+				smartActions.userLogout($this);
+				e.preventDefault();
+				
+				//clear memory reference
+				$this = null;
+				
+			}); 
 				
 			/*
 			 * BUTTON ACTIONS 
@@ -948,7 +957,7 @@ var calc_navbar_height = function() {
 		    checkURL();
 	    }
 	
-	    $(document).on('click', 'nav a[href!="#"]', function(e) {
+	    $(document).on('click', 'nav a[href!="#"]', function(e) { 
 		    e.preventDefault();
 		    var $this = $(e.currentTarget);
 	
@@ -967,7 +976,7 @@ var calc_navbar_height = function() {
 								window.location.href.replace(window.location.search, '')
 									.replace(window.location.hash, '') + '#' + $this.attr('href');
 						} else {
-							window.location.hash = $this.attr('href');
+							window.location.hash =  $this.attr('href');
 						}
 				    }, 150);
 				    // it may not need this delay...
@@ -1016,7 +1025,7 @@ var calc_navbar_height = function() {
 /*
  * CHECK TO SEE IF URL EXISTS
  */
-	function checkURL() {
+	function checkURL() { return;
 	
 		//get the url by removing the hash
 		//var url = location.hash.replace(/^#/, '');

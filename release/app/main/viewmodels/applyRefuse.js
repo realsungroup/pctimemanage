@@ -1,7 +1,7 @@
 define(['durandal/app',
     'knockout',
     'plugins/router',
-    'httpService',
+    'httpServiceRE',
     'components/headerCpt','components/cellMainCpt','baseVM'],
      function (app, ko, router,httpService,headerCpt,cellMainCpt,baseVM) {
          var selfVM = new baseVM();
@@ -59,8 +59,11 @@ define(['durandal/app',
             
             selfVM.goToFixSubmitPage = function(index){
                 var tmpData = self.model.data()[index()];
-                var tmpJsonData = JSON.stringify(tmpData);
-                router.navigate("#fixSubmit?data=" + tmpJsonData );
+                // var tmpJsonData = JSON.stringify(tmpData);
+                // router.navigate("#fixSubmit?data=" + tmpJsonData );
+
+                globSingleData = JSON.stringify(tmpData);
+                router.navigate("#fixSubmit");
             }
             return selfVM;
     }); 

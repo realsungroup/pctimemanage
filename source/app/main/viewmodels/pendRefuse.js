@@ -1,7 +1,7 @@
 ﻿define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService',
+  'httpServiceRE',
   'components/headerCpt', 'components/cellMainCpt','baseVM'], function (app, ko, router,httpService,headerCpt,cellMainCpt,baseVM) {
 
     var selfVM = new baseVM();

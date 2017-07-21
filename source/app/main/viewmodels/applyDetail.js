@@ -1,11 +1,11 @@
 define(['durandal/app',
   'knockout',
   'plugins/router',
-  'httpService',
+  'httpServiceRE',
   'mobiscroll',
-  'common',
-  'until',
-  'components/cellReadonlyCpt', 'photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
+  'commonRE',
+  'untilRE',
+  'components/cellReadonlyCpt', 'photoswipeRE/photoswipe-ui-default.min', 'photoswipeRE/photoswipe.min'],
   function (app, ko, router, httpService, mobi, co, ut, cellRonlyCpt, PhotoSwipeUI_Default, PhotoSwipe) {
     var self;
     return {
@@ -30,7 +30,9 @@ define(['durandal/app',
         self = this;
 
         self.init();
-
+        if(e) e.data =globSingleData
+        else  e = {"data": globSingleData}
+        globSingleData = null;
         if (e && e.data) {
 
           var passData = JSON.parse(e.data);

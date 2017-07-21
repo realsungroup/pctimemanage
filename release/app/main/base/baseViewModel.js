@@ -1,5 +1,5 @@
 
-define(['knockout','plugins/router','until','photoswipe/photoswipe-ui-default.min', 'photoswipe/photoswipe.min'],
+define(['knockout','plugins/router','untilRE','photoswipeRE/photoswipe-ui-default.min', 'photoswipeRE/photoswipe.min'],
 function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
 
     return function () {
@@ -61,8 +61,11 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
 
         this.goToApplyDetailPage = function (index) {
             var tmpData = self.model.data()[index()];
-            var tmpJsonData = JSON.stringify(tmpData);
-            router.navigate("#applyDetail?data=" + tmpJsonData);
+            // var tmpJsonData = JSON.stringify(tmpData);
+            // router.navigate("#applyDetail?data=" + tmpJsonData);
+            
+            globSingleData = JSON.stringify(tmpData);
+            router.navigate("#applyDetail");
         }
 
         this.kvoInput = function () {
