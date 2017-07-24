@@ -6,8 +6,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
 
         var queryMonthVM = {};
 
-        
-
         queryMonthVM.model = {
             title: '我的查询',
             subTitle: '当月排班',
@@ -40,14 +38,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
             });
         }
 
-        // obserSelectDate: ko.computed(function () {
-        //     var dateStr = this.model.selectDate().toString();
-        //     if (dateStr != '' && dateStr != undefined) {
-        //         this.getCalendar(dateStr);
-        //     }
-        // }),
-
-
         queryMonthVM.getCalendar = function (defaultYM) {
             defaultYM = defaultYM.toString();
             var yearArr = defaultYM.substring(0, 4); //.slice('年');
@@ -63,7 +53,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
                 return (year % 100 == 0 ? res = (year % 400 == 0 ? 1 : 0) : res = (year % 4 == 0 ? 1 : 0));
             }
 
-            monthDayCountArr = [31, 28 + is_leap(y), 31, 30, 31, 31, 30, 31, 30, 31, 30, 31];//每月天数
+            monthDayCountArr = [31, 28 + is_leap(y), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//每月天数
 
             var firstDate = new Date(entYear, entMonth - 1, 1);
             firstWeek = firstDate.getDay();//1号星期几
@@ -81,6 +71,14 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
             }
             httpService.getMonthWorkData(params, function (data) {
                 data = data.data;
+
+                if(localDebug){
+                    var  a = []
+                     for(var i = 0 ; i < 31 ;i ++){
+                        a.push({"C3_375377576828":"白班"});
+                    } 
+                    data = a;
+                }
                 var textColorArr = [];//字体颜色数组
                 var monthDayCount = monthDayCountArr[dateM];//当月天数
                 // data.splice(10, 5);

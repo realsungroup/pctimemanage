@@ -61,6 +61,10 @@ define([
 
   function getHeader(str) {
     if (str != path.baseUrl + path.login) {
+        if(!appConfig.app.userInfo){
+          console.error("用户信息错误")
+          return;
+        }
       var headers = {
         "userCode": appConfig.app.userInfo.UserCode,
         "accessToken": appConfig.app.userInfo.AccessToken,
@@ -323,6 +327,34 @@ define([
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
+  //查询所有员工审批定义数据
+  function getAllStaffPendData(params, doSuccess, doFail) {
+    params.resid = '542065063018';
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //查询个人所对应的组长，主管，经理列表
+  function getSelectPesonData(params, doSuccess, doFail) {
+    params.resid = '554233627911';
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+    //增加个人设置的组长，主管，经理列表
+  function addPesonPendData(params, doSuccess, doFail) {
+    params.resid = '541450769466';
+    var url = path.baseUrl + path.saveData;
+    baseRequest("GET", url, params, 2, doSuccess, doFail);
+  }
+
+  //保存（编辑）个人设置的组长，主管，经理列表
+  function savePesonPendData(params, doSuccess, doFail) {
+    params.resid = '541450769466';
+    var url = path.baseUrl + path.saveData;
+    baseRequest("GET", url, params, 4, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -346,7 +378,11 @@ define([
     getDayOptions:getDayOptions,
     getMonthWorkData:getMonthWorkData,
     getDayReportData:getDayReportData,
-    getMonthReportData:getMonthReportData
+    getMonthReportData:getMonthReportData,
+    getAllStaffPendData:getAllStaffPendData,
+    getSelectPesonData:getSelectPesonData,
+    addPesonPendData:addPesonPendData,
+    savePesonPendData:savePesonPendData
   }
   return httpService
 });

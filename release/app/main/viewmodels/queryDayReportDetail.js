@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE'],
-    function (app, ko, router, headerCpt, httpService) {
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt'],
+    function (app, ko, router, headerCpt) {
 
         var monthReportVM = {};
 
@@ -13,12 +13,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
         monthReportVM.activate = function (e) {
 
-            monthReportVM.propData = {
-                "F_27":"1",
-                "F_1":"2"
-            }
             monthReportVM.data(monthReportVM.propData);
-            // alert(monthReportVM.propData)
         };
 
 

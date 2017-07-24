@@ -181,3 +181,13 @@ ko.components.register('cellPendPersonCpt', {
               </div>' 
 });
 
+
+//保存按钮
+ko.components.register('cellSaveBtnCpt', {
+    viewModel: function (params) {
+        this.propClick = params && params.propClick || '';
+    },
+    template: '<div class="from-group">\
+        <button class="btn btn-cancel-edit btn-primary w45 ccg rf" data-bind="click:propClick">保存</button>\
+    </div>'
+});

@@ -181,13 +181,14 @@ var calc_navbar_height = function() {
 						buttons : '[No][Yes]'
 			
 					}, function(ButtonPressed) {
+						$.root_.addClass('animated fadeOutUp');
 						if (ButtonPressed == "Yes") {
-							$.root_.addClass('animated fadeOutUp');
+							
 							setTimeout(logout, 1000);
 						}
 					});
 					function logout() {
-						window.location = $this.attr('href');
+						// window.location = $this.attr('href');
 					}
 			
 				},
@@ -340,8 +341,8 @@ var calc_navbar_height = function() {
 			}); 
 			
 			$.root_.on('click', '[data-action="toggleMenu"]', function(e) {	
-				smartActions.toggleMenu();
-				e.preventDefault();
+				// smartActions.toggleMenu();
+				// e.preventDefault();
 			});  
 		
 			$.root_.on('click', '[data-action="toggleShortcut"]', function(e) {	

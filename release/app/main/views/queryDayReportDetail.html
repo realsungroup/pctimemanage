@@ -6,130 +6,128 @@
 
 
 
-                            <!-- row -->
-                            <div class="row">
+<!-- row -->
+<div class="row">
 
-                                <!-- NEW WIDGET START -->
-                                <article class="col-sm-12 col-md-12 col-lg-12">
-                                    <td class="label-title" data-bind="text:data().DATES"></td>
-                                    <table class="table table-hover table-bordered">
-                                       
-
-
-                                        <tbody >
-                                             <tr>
-                                            <td></td>
-                                            <td data-bind="text:data().C3_375377576828"></td>
-                                            <td></td>
-                                            <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>上班</td>
-                                                <td data-bind="text:data().STARTTIMES == '00:00' ? '' : data().STARTTIMES"></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>下班</td>
-                                                <td data-bind="text:data().ENDTIMES == '00:00' ? '' : data().ENDTIMES"></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </article>
-                                <!-- WIDGET END -->
+    <!-- NEW WIDGET START -->
+    <article class="col-sm-12 col-md-12 col-lg-12">
+        <td class="label-title" data-bind="text:data().DATES"></td>
+        <table class="table table-hover table-bordered">
 
 
-                                <!-- NEW WIDGET START -->
-                                <article class="col-sm-12 col-md-12 col-lg-12">
-                                    <td class="label-title">缺勤</td>
-                                    <table class="table table-hover table-bordered">
-                                        
+
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td data-bind="text:data().C3_375377576828"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>上班</td>
+                    <td data-bind="text:data().STARTTIMES == '00:00' ? '' : data().STARTTIMES"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>下班</td>
+                    <td data-bind="text:data().ENDTIMES == '00:00' ? '' : data().ENDTIMES"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+    <!-- WIDGET END -->
 
 
-                                        <tbody >
-                                        <tr>
-                                            <td>迟到</td>
-                                            <td>早退</td>
-                                            <td>未刷卡</td>
-                                            <td>漏刷卡</td>
-                                        </tr>
+    <!-- NEW WIDGET START -->
+    <article class="col-sm-12 col-md-12 col-lg-12">
+        <td class="label-title">缺勤</td>
+        <table class="table table-hover table-bordered">
 
-                                            <tr>
-                                                <td data-bind="text:data().F_1"></td>
-                                                <td data-bind="text:data().F_2"></td>
-                                                <td data-bind="text:data().F_3"></td>
-                                                <td data-bind="text:data().F_40"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </article>
-                                <!-- WIDGET END -->
+            <tbody>
+                <tr>
+                    <td>迟到</td>
+                    <td>早退</td>
+                    <td>未刷卡</td>
+                    <td>漏刷卡</td>
+                </tr>
+
+                <tr>
+                    <td data-bind="text:data().F_1"></td>
+                    <td data-bind="text:data().F_2"></td>
+                    <td data-bind="text:data().F_3"></td>
+                    <td data-bind="text:data().F_40"></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+    <!-- WIDGET END -->
 
 
-                                <!-- NEW WIDGET START -->
-                                <article class="col-sm-12 col-md-12 col-lg-12">
-                                    <td class="label-title">请假</td>
-                                    <table class="table table-hover table-bordered">
+    <!-- NEW WIDGET START -->
+    <article class="col-sm-12 col-md-12 col-lg-12">
+        <td class="label-title">请假</td>
+        <table class="table table-hover table-bordered">
 
-                                        <tbody >
-                                            <tr>
-                                                <td>病假</td>
-                                                <td>事假</td>
-                                                <td>年假</td>
-                                                <td>婚假</td>
-                                            </tr>
+            <tbody>
+                <tr>
+                    <td>病假</td>
+                    <td>事假</td>
+                    <td>年假</td>
+                    <td>婚假</td>
+                </tr>
 
-                                            <tr>
-                                                <td  data-bind="text:data().F_14">/td>
-                                                <td  data-bind="text:data().F_15">/td>
-                                                <td  data-bind="text:data().F_23">/td>
-                                                <td  data-bind="text:data().F_18">/td>
-                                            </tr>
-                                            <tr>
-                                                <td>产前假</td>
-                                                <td>护理假</td>
-                                                <td>路程假</td>
-                                                <td>丧假</td>
-                                            </tr>
-                                            <tr>
-                                                <td  data-bind="text:data().F_36">/td>
-                                                <td  data-bind="text:data().F_69">/td>
-                                                <td  data-bind="text:data().F_54">/td>
-                                                <td  data-bind="text:data().F_19">/td>
-                                            </tr>
-                                            <tr>
-                                                <td>工伤假</td>
-                                                <td>产假</td>
-                                                <td>产检假</td>
-                                                <td>哺乳假</td>
-                                            </tr>
-                                            <tr>
-                                                <td  data-bind="text:data().F_27">/td>
-                                                <td  data-bind="text:data().F_16">/td>
-                                                <td  data-bind="text:data().F_35">/td>
-                                                <td  data-bind="text:data().F_37">/td>
-                                            </tr>
-                                            <tr>
-                                                <td>计划生育假</td>
-                                                <td>调休</td>
-                                                <td>欠班</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td  data-bind="text:data().F_52">/td>
-                                                <td  data-bind="text:data().F_28">/td>
-                                                <td  data-bind="text:data().F_70">/td>
-                                                <td></td>
-                                            </tr>
-                                            <td class="label-title">累计出勤
-                                                <text class="color-red"  data-bind="text:data().F_79 ? data().F_79 : '-'">/text>h</td>
-                                            </td>
-                                        </tbody>
-                                    </table>
-                                </article>
-                                <!-- WIDGET END -->
+                <tr>
+                    <td data-bind="text:data().F_14">/td>
+                        <td data-bind="text:data().F_15">/td>
+                            <td data-bind="text:data().F_23">/td>
+                                <td data-bind="text:data().F_18">/td>
+                </tr>
+                <tr>
+                    <td>产前假</td>
+                    <td>护理假</td>
+                    <td>路程假</td>
+                    <td>丧假</td>
+                </tr>
+                <tr>
+                    <td data-bind="text:data().F_36">/td>
+                        <td data-bind="text:data().F_69">/td>
+                            <td data-bind="text:data().F_54">/td>
+                                <td data-bind="text:data().F_19">/td>
+                </tr>
+                <tr>
+                    <td>工伤假</td>
+                    <td>产假</td>
+                    <td>产检假</td>
+                    <td>哺乳假</td>
+                </tr>
+                <tr>
+                    <td data-bind="text:data().F_27">/td>
+                        <td data-bind="text:data().F_16">/td>
+                            <td data-bind="text:data().F_35">/td>
+                                <td data-bind="text:data().F_37">/td>
+                </tr>
+                <tr>
+                    <td>计划生育假</td>
+                    <td>调休</td>
+                    <td>欠班</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td data-bind="text:data().F_52">/td>
+                        <td data-bind="text:data().F_28">/td>
+                            <td data-bind="text:data().F_70">/td>
+                                <td></td>
+                </tr>
+                <td class="label-title">累计出勤
+                    <text class="color-red" data-bind="text:data().F_79 ? data().F_79 + 'h' : '-' + 'h'"></td>
+                </td>
+            </tbody>
+        </table>
+    </article>
+    <!-- WIDGET END -->
 
-                            </div>
-                            <!-- end row -->
+</div>
+<!-- end row -->

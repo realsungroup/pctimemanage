@@ -40,21 +40,11 @@ function cmAlert(title) {
 
     $('#myModal').modal(options)
 
+    
+    
 }
 
-// function cmAlert(title,callback) {
-//     // alert(title);
-//     // dialog.showMessage(title)
-//     var options = {}
-//     $('#modalTitle').html('提示');
-//     $('#modalSubTitle').html(title);
 
-//     $('#myModal').modal(options)
-
-//     $('#myModal').on('hidden.bs.modal', function (e) {
-//         if(typeof callback == 'function') callback();
-//     })
-// }
 
 function customLoading() {
 

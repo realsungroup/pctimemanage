@@ -39,6 +39,7 @@
     "wallabify": "0.0.14"
   },
   "dependencies": {
+    "ifvisible.js": "^1.0.6",
     "jquery": "^2.2.0"
   }
 }

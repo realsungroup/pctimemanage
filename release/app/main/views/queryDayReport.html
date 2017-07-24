@@ -6,7 +6,7 @@
 
 <div id="mysearch2">
 
-    <div id="msPageOne">
+    <!--<div id="msPageOne">
         <div>
             <select name="" id="" data-bind="options:dayOptionT,value:selectDate">
         </select>
@@ -14,7 +14,7 @@
             <span data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>
             <span>异常</span>
         </div>
-    </div>
+    </div>-->
         <!-- row -->
         <div class="row">
 
@@ -40,8 +40,8 @@
                             <th></th>
                             <th></th>
                             <th>
-                               <span data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>
-                               <span>异常</span>
+                               <span class="my-switch" data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>
+                               <span class="my-switch-title">异常</span>
                             </th>
                         </tr>
                     </thead>

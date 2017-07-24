@@ -3,7 +3,10 @@ html,body,#applicationHost,#main-login{
     height: 100% !important;
 }
 
-
+td{
+    word-break: break-all;
+    height: 37px !important;
+}
 
 
 .clear-margin-rl{
@@ -222,6 +225,15 @@ ul{
     
 }
 
+.line-ab{
+    height: 1px;
+    position: absolute;
+    background-color: #BBBBBB;
+    left: 10px;
+    right:10px;
+    bottom:0;
+}
+
 
 #week{
     display:flex; 
@@ -249,6 +261,7 @@ ul{
      display: -webkit-flex;
      width: 100%;
         height: 72px;
+        position: relative;
 }
 
 #day ul li{
@@ -353,13 +366,20 @@ ul{
     background-image: url(../img/img/yichang-2.png);
 }
 
-#msPageOne div:nth-child(1) span:nth-child(3){
+.my-switch{
     display: inline-block;
-    position: absolute;
-    right: 10px;
-    top: 14px;
+    width: 45px;
+    height: 24px;
     font-size: 11px;
     color: #EE2A15;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.my-switch-title{
+        vertical-align: top;
+    line-height: 24px;
+    margin-left: 4px;
 }
 
 #msContent ul{

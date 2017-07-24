@@ -11,22 +11,28 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
       activate: function () {
         self = this;
 
+        self.data.vacationCategorySuccess = false;
+        self.data.teamApproveSuccess = false;
+        self.data.refuseArrSuccess = false;
+
+        // 随机背景图片
         var radmomNum = Math.floor(Math.random() * 4) + 1
         self.data.radomPhotoNum("url('../../img/img/photo" + radmomNum + ".jpg')")
       },
+
+      // 登录
       login: function () {
 
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        console.log("--------->" + userStr + passWordStr)
-         if (localDebug) userStr = "80881" 
+        if(localDebug) console.log("--------->" + userStr + passWordStr)
+        if (localDebug) userStr = "80881" 
         var data = { "badgeno": userStr, "Password": passWordStr };
-       
-        // if(localDebug)  data = { "Code": "demo1", "Password": "kingofdinner@2017", "unionid": "" };
+
         httpService.accountLogin(data, function (e) {
           if (e.OpResult == 'Y') {
-            cmAlert("登录成功", function () { });
+            cmAlert("登录成功");
             var tmpData = {
               'Dep1Code': enterprisecode
             }
@@ -39,9 +45,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
             self.getRefuseData();
 
 
-
-
-
           } else {
             cmAlert(e.ErrorMsg);
           }
@@ -51,6 +54,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
 
       },
 
+      // 获取假期数据
       getVacationCategory: function () {
         httpService.getVacationHttpCategory(function (data) {
           if (data && data.data) {
@@ -70,6 +74,8 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
           cmAlert('获取假期类别失败')
         });
       },
+
+      // 获取审批人
       getTeamApprove: function () {
         httpService.getTeamHttpApprove(function (data) {
           // if(localDebug) data.data = ['11'];
@@ -82,27 +88,20 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
               appConfig.app.teamApprove = dataArr[0].C3_541450797951;
             }
 
-            console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
-            self.data.teamApproveSuccess = true
+            if(localDebug) console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
+            self.data.teamApproveSuccess = true;
             self.gotoApplyPage();
           } else {
-            cmAlert('获取审批组长类别失败')
+            cmAlert('获取审批组长类别失败');
           }
         }, function () {
-          cmAlert('获取审批组长类别失败')
+          cmAlert('获取审批组长类别失败');
         });
       },
-      gotoApplyPage: function () {
-        if (self.data.vacationCategorySuccess && self.data.teamApproveSuccess && self.data.refuseArrSuccess) {
-          router.deactivate();
-          router.reset();
-          app.setRoot('shell');
 
-        } else {
+      
 
-        }
-
-      },
+      //获取拒绝数据
       getRefuseData: function () {
         var params = {
           'resid': 541705605790,
@@ -127,6 +126,17 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         }, function () {
           cmAlert('获取退回理由失败')
         });
+      },
+
+
+      // 跳转到主路由
+      gotoApplyPage: function () {
+        if (self.data.vacationCategorySuccess && self.data.teamApproveSuccess && self.data.refuseArrSuccess) {
+          router.deactivate();
+          router.reset();
+          app.setRoot('shell');
+
+        }
       }
     };
   }); 

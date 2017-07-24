@@ -16,7 +16,7 @@
 
 		<!-- collapse menu button -->
 		<div id="hide-menu" class="btn-header pull-right">
-			<span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+			<span> <a href="javascript:void(0);" data-bind="click:toggleMenu" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
 		</div>
 		<!-- end collapse menu -->
 
@@ -51,6 +51,13 @@
 				</ul>
 			</li>
 		</ul>
+
+		<!-- logout button -->
+		<div id="logout" class="btn-header transparent pull-right" data-bind="click:logoutClick">
+			<span> <a href="#login" title="Sign Out" ><i class="fa fa-sign-out"></i></a> </span>
+		</div>
+		<!-- end logout button -->
+
 
 		<!-- search mobile button (this is hidden till mobile view port) -->
 		<div id="search-mobile" style="display: none" class="btn-header transparent pull-right">

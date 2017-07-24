@@ -49,7 +49,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/view
                 return (year % 100 == 0 ? res = (year % 400 == 0 ? 1 : 0) : res = (year % 4 == 0 ? 1 : 0));
             }
 
-            monthDayCountArr = [31, 28 + is_leap(entYear), 31, 30, 31, 31, 30, 31, 30, 31, 30, 31];//每月天数
+            monthDayCountArr = [31, 28 + is_leap(entYear), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//每月天数
             var firstDateStr = new Date(entYear, entMonth, 1).format('yyyyMMdd');
             var lastDateStr = new Date(entYear, entMonth, monthDayCountArr[entMonth]).format('yyyyMMdd');
 
@@ -70,6 +70,19 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/view
                             'STARTTIMES': "3",
                             'ENDTIMES': "4",
                             'F_5': "5"
+                        },{
+                            'DATES': "11",
+                            'C3_375377576828': "22",
+                            'STARTTIMES': "33",
+                            'ENDTIMES': "44",
+                            'F_5': "55"
+                        },{
+                            'DATES': "111",
+                            'C3_375377576828': "222",
+                            'STARTTIMES': "333",
+                            'ENDTIMES': "444",
+                            'F_5': "555",
+                            'F_1':'10'
                         }]
                     }
                 }
@@ -96,7 +109,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/view
                 queryDayReportVM.switchBool(false);
             }
 
-        }, queryDayReportVM);
+        });
 
         queryDayReportVM.errorData = function () {
             queryDayReportVM.switchBool(!queryDayReportVM.switchBool());
