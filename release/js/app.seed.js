@@ -959,7 +959,7 @@ var calc_navbar_height = function() {
 	    }
 	
 	    $(document).on('click', 'nav a[href!="#"]', function(e) { 
-		    e.preventDefault();
+		    // e.preventDefault();
 		    var $this = $(e.currentTarget);
 	
 		    // if parent is not active then get hash, or else page is assumed to be loaded
@@ -987,7 +987,7 @@ var calc_navbar_height = function() {
 							window.location.href.replace(window.location.search, '')
 								.replace(window.location.hash, '') + '#' + $this.attr('href');
 					} else {
-						window.location.hash = $this.attr('href');
+						// window.location.hash = $this.attr('href');
 					}
 			    }
 			    

@@ -28,6 +28,8 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
 
         if(localDebug) console.log("--------->" + userStr + passWordStr)
         if (localDebug) userStr = "80881" 
+          // userStr = "20465"   ;passWordStr = "095028" 
+        //  
         var data = { "badgeno": userStr, "Password": passWordStr };
 
         httpService.accountLogin(data, function (e) {

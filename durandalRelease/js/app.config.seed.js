@@ -121,17 +121,24 @@ var root = this,
 	ignore_key_elms = ["#header, #left-panel, #right-panel, #main, div.page-footer, #shortcut, #divSmallBoxes, #divMiniIcons, #divbigBoxes, #voiceModal, script, .ui-chatbox"];
 
 
+/*---------------------------------------------*/
+
+localDebug = false;
+
 enterprisecode = '9063'//全局企业编号
 
 globBadgeno = null;//全局工号
 
 globSingleData = null;//全局传入内页的数据变量
 
+globActiveDuration = 600;//页面活跃时间（s）
+
 //router
 
-routeTypeList = ["我的申请","我的审批"]
+routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请"]
 
 routeList = [
+	// { route: ['','applying'], title: '申请中', moduleId: 'applyingRE', nav: true, type: "我的申请" },
 	{ route: ['','applying'], title: '申请中', moduleId: 'main/viewmodels/applying', nav: true, type: "我的申请" },
 	{ route: 'appled', title: '已审核', moduleId: 'main/viewmodels/appled', nav: true, type: "我的申请" },
 	{ route: 'applyRefuse', title: '已退回', moduleId: 'main/viewmodels/applyRefuse', nav: true, type: "我的申请" },
@@ -142,14 +149,29 @@ routeList = [
 	{ route: 'pended', title: '已审批', moduleId: 'main/viewmodels/pended', nav: true, type: "我的审批" },
 	{ route: 'pendRefuse', title: '已退回', moduleId: 'main/viewmodels/pendRefuse', nav: true, type: "我的审批" },
 	{ route: 'pendHistory', title: '历史记录', moduleId: 'main/viewmodels/pendHistory', nav: true, type: "我的审批" },
+ 
+	{ route: 'queryMonthWork', title: '当月排班', moduleId: 'main/viewmodels/queryMonthWork', nav: true, type: "我的查询" },
+	{ route: 'queryDayReport', title: '考勤日报', moduleId: 'main/viewmodels/queryDayReport', nav: true, type: "我的查询" },
+	{ route: 'queryMonthReport', title: '考勤月报', moduleId: 'main/viewmodels/queryMonthReport', nav: true, type: "我的查询" },
+
+	{ route: 'staffPend', title: '员工审批定义', moduleId: 'main/viewmodels/staffPend', nav: true, type: "员工审批定义" },
+
+	{ route: 'wxApply', title: '微信考勤申请', moduleId: 'main/viewmodels/wxApply', nav: true, type: "微信考勤申请" },
 
 	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
 	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},
 	{ route: 'fixSubmit', title: 'fixSubmit', moduleId: 'main/viewmodels/fixSubmit', nav: false},
+	{ route: 'queryDayReportDetail', title: 'queryDayReportDetail', moduleId: 'main/viewmodels/queryDayReportDetail', nav: false},
+	{ route: 'staffPendEdit', title: 'staffPendEdit', moduleId: 'main/viewmodels/staffPendEdit', nav: false},
+	{ route: 'staffPendEditOption', title: 'staffPendEditOption', moduleId: 'main/viewmodels/staffPendEditOption', nav: false},
+	{ route: 'wxApplyPendDetail', title: 'wxApplyPendDetail', moduleId: 'main/viewmodels/wxApplyPendDetail', nav: false},
+	
+	
+		
 
 ]
 
-localDebug = false;
+
 /*
  * END APP.CONFIG
  */

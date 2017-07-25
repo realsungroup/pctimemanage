@@ -13,30 +13,18 @@
         <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
         <table class="table table-hover table-bordered">
             <thead>
-                <th>产线</th>
                 <th>员工工号</th>
                 <th>员工姓名</th>
-                <th>组长</th>
-                <th>主管</th>
-                <th>经理</th>
-                <th>错误提示</th>
-                <th>待审批</th>
-                <th>已审核</th>
-                <th>申请被退回</th>
+                <th>员工编号</th>
+                <th>英文名</th>
                 <th>操作</th>
             </thead>
             <tbody data-bind="foreach:model.data">
                 <tr>
                     <td data-bind="text:C3_511299354239"></td>
                     <td data-bind="text:C3_511297363801"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
-                    <td data-bind="text:"></td>
+                    <td data-bind="text:C3_511297180036"></td>
+                    <td data-bind="text:C3_545758007348"></td>
                     <td><button class="btn btn-primary" data-bind="click:function(){$parent.chooseClick($index)}">选择</button></td>
                 </tr>
             </tbody>
@@ -45,7 +33,7 @@
     <!-- WIDGET END -->
 
     <!-- 分页pageSelectCpt-->
-    <!--ko component:"pageSelectCpt"-->
+    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->
     <!--/ko-->
 
 </div>

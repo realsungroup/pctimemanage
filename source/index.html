@@ -1,54 +1,55 @@
 <!DOCTYPE html>
-<html lang="en-us">	
-	<head>
-		<meta charset="utf-8">
-		<title> 考勤管理</title>
-		<meta name="description" content="">
-		<meta name="author" content="">
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html lang="en-us">
 
-		<!-- #CSS Links -->
-		<!-- Basic Styles -->
-		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">-->
-		<link rel="stylesheet" type="text/css" media="screen" href="lib\bootstrap\css\bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+<head>
+	<meta charset="utf-8">
+	<title> 考勤管理</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
-		
-		<link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="lib/weui/weui.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" type="text/css" media="screen" href="lib/photoswipe/default-skin.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="lib/photoswipe/photoswipe.css">
+	<!-- #CSS Links -->
+	<!-- Basic Styles -->
+	<!--<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">-->
+	<link rel="stylesheet" type="text/css" media="screen" href="lib\bootstrap\css\bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
 
-		<!-- SmartAdmin RTL Support -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css"> 
+	<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+	<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
 
-		<!-- We recommend you use "your_style.css" to override SmartAdmin
+	<link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="lib/weui/weui.min.css">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="lib/photoswipe/default-skin.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="lib/photoswipe/photoswipe.css">
+
+	<!-- SmartAdmin RTL Support -->
+	<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css">
+
+	<!-- We recommend you use "your_style.css" to override SmartAdmin
 		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.
 		<link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
 
 
-		 <!--#GOOGLE FONT 
+	<!--#GOOGLE FONT 
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">-->
 
-		<!-- #APP SCREEN / ICONS -->
-		<!-- Specifying a Webpage Icon for Web Clip 
+	<!-- #APP SCREEN / ICONS -->
+	<!-- Specifying a Webpage Icon for Web Clip 
 			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
-	
-		
-		<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		
-	</head>
 
-	<!--
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+</head>
+
+<!--
 
 	TABLE OF CONTENTS.
 	
@@ -75,9 +76,9 @@
 	===================================================================
 	
 	-->
-	
-	<!-- #BODY -->
-	<!-- Possible Classes
+
+<!-- #BODY -->
+<!-- Possible Classes
 
 		* 'smart-style-{SKIN#}'
 		* 'smart-rtl'         - Switch theme mode to RTL
@@ -90,136 +91,141 @@
 		* 'fixed-page-footer' - Fixes footer
 		* 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
 	-->
-	<body class="">
-		<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
+<body class="">
+	<!-- Root element of PhotoSwipe. Must have class pswp. -->
+	<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+		<!-- Background of PhotoSwipe. 
          It's a separate element, as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
+		<div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
+		<!-- Slides wrapper with overflow:hidden. -->
+		<div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
-        <div class="pswp__container">
-            <!-- don't modify these 3 pswp__item elements, data is added later on -->
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
+			<!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+			<div class="pswp__container">
+				<!-- don't modify these 3 pswp__item elements, data is added later on -->
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+			</div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
+			<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+			<div class="pswp__ui pswp__ui--hidden">
 
-            <div class="pswp__top-bar">
+				<div class="pswp__top-bar">
 
-                <!--  Controls are self-explanatory. Order can be changed. -->
+					<!--  Controls are self-explanatory. Order can be changed. -->
 
-                <div class="pswp__counter"></div>
+					<div class="pswp__counter"></div>
 
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+					<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 
-                <button class="pswp__button pswp__button--share" title="Share"></button>
+					<button class="pswp__button pswp__button--share" title="Share"></button>
 
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
 
-                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
+					<!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+					<!-- element will get class pswp__preloader--active when preloader is running -->
+					<div class="pswp__preloader">
+						<div class="pswp__preloader__icn">
+							<div class="pswp__preloader__cut">
+								<div class="pswp__preloader__donut"></div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
+				<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+					<div class="pswp__share-tooltip"></div>
+				</div>
 
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+				<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
             </button>
 
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+				<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
             </button>
 
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
+				<div class="pswp__caption">
+					<div class="pswp__caption__center"></div>
+				</div>
 
-          </div>
+			</div>
 
-        </div>
+		</div>
 
-</div>
-	   
+	</div>
 
-	   <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 id="modalTitle" class="modal-title">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        <p id="modalSubTitle">One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
-		
-		 <!--PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
-		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
-		
-		<!--================================================== -->
-		   <div id="applicationHost">
-             
-        </div>
-          <script src="lib/require/require.js" data-main="app/main"></script>  
-		<!-- #PLUGINS -->
-	 
-		<script>
-			//if (!window.jQuery) {
-				document.write('<script src="js/libs/jquery-2.1.1.min.js"><\/script>');
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 id="modalTitle" class="modal-title">Modal title</h4>
+				</div>
+				<div class="modal-body">
+					<p id="modalSubTitle">One fine body&hellip;</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+	<!--PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+	<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+	<!--================================================== -->
+	<div id="applicationHost">
+
+	</div>
+
+
+	<script>
+		//if (!window.jQuery) {
+		document.write('<script src="js/libs/jquery-2.1.1.min.js"><\/script>');
 		//	}
-		</script>
+	</script>
 
-	 
-		<script>
+
+	<script>
 		//	if (!window.jQuery.ui) {
-				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+		document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
 		//	}
-		</script>
-        
-		<!-- IMPORTANT: APP CONFIG -->
-		<script src="js/app.config.seed.js"></script>
+	</script>
 
-		<!--SmartNotification JS-->
-		<script src="js\notification\SmartNotification.min.js"></script>
+	<script src="js/libs/jquery-2.1.1.min.js"></script>
+	<!-- IMPORTANT: APP CONFIG -->
+	<script src="js/app.config.seed.js"></script>
 
-		<!-- BOOTSTRAP JS -->
-		<script src="js/bootstrap/bootstrap.min.js"></script>
+	<!--SmartNotification JS-->
+	<script src="js\notification\SmartNotification.min.js"></script>
 
-		<!-- photoswipe JS -->
-		<!--<script src="lib/photoswipe/photoswipe-ui-default.min.js"></script>
+	<!-- BOOTSTRAP JS -->
+	<script src="js/bootstrap/bootstrap.min.js"></script>
+
+	<!-- photoswipe JS -->
+	<!--<script src="lib/photoswipe/photoswipe-ui-default.min.js"></script>
 		<script src="lib/photoswipe/photoswipe.min.js"></script>-->
 
-		<!--[if IE 8]>
+	<!--[if IE 8]>
 			<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
 		<![endif]-->
-      
-		<!-- MAIN APP JS FILE -->
-		<script src="js/app.seed.js"></script>
-      
-		 
-	</body>
+
+	<!-- MAIN APP JS FILE -->
+	<script src="js/app.seed.js"></script>
+
+	<script src="lib/require/require.js" data-main="app/main"></script>
+	<!-- #PLUGINS -->
+</body>
 
 </html>

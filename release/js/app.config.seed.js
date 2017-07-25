@@ -123,7 +123,7 @@ var root = this,
 
 /*---------------------------------------------*/
 
-localDebug = true;
+localDebug = false;
 
 enterprisecode = '9063'//全局企业编号
 
@@ -131,11 +131,11 @@ globBadgeno = null;//全局工号
 
 globSingleData = null;//全局传入内页的数据变量
 
-globActiveDuration = 60;//页面活跃时间（s）
+globActiveDuration = 600;//页面活跃时间（s）
 
 //router
 
-routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义"]
+routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请"]
 
 routeList = [
 	// { route: ['','applying'], title: '申请中', moduleId: 'applyingRE', nav: true, type: "我的申请" },
@@ -156,12 +156,16 @@ routeList = [
 
 	{ route: 'staffPend', title: '员工审批定义', moduleId: 'main/viewmodels/staffPend', nav: true, type: "员工审批定义" },
 
+	{ route: 'wxApply', title: '微信考勤申请', moduleId: 'main/viewmodels/wxApply', nav: true, type: "微信考勤申请" },
+
 	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
 	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},
 	{ route: 'fixSubmit', title: 'fixSubmit', moduleId: 'main/viewmodels/fixSubmit', nav: false},
 	{ route: 'queryDayReportDetail', title: 'queryDayReportDetail', moduleId: 'main/viewmodels/queryDayReportDetail', nav: false},
 	{ route: 'staffPendEdit', title: 'staffPendEdit', moduleId: 'main/viewmodels/staffPendEdit', nav: false},
 	{ route: 'staffPendEditOption', title: 'staffPendEditOption', moduleId: 'main/viewmodels/staffPendEditOption', nav: false},
+	{ route: 'wxApplyPendDetail', title: 'wxApplyPendDetail', moduleId: 'main/viewmodels/wxApplyPendDetail', nav: false},
+	
 	
 		
 

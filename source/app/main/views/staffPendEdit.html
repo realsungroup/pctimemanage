@@ -13,45 +13,52 @@
             <div class="form-group">
                 <p class="col-xs-4 control-label text-right">工号</p>
                 <div class="col-xs-8">
-                    <input class="form-control" type="text" data-bind="value:model.data().C3_542062213811" readonly>
+                    <input class="form-control" type="text" data-bind="value:model.data().C3_542062213811">
                 </div>
             </div>
 
             <div class="form-group">
-                <p class="col-xs-4 control-label text-right">工号</p>
+                <p class="col-xs-4 control-label text-right">姓名</p>
                 <div class="col-xs-8">
-                    <input class="form-control" type="text" data-bind="value:model.data().C3_541450807755" readonly>
+                    <input class="form-control" type="text" data-bind="value:model.data().C3_541450807755">
                 </div>
             </div>
 
-             <div class="form-group">
+            <div class="form-group">
                 <p class="col-xs-4 control-label text-right">组长</p>
                 <div class="col-xs-8">
-                    <input class="form-control"  data-bind="value:model.data().C3_541450797951,click:function(){gotoChoosePageClick('zuzhang')}" readonly>
-                    
+                    <input class="form-control" data-bind="value:model.data().C3_541450797951,click:function(){gotoChoosePageClick('zuzhang')}"
+                        readonly>
+
                 </div>
             </div>
 
             <div class="form-group">
                 <p class="col-xs-4 control-label text-right">主管</p>
                 <div class="col-xs-8">
-                    <input class="form-control"  data-bind="value:model.data().C3_541467332728,click:function(){gotoChoosePageClick('zhuguan')}" readonly>
+                    <input class="form-control" data-bind="value:model.data().C3_541467332728,click:function(){gotoChoosePageClick('zhuguan')}"
+                        readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <p class="col-xs-4 control-label text-right">经理</p>
                 <div class="col-xs-8">
-                    <input class="form-control"  data-bind="value:model.data().C3_541467363607,click:function(){gotoChoosePageClick('jinli')}" readonly>
+                    <input class="form-control" data-bind="value:model.data().C3_541467363607,click:function(){gotoChoosePageClick('jinli')}"
+                        readonly>
                 </div>
             </div>
 
-            
+
         </form>
     </article>
     <!-- WIDGET END -->
 
-        <!--cellSaveBtnCpt-->
+    <!--cellSaveBtnCpt-->
 
+    <div data-bind='component: {
+         name: "cellSaveBtnCpt",params:{propClick:saveClick}
+         }'>
+    </div>
 </div>
-<!-- end row -->
+<!-- end row <-->

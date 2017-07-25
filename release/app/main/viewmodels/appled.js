@@ -41,6 +41,9 @@ define(['durandal/app',
                         var dataArr = data.data;
                         self.model.data(dataArr);
 
+                         //设置页标（base中）
+                        self.setPageMark(param,data);
+
                         if (dataArr.length < param.pageSize) self.model.noMore =  true ;
                         else self.model.noMore =  false ;
 

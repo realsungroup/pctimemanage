@@ -25,7 +25,7 @@
           'key': self.model.inputVal() ? self.model.inputVal() : ''
         }
 
-        param.pageSize = 10;
+        param.pageSize = 1;
         if (!type) {//刷新
           param.pageIndex = 0;
 
@@ -43,6 +43,8 @@
               val.selected = false
             })
             self.model.data(dataArr);
+            //设置页标（base中）
+            self.setPageMark(param,data);
 
             if (dataArr.length < param.pageSize) self.model.noMore = true;
             else self.model.noMore = false;

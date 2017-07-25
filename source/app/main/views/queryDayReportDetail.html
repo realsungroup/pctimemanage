@@ -11,7 +11,7 @@
 
     <!-- NEW WIDGET START -->
     <article class="col-sm-12 col-md-12 col-lg-12">
-        <td class="label-title" data-bind="text:data().DATES"></td>
+        <label class="label-title" data-bind="text:data().DATES"></label>
         <table class="table table-hover table-bordered">
 
 
@@ -43,7 +43,7 @@
 
     <!-- NEW WIDGET START -->
     <article class="col-sm-12 col-md-12 col-lg-12">
-        <td class="label-title">缺勤</td>
+        <label class="label-title">缺勤</label>
         <table class="table table-hover table-bordered">
 
             <tbody>
@@ -68,7 +68,7 @@
 
     <!-- NEW WIDGET START -->
     <article class="col-sm-12 col-md-12 col-lg-12">
-        <td class="label-title">请假</td>
+        <label class="label-title">请假</label>
         <table class="table table-hover table-bordered">
 
             <tbody>
@@ -121,11 +121,12 @@
                             <td data-bind="text:data().F_70">/td>
                                 <td></td>
                 </tr>
-                <td class="label-title">累计出勤
-                    <text class="color-red" data-bind="text:data().F_79 ? data().F_79 + 'h' : '-' + 'h'"></td>
-                </td>
+                
             </tbody>
         </table>
+        <label class="label-title">累计出勤
+                    <span class="color-red" data-bind="text:data().F_79 ? data().F_79 + 'h' : '-' + 'h'"> </span></td>
+                </label>
     </article>
     <!-- WIDGET END -->
 

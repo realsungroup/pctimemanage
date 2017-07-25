@@ -168,7 +168,7 @@ gulp.task('durandal', function(){
          main: 'main.js',  //same as default, so not really required.
          output: 'main.js', //same as default, so not really required.
          almond: true,
-         minify: true 
+         minify: false 
 
          })
          .pipe(gulp.dest(durandalReleaseDir+'/'+appdir));

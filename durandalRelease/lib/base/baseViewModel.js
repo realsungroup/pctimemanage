@@ -13,11 +13,14 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
             inputVal: ko.observable(''),
             pageIndex: 0,
             noMore: false,
-            isLoading:false
+            isLoading:false,
+            pageMark:ko.observable(''),//总页数
+            isActivated:false
         }
 
         this.activate = function (e) {
-            self.init();
+            // if(self.model.isActivated) return;
+            // self.init();
 
             //配置所有类型
             var allVacationCategory = ['全部'];
@@ -26,7 +29,9 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
             self.model.selectedCategory = ko.observable(allVacationCategory[0])
 
 
-            self.getData(0);
+            self.getData(1);
+
+            // self.model.isActivated = true;
         }
 
         this.attached = function () {
@@ -61,14 +66,12 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
 
         this.goToApplyDetailPage = function (index) {
             var tmpData = self.model.data()[index()];
-            // var tmpJsonData = JSON.stringify(tmpData);
-            // router.navigate("#applyDetail?data=" + tmpJsonData);
-            
             globSingleData = JSON.stringify(tmpData);
             router.navigate("#applyDetail");
         }
 
         this.kvoInput = function () {
+            self.model.pageIndex = 0;
             self.getData(0);
         }
 
@@ -86,7 +89,17 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
             self.getData(1);
         }
 
-        
+        this.pageFirst = function(){
+             self.model.pageIndex = 0;
+             self.getData(0);
+        }
+
+        this.setPageMark = function(param,data){
+            var pageMarkIndex =  param.pageIndex + 1;
+            var pageMarkTotal = Math.ceil(parseInt(data.total) / param.pageSize);
+            if(pageMarkTotal == 0) pageMarkIndex = 0;
+            self.model.pageMark(pageMarkIndex + "/" + pageMarkTotal);
+        }
 
     }
 

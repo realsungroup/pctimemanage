@@ -34,7 +34,8 @@
             initApp.SmartActions();
             initApp.leftNav();
             initApp.domReadyMisc();
-             router.navigate("#applying");
+
+            
         },
         logoutClick:function(){
                
@@ -53,6 +54,7 @@
 							 router.deactivate();
                             router.reset();
                             app.setRoot('login')
+                            window.location.hash = "#applying";
 						}
 					});
             

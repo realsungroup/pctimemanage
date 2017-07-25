@@ -28,6 +28,9 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                     var dataArr = data.data;
                     self.model.data(dataArr);
 
+                    //设置页标（base中）
+                    self.setPageMark(param,data);
+
                     if (dataArr.length < param.pageSize) self.model.noMore = true;
                     else self.model.noMore = false;
 
@@ -42,11 +45,14 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             index = index();
             var tmpData = selfVM.model.data()[index];
            
-           if(typeof(selfVM.chooseBlock) == 'function')  selfVM.chooseBlock(tmpData);
+           //block 回调函数
+           if(typeof(selfVM.chooseBlock) == 'function') {
+               selfVM.chooseBlock(tmpData);
+                router.navigateBack();
+           }
            
 
-            router.navigateBack();
-            //propType
+           
         }
 
         return selfVM;

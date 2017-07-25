@@ -8,6 +8,9 @@ td{
     height: 37px !important;
 }
 
+.color-red{
+    color: red;
+}
 
 .clear-margin-rl{
     margin-right: 0 !important;
@@ -17,6 +20,10 @@ td{
 .padding-lf-12{
     padding-left: 14px !important;
     padding-right: 14px !important;
+}
+
+.padding-bt-10{
+    padding-bottom: 10px !important;
 }
 
 .height-auto{
@@ -187,17 +194,17 @@ td{
 .page-control-nav{
     display: inline-block;
     vertical-align: bottom;
-    margin-left: calc(100% - 205px);
-    margin-left: -webkit-calc(100% - 205px);
+    margin-left: calc(100% - 3350px);
+    margin-left: -webkit-calc(100% - 335px);
 }
 
 .page-control-nav a{
     width: 80px;
 }
 
-.page-control-nav li:nth-child(1) a{
+/*.page-control-nav li:nth-child(1) a{
     margin-right: 30px;
-}
+}*/
 
 
 

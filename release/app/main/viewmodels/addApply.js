@@ -212,9 +212,9 @@ define(['durandal/app',
           httpService.addApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
               cmAlert("添加成功");
-              var returnData = resData.data[0];
-              applying.model.data().unshift(returnData);
-              applying.model.data(applying.model.data());
+              // var returnData = resData.data[0];
+              // applying.model.data().unshift(returnData);
+              // applying.model.data(applying.model.data());
               router.navigateBack();
 
             } else {

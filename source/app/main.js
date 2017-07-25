@@ -1,7 +1,7 @@
 ﻿
 requirejs.config({
     paths: {
-        'httpServiceRE': "../app/httpService/httpService",
+        'httpServiceRE': "../lib/service/httpService",
         'text': '../lib/require/text',
         'durandal': '../lib/durandal/js',
         'plugins': '../lib/durandal/js/plugins',
@@ -13,10 +13,10 @@ requirejs.config({
         'calendar': '../lib/fullcalendar',
         'components': 'components',
         'mobiscroll': '../lib/mobiscorll/mobiscroll.custom-3.0.0-beta2.min',
-        'commonRE': '../app/common/common',
-        'untilRE': 'until/until',
+        'commonRE': '../lib/common1/common2',
+        'untilRE': '../lib/until/untilFun',
         'photoswipeRE': '../lib/photoswipe',
-        'baseVM': 'main/base/baseViewModel',
+        'baseVM': '../lib/base/baseViewModel',
         'ifvisibleRE': '../lib/ifvisible/ifvisible.min'
 
     }
@@ -42,6 +42,7 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
             router.reset();
             router.deactivate();
             app.setRoot('login')
+             window.location.hash = "#applying";
         });
 
         app.start().then(function () {
@@ -53,9 +54,9 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
                 system.debug(appConfig.app.debug);
                 system.log(appConfig);
 
-                initApp.SmartActions();
-                initApp.leftNav();
-                initApp.domReadyMisc();
+                // initApp.SmartActions();
+                // initApp.leftNav();
+                // initApp.domReadyMisc();
                 
                 app.setRoot('login', 'entrance');
             });

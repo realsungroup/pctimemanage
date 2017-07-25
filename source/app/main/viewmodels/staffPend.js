@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt','main/viewmodels/staffPendEdit'],
-    function (app, ko, router, headerCpt, httpService, baseVM,cellMainCpt,staffPendEdit) {
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'main/viewmodels/staffPendEdit'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, staffPendEdit) {
 
         var selfVM = new baseVM();
         selfVM.model.title = '员工审批'
@@ -28,6 +28,10 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                     var dataArr = data.data;
                     self.model.data(dataArr);
 
+                    //设置页标（base中）
+                    self.setPageMark(param, data);
+
+
                     if (dataArr.length < param.pageSize) self.model.noMore = true;
                     else self.model.noMore = false;
 
@@ -38,16 +42,28 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             });
         }
 
-        selfVM.editClick = function(index){
+        selfVM.editClick = function (index) {
             index = index();
             var tmpData = selfVM.model.data()[index];
             staffPendEdit.propData = tmpData;
+
+            // staffPendEdit.saveSuccessBlock = function (data) {
+            //     tmpData = data;
+            //     selfVM.model.data(selfVM.model.data());
+            // };
             router.navigate("#staffPendEdit");
         }
 
-        selfVM.addClick = function(){
+        selfVM.addClick = function () {
+            staffPendEdit.saveSuccessBlock = function (data) {
+                selfVM.model.pageIndex = 0;
+                // var tmpData = selfVM.model.data();
+                // tmpData.push(data);
+                // selfVM.model.data(tmpData);
+            };
             router.navigate("#staffPendEdit");
         }
+
 
         return selfVM;
 

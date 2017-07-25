@@ -34,7 +34,8 @@ define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko
             initApp.SmartActions();
             initApp.leftNav();
             initApp.domReadyMisc();
-             router.navigate("#applying");
+
+            
         },
         logoutClick:function(){
                
@@ -53,6 +54,7 @@ define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko
 							 router.deactivate();
                             router.reset();
                             app.setRoot('login')
+                            window.location.hash = "#applying";
 						}
 					});
             

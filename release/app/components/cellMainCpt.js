@@ -160,13 +160,26 @@ ko.components.register('cellMainRefuseBtn', {
 //分页
 ko.components.register('pageSelectCpt', {
     viewModel: function (params) {
-        this.item = params && params.item || '';
+        this.pageMark = params && params.pageMark || '';
+        this.pageFirstClick = params && params.pageFirstClick || '';
+
+
     },
     template: '<div><nav class="page-control-nav" aria-label="Page navigation">\
                         <ul class="pagination">\
+                            <li data-bind="click:pageFirstClick">\
+                                <a href="#" onclick="return false;" aria-label="Previous">\
+                                    <span aria-hidden="true">首页</span>\
+                                </a>\
+                            </li>\
                             <li data-bind="click:$root.pageUp">\
                                 <a href="#" onclick="return false;" aria-label="Previous">\
                                     <span aria-hidden="true">上一页</span>\
+                                </a>\
+                            </li>\
+                            <li >\
+                                <a href="#" onclick="return false;" aria-label="Previous">\
+                                    <span aria-hidden="true" data-bind="text:pageMark">1/9</span>\
                                 </a>\
                             </li>\
                             <li data-bind="click:$root.pageDown">\

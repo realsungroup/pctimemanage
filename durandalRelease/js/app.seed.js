@@ -181,13 +181,14 @@ var calc_navbar_height = function() {
 						buttons : '[No][Yes]'
 			
 					}, function(ButtonPressed) {
+						$.root_.addClass('animated fadeOutUp');
 						if (ButtonPressed == "Yes") {
-							$.root_.addClass('animated fadeOutUp');
+							
 							setTimeout(logout, 1000);
 						}
 					});
 					function logout() {
-						window.location = $this.attr('href');
+						// window.location = $this.attr('href');
 					}
 			
 				},
@@ -340,8 +341,8 @@ var calc_navbar_height = function() {
 			}); 
 			
 			$.root_.on('click', '[data-action="toggleMenu"]', function(e) {	
-				smartActions.toggleMenu();
-				e.preventDefault();
+				// smartActions.toggleMenu();
+				// e.preventDefault();
 			});  
 		
 			$.root_.on('click', '[data-action="toggleShortcut"]', function(e) {	
@@ -958,7 +959,7 @@ var calc_navbar_height = function() {
 	    }
 	
 	    $(document).on('click', 'nav a[href!="#"]', function(e) { 
-		    e.preventDefault();
+		    // e.preventDefault();
 		    var $this = $(e.currentTarget);
 	
 		    // if parent is not active then get hash, or else page is assumed to be loaded
@@ -986,7 +987,7 @@ var calc_navbar_height = function() {
 							window.location.href.replace(window.location.search, '')
 								.replace(window.location.hash, '') + '#' + $this.attr('href');
 					} else {
-						window.location.hash = $this.attr('href');
+						// window.location.hash = $this.attr('href');
 					}
 			    }
 			    

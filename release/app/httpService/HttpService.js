@@ -3,7 +3,7 @@
 // 发起get请求
 var path = {
   baseUrl: 'http://kingofdinner.realsun.me:9091/',
-  loginBaseUrl: 'http://kingofdinner.realsun.me:9091/',
+  loginBaseUrl: 'http://192.168.1.113:9091/',
   getData: 'api/100/table/Retrieve',
   getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
   saveData: 'api/100/table/Save',
@@ -60,7 +60,7 @@ define([
   }
 
   function getHeader(str) {
-    if (str != path.baseUrl + path.login) {
+    if (str != path.loginBaseUrl + path.login) {
         if(!appConfig.app.userInfo){
           console.error("用户信息错误")
           return;
@@ -108,7 +108,10 @@ define([
 
                 if (res.message) cmAlert(res.message);
                 else cmAlert("操作失败");
-                doFail();
+
+                if (typeof doFail == "function") {
+                  doFail();
+                }
               }
 
             } else {
@@ -343,16 +346,38 @@ define([
 
     //增加个人设置的组长，主管，经理列表
   function addPesonPendData(params, doSuccess, doFail) {
-    params.resid = '541450769466';
+    params.resid = '542065063018';
     var url = path.baseUrl + path.saveData;
-    baseRequest("GET", url, params, 2, doSuccess, doFail);
+    baseRequest("POST", url, params, 2, doSuccess, doFail);
   }
 
   //保存（编辑）个人设置的组长，主管，经理列表
   function savePesonPendData(params, doSuccess, doFail) {
-    params.resid = '541450769466';
+    params.resid = '542065063018';
     var url = path.baseUrl + path.saveData;
-    baseRequest("GET", url, params, 4, doSuccess, doFail);
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
+
+  //获取微信考勤申请记录
+  function getApplyDataForWX(params, doSuccess, doFail) {
+    params.resid = '552993482400';
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //获取微信考勤申请审批数据
+  function getApplyPendDataForWX(params, doSuccess, doFail) {
+    params.resid = '552993482400';
+    params.subresid = '554315806876';
+    var url = path.loginBaseUrl + path.getSubData;
+    baseRequest("GET", url, params, 3, doSuccess, doFail);
+  }
+
+  //撤销微信考勤申请记录
+  function cancelApplyDataForWX(params, doSuccess, doFail) {
+    params.resid = '552993482400';
+    var url = path.loginBaseUrl + path.saveData;
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   var httpService = {
@@ -382,7 +407,10 @@ define([
     getAllStaffPendData:getAllStaffPendData,
     getSelectPesonData:getSelectPesonData,
     addPesonPendData:addPesonPendData,
-    savePesonPendData:savePesonPendData
+    savePesonPendData:savePesonPendData,
+    getApplyDataForWX:getApplyDataForWX,
+    getApplyPendDataForWX:getApplyPendDataForWX,
+    cancelApplyDataForWX:cancelApplyDataForWX
   }
   return httpService
 });

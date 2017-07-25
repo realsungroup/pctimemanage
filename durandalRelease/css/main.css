@@ -3,8 +3,14 @@ html,body,#applicationHost,#main-login{
     height: 100% !important;
 }
 
+td{
+    word-break: break-all;
+    height: 37px !important;
+}
 
-
+.color-red{
+    color: red;
+}
 
 .clear-margin-rl{
     margin-right: 0 !important;
@@ -16,9 +22,17 @@ html,body,#applicationHost,#main-login{
     padding-right: 14px !important;
 }
 
+.padding-bt-10{
+    padding-bottom: 10px !important;
+}
+
 .height-auto{
     height: auto !important;
     min-height: 34px;
+}
+
+.wd-fourty-pe{
+    width:40%;
 }
 
 .img-gallery{
@@ -180,14 +194,342 @@ html,body,#applicationHost,#main-login{
 .page-control-nav{
     display: inline-block;
     vertical-align: bottom;
-    margin-left: calc(100% - 205px);
-    margin-left: -webkit-calc(100% - 205px);
+    margin-left: calc(100% - 3350px);
+    margin-left: -webkit-calc(100% - 335px);
 }
 
 .page-control-nav a{
     width: 80px;
 }
 
-.page-control-nav li:nth-child(1) a{
+/*.page-control-nav li:nth-child(1) a{
     margin-right: 30px;
+}*/
+
+
+
+
+/*///////////////////////日历/////////////////////////////*/
+ul{
+    list-style-type: none;
+}
+
+#nextWorkDay *{
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+#nextWorkDay{
+    margin-bottom: 50px;
+}
+
+.line{
+    width: 93.75%;
+    height: 0.5px;
+    position: relative;
+   left: 3.125%;
+    background-color: #BBBBBB;
+    
+}
+
+.line-ab{
+    height: 1px;
+    position: absolute;
+    background-color: #BBBBBB;
+    left: 10px;
+    right:10px;
+    bottom:0;
+}
+
+
+#week{
+    display:flex; 
+    display: -webkit-flex;
+    height: 42px;
+    border-width: 0 0 1px 0;
+    border-color: #EE2B15;
+    border-style: solid;
+}
+
+#week li{
+    display: inline-block;
+    flex:1;
+    text-align: center;
+    height: inherit;
+    line-height: 42px;
+    color: #333333;
+     font-size: 12px;
+}
+
+
+
+#day ul{
+     display: flex;
+     display: -webkit-flex;
+     width: 100%;
+        height: 72px;
+        position: relative;
+}
+
+#day ul li{
+    flex: 1;
+     height: inherit;
+}
+
+#day ul li span{
+    height: 11px;
+    line-height: 11px;
+    display: block;
+    text-align: center;
+}
+
+#day ul li span:nth-child(1){
+    margin-top: 15px;
+    color: #333333;
+     font-size: 12px;
+}
+#day ul li span:nth-child(2){
+     margin-top: 20px;
+     font-size: 9px;
+}
+
+
+#selDay{
+    height: 39px;
+    border-width: 1px 0 1px 0;
+    border-color: #CFCFCF;
+    border-style: solid;
+    text-align: left;
+}
+
+#selDay select,#mysearch2 select{
+    width: 132px;
+    height: 23px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+    border-radius: 4px;
+    margin-left: 3.125%;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #666666;
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            -ms-appearance:none;
+
+  background:url('../img/xiala.png') no-repeat ; 
+    background-size: 13px 7px;
+    background-position: 95.091% 8px;
+    text-indent: 6.818%;
+    letter-spacing: 0.8px;
+}
+
+
+#week li:nth-child(1),#week li:nth-child(7),
+#day ul li:nth-child(1) span:nth-child(1),
+#day ul li:nth-child(7) span:nth-child(1){
+    color: #BBBBBB;
+}
+
+
+/*/////////////////当日排班//////////////////*/
+
+
+#msPageOne{
+    margin-bottom: 50px;
+}
+
+#msContent *{
+    font-size: 12px;
+}
+
+#msPageOne div:nth-child(1){
+    height: 39px;
+    text-align: left;
+
+    border-width: 1px 0 1px 0;
+    border-color: #CFCFCF;
+    border-style: solid;
+}
+
+#msPageOne div:nth-child(1) span:nth-child(2){
+    display: inline-block;
+    position: absolute;
+    top: 7px;
+    right: 40px;
+
+    width: 45px;
+    height: 24px;
+
+    background-size: 45px 24px;
+}
+
+.mysearchErrorOn{
+    /*E:\github\pctimemanage\source\img\img\yichang-1.png*/
+    background-image: url(../img/img/yichang-1.png);
+}
+
+.mysearchErrorOff{
+    background-image: url(../img/img/yichang-2.png);
+}
+
+.my-switch{
+    display: inline-block;
+    width: 45px;
+    height: 24px;
+    font-size: 11px;
+    color: #EE2A15;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.my-switch-title{
+        vertical-align: top;
+    line-height: 24px;
+    margin-left: 4px;
+}
+
+#msContent ul{
+    display: flex;
+    display: -webkit-flex;
+    height: 73px;
+}
+
+#msContent ul li{
+    flex:1;
+    text-align: center;
+    height: inherit;
+}
+#msContent ul li span{
+    display: block;
+    overflow: hidden;
+    height: 14px;
+}
+
+#msContent ul li:nth-child(1) span:nth-child(1),#msContent ul li:nth-child(2) span:nth-child(1){
+    margin-top: 18px;
+}
+
+#msContent ul li:nth-child(1) span:nth-child(2),#msContent ul li:nth-child(2) span:nth-child(2){
+     margin-top: 11px;
+}
+
+#msContent ul li:nth-child(3){
+    line-height: 73px;
+    font-size: 11px;
+
+}
+#msContent ul li:nth-child(4){
+    color: #999999;
+}
+
+#msContent ul li i{
+    background-image: url(../img/xiangqing.png);
+    display: block;
+    height: 20px;
+    background-position-x: center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+
+
+
+/*-------------------------------*/
+#msPageTwo *{
+    font-family: "微软雅黑";
+    font-size: 12px;
+    
+}
+
+#msPageTwo{
+    text-align: left;
+    margin-bottom: 50px;
+}
+
+
+#msPageTwo div#msPageTwoDate,#totalHour{
+     width: 93.75%;
+    margin: 0 auto;
+    height: 37px;
+    line-height: 37px;
+    color: #333333;
+}
+
+
+#msPageTwo table{
+    width: 93.75%;
+    margin: 0 auto;
+    border-collapse: collapse;
+border-right:1px solid #BBBBBB;
+border-bottom:1px solid #BBBBBB;
+text-align: center;
+}
+
+#msPageTwo table td{
+    display: inline-block;
+    width: 25%;
+    height: 28px;
+border-left:1px solid #BBBBBB;
+border-top:1px solid #BBBBBB;
+    text-align: center;
+    line-height: 28px;
+}
+
+#loseWork,#msLeave{
+   
+    width: 23.125%;
+    height: 28px;
+    line-height: 28px;
+    margin-left: 3.125%;
+    text-align: center;
+}
+
+#loseWork{
+ color: #EE2A15;
+}
+
+#msLeave{
+    color: #8AC84E
+}
+
+#totalHour span:nth-child(1) span{
+color:#EE2A15;
+}
+#totalHour span:nth-child(2){
+    /*position: absolute;
+    right: 0;*/
+    float: right;
+    color: #999999;
+    font-size: 11px;
+}
+
+
+/*----------------------*/
+#mysearch3Div{
+    display:border-box;
+
+}
+
+#mysearch3{
+    width: 100%;
+    text-align: center;
+    border-left:1px solid #BBBBBB;
+border-top:1px solid #BBBBBB;
+ border-collapse: collapse;
+ margin-bottom: 50px;
+}
+
+#mysearch3 tbody{
+    width: 100%;
+}
+
+#mysearch3 td{
+    display: inline-block;
+    width: 50%;
+    height: 30px;
+    border-left:1px solid #BBBBBB;
+border-top:1px solid #BBBBBB;
 }
