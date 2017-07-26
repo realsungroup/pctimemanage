@@ -502,13 +502,13 @@ var calc_navbar_height = function() {
  * DOCUMENT LOADED EVENT
  * Description: Fire when DOM is ready
  */
-	jQuery(document).ready(function() {
+	// jQuery(document).ready(function() {
 		
-		initApp.SmartActions();
-		initApp.leftNav();
-		initApp.domReadyMisc();
+	// 	initApp.SmartActions();
+	// 	initApp.leftNav();
+	// 	initApp.domReadyMisc();
 	
-	});
+	// });
 /*
  * RESIZER WITH THROTTLE
  * Source: http://benalman.com/code/projects/jquery-resize/examples/resize/

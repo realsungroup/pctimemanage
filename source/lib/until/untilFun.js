@@ -38,7 +38,7 @@ function cmAlert(title) {
     $('#modalTitle').html('提示');
     $('#modalSubTitle').html(title);
 
-    // $('#myModal').modal(options)
+    $('#myModal').modal(options)
 
     
     

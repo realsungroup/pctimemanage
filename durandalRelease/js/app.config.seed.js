@@ -123,7 +123,7 @@ var root = this,
 
 /*---------------------------------------------*/
 
-localDebug = false;
+localDebug = true;
 
 enterprisecode = '9063'//全局企业编号
 
@@ -131,7 +131,7 @@ globBadgeno = null;//全局工号
 
 globSingleData = null;//全局传入内页的数据变量
 
-globActiveDuration = 600;//页面活跃时间（s）
+globActiveDuration = 60;//页面活跃时间（s）
 
 //router
 
