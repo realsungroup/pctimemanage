@@ -67,6 +67,7 @@
  * GLOBAL: interval array (to be used with jarviswidget in ajax and 
  * angular mode) to clear auto fetch interval
  */
+
 	$.intervalArr = [];
 /*
  * Calculate nav height
@@ -502,13 +503,13 @@ var calc_navbar_height = function() {
  * DOCUMENT LOADED EVENT
  * Description: Fire when DOM is ready
  */
-	jQuery(document).ready(function() {
+	// jQuery(document).ready(function() {
 		
-		initApp.SmartActions();
-		initApp.leftNav();
-		initApp.domReadyMisc();
+	// 	initApp.SmartActions();
+	// 	initApp.leftNav();
+	// 	initApp.domReadyMisc();
 	
-	});
+	// });
 /*
  * RESIZER WITH THROTTLE
  * Source: http://benalman.com/code/projects/jquery-resize/examples/resize/

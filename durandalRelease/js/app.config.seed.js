@@ -135,7 +135,7 @@ globActiveDuration = 60;//页面活跃时间（s）
 
 //router
 
-routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请"]
+routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请","考勤员查询"]
 
 routeList = [
 	// { route: ['','applying'], title: '申请中', moduleId: 'applyingRE', nav: true, type: "我的申请" },
@@ -157,6 +157,8 @@ routeList = [
 	{ route: 'staffPend', title: '员工审批定义', moduleId: 'main/viewmodels/staffPend', nav: true, type: "员工审批定义" },
 
 	{ route: 'wxApply', title: '微信考勤申请', moduleId: 'main/viewmodels/wxApply', nav: true, type: "微信考勤申请" },
+
+	{ route: 'dayWorkReport', title: '考勤员查询', moduleId: 'main/viewmodels/dayWorkReport', nav: true, type: "考勤员查询" },
 
 	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
 	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},

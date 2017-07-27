@@ -10,13 +10,12 @@ define([
   var path = {
     baseUrl: 'http://kingofdinner.realsun.me:9091/',
     loginBaseUrl: 'http://192.168.1.113:9091/',
-    // loginBaseUrl: 'http://kingofdinner.realsun.me:9091/',
     getData: 'api/100/table/Retrieve',
     getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
     saveData: 'api/100/table/Save',
     login: 'api/Account/Login'
   }
-  if(localDebug) path.loginBaseUrl = path.baseUrl;
+  // if(localDebug) path.loginBaseUrl = path.baseUrl;
 
 
   function fixDataWithMethod(data, method) {
@@ -385,6 +384,13 @@ define([
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
+  //获取考勤员日报数据
+  function getDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = '554407385613';
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -415,7 +421,8 @@ define([
     savePesonPendData: savePesonPendData,
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
-    cancelApplyDataForWX: cancelApplyDataForWX
+    cancelApplyDataForWX: cancelApplyDataForWX,
+    getDayWorkReportData:getDayWorkReportData
   }
   return httpService
 });

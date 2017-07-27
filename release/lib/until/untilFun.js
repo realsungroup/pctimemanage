@@ -38,8 +38,8 @@ function cmAlert(title) {
     $('#modalTitle').html('提示');
     $('#modalSubTitle').html(title);
 
-    // $('#myModal').modal(options)
-
+    if($('#myModal').modal) $('#myModal').modal(options)
+    else alert(title)
     
     
 }

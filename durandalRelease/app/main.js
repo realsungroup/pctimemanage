@@ -15652,7 +15652,7 @@ globActiveDuration = 60;//页面活跃时间（s）
 
 //router
 
-routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请"]
+routeTypeList = ["我的申请","我的审批","我的查询","员工审批定义","微信考勤申请","考勤员查询"]
 
 routeList = [
 	// { route: ['','applying'], title: '申请中', moduleId: 'applyingRE', nav: true, type: "我的申请" },
@@ -15674,6 +15674,8 @@ routeList = [
 	{ route: 'staffPend', title: '员工审批定义', moduleId: 'main/viewmodels/staffPend', nav: true, type: "员工审批定义" },
 
 	{ route: 'wxApply', title: '微信考勤申请', moduleId: 'main/viewmodels/wxApply', nav: true, type: "微信考勤申请" },
+
+	{ route: 'dayWorkReport', title: '考勤员查询', moduleId: 'main/viewmodels/dayWorkReport', nav: true, type: "考勤员查询" },
 
 	{ route: 'addApply', title: 'addApply', moduleId: 'main/viewmodels/addApply', nav: false},
 	{ route: 'applyDetail', title: 'applyDetail', moduleId: 'main/viewmodels/applyDetail', nav: false},
@@ -17206,7 +17208,8 @@ requirejs.config({
         'configSeed':'../js/app.config.seed',
         'smartNot':'../js/notification/SmartNotification.min',
         'bootstrapRE':'../js/bootstrap/bootstrap.min',
-        'appSeedRE':'../js/app.seed'
+        'appSeedRE':'../js/app.seed',
+        'dayWorkReportModel':'../lib/models/dayWorkReportModel'
 
     }
 
@@ -17819,13 +17822,12 @@ define('httpServiceRE',[
   var path = {
     baseUrl: 'http://kingofdinner.realsun.me:9091/',
     loginBaseUrl: 'http://192.168.1.113:9091/',
-    // loginBaseUrl: 'http://kingofdinner.realsun.me:9091/',
     getData: 'api/100/table/Retrieve',
     getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
     saveData: 'api/100/table/Save',
     login: 'api/Account/Login'
   }
-  if(localDebug) path.loginBaseUrl = path.baseUrl;
+  // if(localDebug) path.loginBaseUrl = path.baseUrl;
 
 
   function fixDataWithMethod(data, method) {
@@ -18194,6 +18196,13 @@ define('httpServiceRE',[
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
+  //获取考勤员日报数据
+  function getDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = '554407385613';
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -18224,7 +18233,8 @@ define('httpServiceRE',[
     savePesonPendData: savePesonPendData,
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
-    cancelApplyDataForWX: cancelApplyDataForWX
+    cancelApplyDataForWX: cancelApplyDataForWX,
+    getDayWorkReportData:getDayWorkReportData
   }
   return httpService
 });
@@ -18258,7 +18268,8 @@ define('login',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', '
 
         if(localDebug) console.log("--------->" + userStr + passWordStr)
         if (localDebug) userStr = "80881" 
-          // userStr = "20465"   ;passWordStr = "095028" 
+         if (localDebug){ userStr = "20465"   ;passWordStr = "095028";} 
+        //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         //  
         var data = { "badgeno": userStr, "Password": passWordStr };
 
@@ -19801,6 +19812,91 @@ define('main/viewmodels/applyRefuse',['durandal/app',
             }
             return selfVM;
     }); 
+//dayWorkReportModel
+define('main/viewmodels/dayWorkReport',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt) {
+
+        var selfVM = {};
+        selfVM.model = {
+            'title': '考勤员查询',
+            'subTitle': '考勤日报',
+            'pageIndex': 0,
+            'data': ko.observable([]),
+            'recID': '',
+            'inputVal':ko.observable(''),
+            'selectDateArr':ko.observable([]),
+            'selectDate':ko.observable('')
+        }
+
+        selfVM.activate = function (e) {
+
+            selfVM.getData(0);
+
+            var dateArr = [];
+            for (var i = 0; i < 6; i++) {
+                var nowDate = new Date();
+                nowDate.setMonth(nowDate.getMonth() - i);
+                var month = nowDate.getMonth() + 1;
+                var year = nowDate.getFullYear();
+                // var dateStr = year + '年' + month + '月';
+                 var dateStr = year + month + '';
+                dateArr.push(dateStr);
+            }
+            selfVM.selectDateArr(dateArr);
+            selfVM.selectDate(dateArr[0]);
+        }
+
+        selfVM.init = function () {
+            selfVM.model.pageIndex = 0;
+            selfVM.model.data([]);
+            selfVM.model.recID;
+        }
+
+        selfVM.getData = function (type) {
+            var self = selfVM;
+
+            var cmswhere = '';
+            if(selfVM.model.selectDate().length > 0){
+                cmswhere = "考勤月份 ='" +selfVM.model.selectDate() + "'";
+            }
+            var param = {
+                'cmswhere': cmswhere,
+                'key': self.model.inputVal() ? self.model.inputVal() : ''
+            }
+
+            param.pageSize = 10;
+            if (!type) {//刷新
+                param.pageIndex = 0;
+
+            } else {//加载
+                param.pageIndex = self.model.pageIndex;
+            }
+
+            httpService.getDayWorkReportData(param, function (data) {
+
+                if (data && data.data) {
+                    var dataArr = data.data;
+                    self.model.data(dataArr);
+                }
+            }, function () {
+
+            });
+        }
+
+        selfVM.kvoInput = function () {
+            selfVM.model.pageIndex = 0;
+            selfVM.getData(0);
+        }
+
+        selfVM.model.selectDate.subscribe(function(newVal){
+            selfVM.model.pageIndex = 0;
+            selfVM.getData(0);
+        })
+
+
+        return selfVM;
+
+    });
 define('main/viewmodels/fixSubmit',['durandal/app',
   'knockout',
   'plugins/router',
@@ -21104,6 +21200,8 @@ define('shell',['plugins/router', 'durandal/app', 'knockout'], function (router,
             initApp.SmartActions();
             initApp.leftNav();
             initApp.domReadyMisc();
+
+            
 
             
         },
@@ -22565,6 +22663,9 @@ define('text!main/views/applyRefuse.html',[],function () { return '<div data-bin
 
 
 define('text!main/views/applying.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:"cellMainCategory"-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:true}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainSubmitBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n</div>\r\n\r\n<!-- end row -->\r\n\r\n\r\n\r\n\r\n';});
+
+
+define('text!main/views/dayWorkReport.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- row -->\r\n<div id="dayWorkReport" class="row" style="height: 700px;overflow: scroll">\r\n\r\n    <!-- NEW WIDGET START -->\r\n\r\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\r\n        <div class="col-sm-1 col-md-1 col-lg-1">\r\n            <select name="" id="YMSelect" data-bind="options: model.selectDateArr,value:model.selectDate">\r\n             </select>\r\n        </div>\r\n        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-7 col-md-offset-7 col-lg-offset-7">\r\n            <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\r\n        </div>\r\n    </div>\r\n\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <table class="table table-hover table-bordered">\r\n            <thead>\r\n                <tr>\r\n                    <th>考勤月份</th>\r\n                    <th>班组名称</th>\r\n                    <th>员工工号</th>\r\n                    <th>员工姓名</th>\r\n                    <th>考勤项目</th>\r\n\r\n                    <th>A16</th>\r\n                    <th>A17</th>\r\n                    <th>A18</th>\r\n                    <th>A19</th>\r\n                    <th>A20</th>\r\n                    <th>A21</th>\r\n                    <th>A22</th>\r\n                    <th>A23</th>\r\n                    <th>A24</th>\r\n                    <th>A25</th>\r\n                    <th>A26</th>\r\n                    <th>A27</th>\r\n                    <th>A28</th>\r\n                    <th>A29</th>\r\n                    <th>A30</th>\r\n                    <th>A31</th>\r\n                    <th>B01</th>\r\n                    <th>B02</th>\r\n                    <th>B03</th>\r\n                    <th>B04</th>\r\n                    <th>B05</th>\r\n                    <th>B06</th>\r\n                    <th>B07</th>\r\n                    <th>B08</th>\r\n                    <th>B09</th>\r\n                    <th>B10</th>\r\n                    <th>B11</th>\r\n                    <th>B12</th>\r\n                    <th>B13</th>\r\n                    <th>B14</th>\r\n                    <th>B15</th>\r\n                    \r\n                    <th>dept1id</th>\r\n                    <th>dept2id</th>\r\n                    <th>dept3id</th>\r\n                    <th>dept4id</th>\r\n                    <th>dept5id</th>\r\n                </tr>\r\n\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:考勤月份"></td>\r\n                    <td data-bind="text:班组名称"></td>\r\n                    <td data-bind="text:员工工号"></td>\r\n                    <td data-bind="text:员工姓名"></td>\r\n                    <td data-bind="text:考勤项目"></td>\r\n                    <td data-bind="text:A16"></td>\r\n                    <td data-bind="text:A17"></td>\r\n                    <td data-bind="text:A18"></td>\r\n                    <td data-bind="text:A19"></td>\r\n                    <td data-bind="text:A20"></td>\r\n                    <td data-bind="text:A21"></td>\r\n                    <td data-bind="text:A22"></td>\r\n                    <td data-bind="text:A23"></td>\r\n                    <td data-bind="text:A24"></td>\r\n                    <td data-bind="text:A25"></td>\r\n                    <td data-bind="text:A26"></td>\r\n                    <td data-bind="text:A27"></td>\r\n                    <td data-bind="text:A28"></td>\r\n                    <td data-bind="text:A29"></td>\r\n                    <td data-bind="text:A30"></td>\r\n                    <td data-bind="text:A31"></td>\r\n                    <td data-bind="text:B01"></td>\r\n                    <td data-bind="text:B02"></td>\r\n                    <td data-bind="text:B03"></td>\r\n                    <td data-bind="text:B04"></td>\r\n                    <td data-bind="text:B05"></td>\r\n                    <td data-bind="text:B06"></td>\r\n                    <td data-bind="text:B07"></td>\r\n                    <td data-bind="text:B08"></td>\r\n                    <td data-bind="text:B09"></td>\r\n                    <td data-bind="text:B10"></td>\r\n                    <td data-bind="text:B11"></td>\r\n                    <td data-bind="text:B12"></td>\r\n                    <td data-bind="text:B13"></td>\r\n                    <td data-bind="text:B14"></td>\r\n                    <td data-bind="text:B15"></td>\r\n                    <td data-bind="text:dept1id"></td>\r\n                    <td data-bind="text:dept2id"></td>\r\n                    <td data-bind="text:dept3id"></td>\r\n                    <td data-bind="text:dept4id"></td>\r\n                    <td data-bind="text:dept5id"></td>\r\n                 </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n<!-- end row -->\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<!-- \r\n\r\n    <thead>\r\n                <tr>\r\n                <th>班组</th>\r\n                <th>工号</th>\r\n                <th>姓名</th>\r\n                <th>类型</th>\r\n\r\n                <th>二</th>\r\n                <th>三</th>\r\n                <th>四</th>\r\n                <th>五</th>\r\n                <th>六</th>\r\n                <th>日</th>\r\n                <th>一</th>\r\n                </tr>\r\n\r\n                <tr>\r\n                <th></th>\r\n                <th></th>\r\n                <th></th>\r\n                <th></th>\r\n\r\n                <th>16</th>\r\n                <th>17</th>\r\n                <th>18</th>\r\n                <th>19</th>\r\n                <th>20</th>\r\n                <th>21</th>\r\n                <th>22</th>\r\n                </tr>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:C3_541468317577"></td>\r\n                    <td data-bind="text:C3_542062213811"></td>\r\n                    <td data-bind="text:C3_541450807755"></td>\r\n                    <td data-bind="text:C3_541450797951"></td>\r\n                    <td data-bind="text:C3_541467332728"></td>\r\n                    <td data-bind="text:C3_541467363607"></td>\r\n                    <td data-bind="text:C3_542065304623"></td>\r\n                    <td data-bind="text:C3_542385852578"></td>\r\n                    <td data-bind="text:C3_542385880907"></td>\r\n                    <td data-bind="text:C3_542385904547"></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.editClick($index)}">编辑</button></td>\r\n                </tr>\r\n            </tbody>\r\n            -->';});
 
 
 define('text!main/views/fixSubmit.html',[],function () { return '<form class="form-horizontal">\r\n\r\n    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--结束时间cellEndTimeReadonlyCpt-->\r\n    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--审批人cellApprovePersonCpt-->\r\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--时长 cellTimeLenghtReadonlyCpt-->\r\n    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--事由 cellReasonEdit-->\r\n    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--退回理由-->\r\n    <div class=\'form-group\'>\r\n        <label for=\'\' class=\'col-sm-2 col-md-2 col-lg-2 control-label\'>退回理由</label>\r\n        <div class=\' col-sm-10 col-md-10 col-lg-10\'>\r\n            <p class=\'form-control height-auto\' data-bind="text:model.data().C3_541451198969 == \'其他\' ? model.data().C3_547719838514 : model.data().C3_541451198969"></p>\r\n        </div>\r\n    </div>\r\n\r\n    <!-- 拍照 -->\r\n    <!-- ko foreach:model.imgShowArr -->\r\n         <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->\r\n                                                                                       \r\n         <!--/ko-->\r\n    <!-- /ko -->\r\n\r\n    <!--附件 cellAttachCpt-->\r\n     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n     <!--审批流 cellPendPersonCpt-->\r\n    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->\r\n    <!--/ko-->\r\n    \r\n    <!--保存提交cellSubmitBtnCpt-->\r\n     <!--ko component: "cellSubmitBtnCpt"-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--撤销 cellCancelBtnCpt-->\r\n     <!--ko component: "cellCancelBtnCpt"-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n\r\n\r\n\r\n</form>\r\n\r\n\r\n\r\n\r\n';});

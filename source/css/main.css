@@ -8,6 +8,7 @@ td{
     height: 37px !important;
 }
 
+
 .color-red{
     color: red;
 }
@@ -533,3 +534,9 @@ border-top:1px solid #BBBBBB;
     border-left:1px solid #BBBBBB;
 border-top:1px solid #BBBBBB;
 }
+
+
+/*#dayWorkReport td,#dayWorkReport th{
+    display: inline-block;
+    min-width: 50px;
+}*/

@@ -7,8 +7,8 @@ requirejs.config({
         'plugins': '../lib/durandal/js/plugins',
         'transitions': '../lib/durandal/js/transitions',
         'knockout': '../lib/knockout/knockout-3.4.0',
-        // 'jQuery':'../lib/jquery/jquery-1.9.1',
         'jquery': '../lib/jquery/jquery-1.9.1',
+        'jqueryUI':'../js/libs/jquery-ui-1.10.3.min',
         'realsun': '../lib/realsun/js',
         'calendar': '../lib/fullcalendar',
         'components': 'components',
@@ -17,13 +17,43 @@ requirejs.config({
         'untilRE': '../lib/until/untilFun',
         'photoswipeRE': '../lib/photoswipe',
         'baseVM': '../lib/base/baseViewModel',
-        'ifvisibleRE': '../lib/ifvisible/ifvisible.min'
+        'ifvisibleRE': '../lib/ifvisible/ifvisible.min',
+        'configSeed':'../js/app.config.seed',
+        'smartNot':'../js/notification/SmartNotification.min',
+        'bootstrapRE':'../js/bootstrap/bootstrap.min',
+        'appSeedRE':'../js/app.seed',
+        'dayWorkReportModel':'../lib/models/dayWorkReportModel'
 
+    },
+
+    shim:{
+        'configSeed': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'configSeed'
+　　　　　　},
+        'appSeedRE': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'appSeedRE'
+　　　　　　},
+        'smartNot': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'smartNot'
+　　　　　　},
+        'bootstrapRE': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'bootstrapRE'
+　　　　　　},
+        'jqueryUI': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'jqueryUI'
+　　　　　　}
     }
+
 
 });
 
-define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocator', 'realsun/common', 'plugins/dialog', 'ifvisibleRE'],
+define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocator', 'realsun/common', 'plugins/dialog', 'ifvisibleRE',
+        'configSeed','smartNot','bootstrapRE','appSeedRE','jqueryUI'],
     function (system, router, app, viewLocator, common, dialog, ifvisible) {
 
 

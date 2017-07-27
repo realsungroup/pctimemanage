@@ -36,6 +36,8 @@ define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko
             initApp.domReadyMisc();
 
             
+
+            
         },
         logoutClick:function(){
                

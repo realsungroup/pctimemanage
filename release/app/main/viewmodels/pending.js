@@ -25,7 +25,7 @@ define(['durandal/app',
           'key': self.model.inputVal() ? self.model.inputVal() : ''
         }
 
-        param.pageSize = 1;
+        param.pageSize = 10;
         if (!type) {//刷新
           param.pageIndex = 0;
 

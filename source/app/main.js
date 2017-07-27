@@ -21,8 +21,32 @@ requirejs.config({
         'configSeed':'../js/app.config.seed',
         'smartNot':'../js/notification/SmartNotification.min',
         'bootstrapRE':'../js/bootstrap/bootstrap.min',
-        'appSeedRE':'../js/app.seed'
+        'appSeedRE':'../js/app.seed',
+        'dayWorkReportModel':'../lib/models/dayWorkReportModel'
 
+    },
+
+    shim:{
+        'configSeed': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'configSeed'
+　　　　　　},
+        'appSeedRE': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'appSeedRE'
+　　　　　　},
+        'smartNot': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'smartNot'
+　　　　　　},
+        'bootstrapRE': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'bootstrapRE'
+　　　　　　},
+        'jqueryUI': {
+　　　　　　　　deps: ['jquery'],
+　　　　　　　　exports: 'jqueryUI'
+　　　　　　}
     }
 
 

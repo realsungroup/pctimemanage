@@ -28,7 +28,8 @@
 
         if(localDebug) console.log("--------->" + userStr + passWordStr)
         if (localDebug) userStr = "80881" 
-          // userStr = "20465"   ;passWordStr = "095028" 
+         if (localDebug){ userStr = "20465"   ;passWordStr = "095028";} 
+        //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         //  
         var data = { "badgeno": userStr, "Password": passWordStr };
 
