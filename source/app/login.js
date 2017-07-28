@@ -22,15 +22,16 @@
 
       // 登录
       login: function () {
+        if (localDebug) console.log("loginClick")
+        $("#loginBtn").button('loading');
 
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        if(localDebug) console.log("--------->" + userStr + passWordStr)
-        if (localDebug) userStr = "80881" 
-         if (localDebug){ userStr = "20465"   ;passWordStr = "095028";} 
+        if (localDebug) console.log("--------->" + userStr + passWordStr)
+        if (localDebug) userStr = "80881"
+        if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
-        //  
         var data = { "badgeno": userStr, "Password": passWordStr };
 
         httpService.accountLogin(data, function (e) {
@@ -51,7 +52,9 @@
           } else {
             cmAlert(e.ErrorMsg);
           }
+          
         }, function () {
+          $("#loginBtn").button('reset')
           cmAlert('系统错误');
         })
 
@@ -91,7 +94,7 @@
               appConfig.app.teamApprove = dataArr[0].C3_541450797951;
             }
 
-            if(localDebug) console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
+            if (localDebug) console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
             self.data.teamApproveSuccess = true;
             self.gotoApplyPage();
           } else {
@@ -102,7 +105,7 @@
         });
       },
 
-      
+
 
       //获取拒绝数据
       getRefuseData: function () {
@@ -134,11 +137,11 @@
 
       // 跳转到主路由
       gotoApplyPage: function () {
-        if (self.data.vacationCategorySuccess && self.data.teamApproveSuccess && self.data.refuseArrSuccess) {
+        if (self.data.vacationCategorySuccess && self.data.refuseArrSuccess) {
           router.deactivate();
           router.reset();
           app.setRoot('shell');
-
+          $("#loginBtn").button('reset');
         }
       }
     };

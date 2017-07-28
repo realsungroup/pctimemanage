@@ -6,8 +6,8 @@
 
 
 
-<!-- row -->
-<div id="dayWorkReport" class="row" style="height: 700px;overflow: scroll">
+<!-- row style="height: 700px;overflow: scroll"-->
+<div id="dayWorkReport" class="row" >
 
     <!-- NEW WIDGET START -->
 
@@ -21,13 +21,13 @@
         </div>
     </div>
 
-    <article class="col-sm-12 col-md-12 col-lg-12" style="width: 4000px">
+    <article class="col-sm-12 col-md-12 col-lg-12"  style="overflow: scroll" > <!--data-bind="style:{height:model.tableHeight() + 'px'}">-->
        
-
-        <table class="table table-hover table-bordered">
+        <div style="width:4000px">
+        <table class="table table-hover table-bordered" style="width: 100%">
             <thead>
                 <tr>
-                    <th rowspan="2">班组</th>
+                    <th>班组</th>
                     <th>工号</th>
                     <th>姓名</th>
                     <th>类型</th>
@@ -83,7 +83,7 @@
                 </tr>
 
                 <tr>
-                    <!--<th></th>-->
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -203,6 +203,7 @@
             </tbody>
             <!--/ko-->
         </table>
+        </div>
     </article>
     <!-- WIDGET END -->
 

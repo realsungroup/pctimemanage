@@ -22,7 +22,9 @@ requirejs.config({
         'smartNot':'../js/notification/SmartNotification.min',
         'bootstrapRE':'../js/bootstrap/bootstrap.min',
         'appSeedRE':'../js/app.seed',
-        'dayWorkReportModel':'../lib/models/dayWorkReportModel'
+        'dayWorkReportModel':'../lib/models/dayWorkReportModel',
+        'FileSaverRE':'../lib/FileSaver/FileSaver.min',
+        // 'xlsxRE':'../lib/xlsx/xlsx.core.min'
 
     },
 
@@ -46,14 +48,17 @@ requirejs.config({
         'jqueryUI': {
 　　　　　　　　deps: ['jquery'],
 　　　　　　　　exports: 'jqueryUI'
-　　　　　　}
+　　　　　　},
+        'FileSaverRE':{
+            exports:'FileSaverRE'
+        }
     }
 
 
 });
 
 define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocator', 'realsun/common', 'plugins/dialog', 'ifvisibleRE',
-        'configSeed','smartNot','bootstrapRE','appSeedRE','jqueryUI'],
+        'configSeed','smartNot','appSeedRE','jqueryUI','bootstrapRE'],
     function (system, router, app, viewLocator, common, dialog, ifvisible) {
 
 

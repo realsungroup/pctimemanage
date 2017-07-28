@@ -6,8 +6,8 @@
 
 
 
-<!-- row -->
-<div id="dayWorkReport" class="row" style="height: 700px;overflow: scroll">
+<!-- row style="height: 700px;overflow: scroll"-->
+<div id="dayWorkReport" class="row" >
 
     <!-- NEW WIDGET START -->
 
@@ -16,18 +16,21 @@
             <select name="" id="YMSelect" data-bind="options: model.selectDateArr,value:model.selectDate">
              </select>
         </div>
-        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-7 col-md-offset-7 col-lg-offset-7">
+        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-6 col-md-offset-6 col-lg-offset-6">
             <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1">
+            <button class="btn btn-info " data-bind="click:exportExcel">EXCEL</button>
         </div>
     </div>
 
-    <article class="col-sm-12 col-md-12 col-lg-12" style="width: 4000px">
+    <article class="col-sm-12 col-md-12 col-lg-12"  style="overflow: scroll" > <!--data-bind="style:{height:model.tableHeight() + 'px'}">-->
        
-
-        <table class="table table-hover table-bordered">
+        <div style="width:4000px">
+        <table class="table table-hover table-bordered" style="width: 100%">
             <thead>
                 <tr>
-                    <th rowspan="2">班组</th>
+                    <th>班组</th>
                     <th>工号</th>
                     <th>姓名</th>
                     <th>类型</th>
@@ -83,7 +86,7 @@
                 </tr>
 
                 <tr>
-                    <!--<th></th>-->
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -143,9 +146,11 @@
             
             <tbody data-bind="foreach:$data">
                 <tr>
-                    <td rowspan="8" data-bind="text:班组名称,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:员工工号,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:员工姓名,visible:$index() == 0"></td>
+                    <!--ko if:$index() == 0-->
+                    <td rowspan="8" data-bind="text:班组名称"></td>
+                    <td rowspan="8" data-bind="text:员工工号"></td>
+                    <td rowspan="8" data-bind="text:员工姓名"></td>
+                    <!--/ko-->
 
                     <td data-bind="text:考勤项目"></td>
                     <td data-bind="text:A16"></td>
@@ -180,6 +185,7 @@
                     <td data-bind="text:B14"></td>
                     <td data-bind="text:B15"></td>
 
+                    <!--ko if:$index() == 0-->
                     <td rowspan="8" data-bind="text:workTime,visible:$index() == 0"></td>
                     <td rowspan="8" data-bind="text:workDefaultTime,visible:$index() == 0"></td>
                     <td rowspan="8" data-bind="text:workExtraTime,visible:$index() == 0"></td>
@@ -196,13 +202,14 @@
                     <td rowspan="8" data-bind="text:littleNightWorkTypeCount,visible:$index() == 0"></td>
                     <td rowspan="8" data-bind="text:bigNightWorkTypeCount,visible:$index() == 0"></td>
                     <td rowspan="8" data-bind="text:workOnVacationCount,visible:$index() == 0"></td>
-                    <!--<td rowspan="8" data-bind="text:$parent.model.data().monWorkTime,visible:$index() == 0"></td>-->
 
                     <td rowspan="8" data-bind="text:allWorkTime,visible:$index() == 0"></td>
+                    <!--/ko-->
                 </tr>
             </tbody>
             <!--/ko-->
         </table>
+        </div>
     </article>
     <!-- WIDGET END -->
 
@@ -213,134 +220,3 @@
 </div>
 <!-- end row -->
 
-
-
-
-
-
-<!--
-     <table style="display: none" class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th>考勤月份</th>
-                    <th>班组名称</th>
-                    <th>员工工号</th>
-                    <th>员工姓名</th>
-                    <th>考勤项目</th>
-
-                    <th>A16</th>
-                    <th>A17</th>
-                    <th>A18</th>
-                    <th>A19</th>
-                    <th>A20</th>
-                    <th>A21</th>
-                    <th>A22</th>
-                    <th>A23</th>
-                    <th>A24</th>
-                    <th>A25</th>
-                    <th>A26</th>
-                    <th>A27</th>
-                    <th>A28</th>
-                    <th>A29</th>
-                    <th>A30</th>
-                    <th>A31</th>
-                    <th>B01</th>
-                    <th>B02</th>
-                    <th>B03</th>
-                    <th>B04</th>
-                    <th>B05</th>
-                    <th>B06</th>
-                    <th>B07</th>
-                    <th>B08</th>
-                    <th>B09</th>
-                    <th>B10</th>
-                    <th>B11</th>
-                    <th>B12</th>
-                    <th>B13</th>
-                    <th>B14</th>
-                    <th>B15</th>
-
-                    <th>dept1id</th>
-                    <th>dept2id</th>
-                    <th>dept3id</th>
-                    <th>dept4id</th>
-                    <th>dept5id</th>
-                </tr>
-
-            </thead>
-            <tbody data-bind="foreach:model.data">
-                <tr>
-                    <td data-bind="text:考勤月份"></td>
-                    <td data-bind="text:班组名称"></td>
-                    <td data-bind="text:员工工号"></td>
-                    <td data-bind="text:员工姓名"></td>
-                    <td data-bind="text:考勤项目"></td>
-                    <td data-bind="text:A16"></td>
-                    <td data-bind="text:A17"></td>
-                    <td data-bind="text:A18"></td>
-                    <td data-bind="text:A19"></td>
-                    <td data-bind="text:A20"></td>
-                    <td data-bind="text:A21"></td>
-                    <td data-bind="text:A22"></td>
-                    <td data-bind="text:A23"></td>
-                    <td data-bind="text:A24"></td>
-                    <td data-bind="text:A25"></td>
-                    <td data-bind="text:A26"></td>
-                    <td data-bind="text:A27"></td>
-                    <td data-bind="text:A28"></td>
-                    <td data-bind="text:A29"></td>
-                    <td data-bind="text:A30"></td>
-                    <td data-bind="text:A31"></td>
-                    <td data-bind="text:B01"></td>
-                    <td data-bind="text:B02"></td>
-                    <td data-bind="text:B03"></td>
-                    <td data-bind="text:B04"></td>
-                    <td data-bind="text:B05"></td>
-                    <td data-bind="text:B06"></td>
-                    <td data-bind="text:B07"></td>
-                    <td data-bind="text:B08"></td>
-                    <td data-bind="text:B09"></td>
-                    <td data-bind="text:B10"></td>
-                    <td data-bind="text:B11"></td>
-                    <td data-bind="text:B12"></td>
-                    <td data-bind="text:B13"></td>
-                    <td data-bind="text:B14"></td>
-                    <td data-bind="text:B15"></td>
-                    <td data-bind="text:dept1id"></td>
-                    <td data-bind="text:dept2id"></td>
-                    <td data-bind="text:dept3id"></td>
-                    <td data-bind="text:dept4id"></td>
-                    <td data-bind="text:dept5id"></td>
-                </tr>
-            </tbody>
-        </table>
--->
-
-
-
-
-
-
-<!-- 
-<tr>
-                    <td data-bind="text:model.dataM().workTeam"></td>
-                    <td data-bind="text:model.dataM().workerNum"></td>
-                    <td data-bind="text:model.dataM().workerName"></td>
-
-                    <td data-bind="text:''">排班出勤</td>
-                    <td data-bind="text:model.dataM().participation.A16"></td>
-                    <td data-bind="text:model.dataM().participation.A17"></td>
-                    <td data-bind="text:model.dataM().participation.A18"></td>
-                    <td data-bind="text:model.dataM().participation.A19"></td>
-                    <td data-bind="text:model.dataM().participation.A20"></td>
-                    <td data-bind="text:model.dataM().participation.A21"></td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-   
-            -->

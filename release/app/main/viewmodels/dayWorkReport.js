@@ -1,5 +1,5 @@
 //dayWorkReportModel
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel'],
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'xlsxRE'],
     function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel) {
 
         var selfVM = new baseVM();
@@ -7,35 +7,46 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         selfVM.model.title = '考勤员查询';
         selfVM.model.subTitle = '考勤日报';
         selfVM.model.selectDateArr = ko.observable([]);
-        selfVM.model.selectDate = ko.observable('');
+        selfVM.model.selectDate = ko.observable();
+
+        selfVM.model.tableHeight = ko.observable(0);
+        selfVM.model.allData = null;
+        selfVM.model.isLocalLoading = false;
 
         selfVM.activate = function (e) {
 
-            selfVM.getData(0);
+            // selfVM.model.tableHeight(window.innerHeight - 300);
+            selfVM.init();
 
-            var dateArr = [];
-            for (var i = 0; i < 6; i++) {
-                var nowDate = new Date();
-                nowDate.setMonth(nowDate.getMonth() - i);
-                var month = nowDate.getMonth() + 1;
-                var year = nowDate.getFullYear();
-                // var dateStr = year + '年' + month + '月';
-                if (month < 10) month = "0" + month;
-                var dateStr = year + "" + month;
-                dateArr.push(dateStr);
-            }
-            selfVM.model.selectDateArr(dateArr);
-            selfVM.model.selectDate(dateArr[0]);
+            if (selfVM.model.data().length) return;
+
+            httpService.getDayOptions({}, function (data) {
+                var yearMonthArr = [];
+                data.data.forEach(function (item) {
+
+                    var yearMonthM = item.C3_542128471153;
+                    var yearMonthStr = yearMonthM.toString();
+                    yearMonthArr.push(yearMonthStr);
+
+                });
+                selfVM.model.selectDateArr(yearMonthArr);
+                // selfVM.model.selectDate(yearMonthArr[0]);
+
+                selfVM.getData(0);
+            });
+
+
         }
 
         selfVM.init = function () {
-            selfVM.model.pageIndex = 0;
-            selfVM.model.data([]);
-            // selfVM.model.recID;
+            selfVM.model.isLoading = false;
         }
 
         selfVM.getData = function (type) {
             var self = selfVM;
+
+            if (selfVM.model.isLoading) return;
+            selfVM.model.isLoading = true;
 
             var cmswhere = '';
             if (selfVM.model.selectDate().length > 0) {
@@ -46,7 +57,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                 'key': self.model.inputVal() ? self.model.inputVal() : ''
             }
 
-            param.pageSize = 20;
+            // param.pageSize = 20;
             if (!type) {//刷新
                 param.pageIndex = 0;
 
@@ -55,25 +66,28 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             }
 
             httpService.getDayWorkReportData(param, function (data) {
-
+                selfVM.model.data([]);
                 if (data && data.data) {
                     var dataArr = data.data;
-                    // self.model.data(dataArr);
 
-
+                    console.log("time ==> " + new Date());
                     var modelArr = new dayWorkReportModel(dataArr);
-                    selfVM.model.data(modelArr);
+                    console.log("time ==> " + new Date());
+                    selfVM.model.allData = modelArr;
+                    getLocalFilterData(0)
 
                 }
 
-                //设置页标（base中）
-                self.setPageMark(param, data);
-
-
                 if (dataArr.length < param.pageSize) self.model.noMore = true;
                 else self.model.noMore = false;
-            }, function () {
 
+
+
+                exportExcel();
+
+                selfVM.model.isLoading = false;
+            }, function () {
+                selfVM.model.isLoading = false;
             });
         }
 
@@ -87,6 +101,77 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             selfVM.getData(0);
         })
 
+        selfVM.pageUp = function () {
+            if (selfVM.model.isLocalLoading) { console.log("loading"); return; };//判断当前是否处于加载数据中 
+            if (selfVM.model.pageIndex <= 0) selfVM.model.pageIndex = 0
+            else selfVM.model.pageIndex--;
+            getLocalFilterData(selfVM.model.pageIndex)
+        }
+
+        selfVM.pageDown = function () {
+            if (selfVM.model.isLocalLoading) { console.log("loading"); return; }//判断当前是否处于加载数据中 
+            if (selfVM.model.noMore) return;
+            selfVM.model.pageIndex++;
+
+            getLocalFilterData(selfVM.model.pageIndex)
+        }
+
+        function exportExcel() {
+            // $("#dayWorkReport table").tableExport({
+            //     // exclude CSS class
+            //     exclude: ".noExl",
+            //     name: "Worksheet Name",
+            //     filename: "酒店星级评定总表" //do not include extension
+            // });
+
+            TableExport($("#dayWorkReport table")[0], {
+                headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
+                footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
+                formats: ['xls', 'csv', 'txt'],             // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
+                filename: 'id',                             // (id, String), filename for the downloaded file, (default: 'id')
+                bootstrap: true,                           // (Boolean), style buttons using bootstrap, (default: true)
+                exportButtons: true,                        // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
+                position: 'bottom',                         // (top, bottom), position of the caption element relative to table, (default: 'bottom')
+                ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
+                ignoreCols: null,                           // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
+                trimWhitespace: true                        // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
+            });
+        }
+
+        function getLocalFilterData(index) {
+            if (selfVM.model.isLocalLoading) return;
+            selfVM.model.isLocalLoading = true;
+            var pageSize = 2;
+            var pageIndex = index;
+
+
+            var startIndex = pageSize * index;
+            var endIndex = pageSize * (index + 1);
+            var data = [];
+            if (Array.isArray(selfVM.model.allData) && selfVM.model.allData.length) {
+                data = selfVM.model.allData.slice(startIndex, endIndex);
+            }
+
+            if (data.length) pageIndex = pageIndex + 1;
+            var total = Math.ceil(selfVM.model.allData.length / pageSize);
+
+            if (!data.length) {
+                selfVM.model.pageIndex--;
+                selfVM.model.isLocalLoading = false;
+
+                if (index == 0) selfVM.setPageMarkWithNum(0, 0);
+                return;
+            }
+            selfVM.model.data(data);
+
+            selfVM.setPageMarkWithNum(pageIndex, total);
+            selfVM.model.isLocalLoading = false;
+        }
+
+        //监听浏览器窗口变化
+        // window.onresize = function(){
+        //     selfVM.model.tableHeight(window.innerHeight - 300);
+        // }
 
         return selfVM;
 

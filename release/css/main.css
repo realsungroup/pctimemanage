@@ -3,10 +3,21 @@ html,body,#applicationHost,#main-login{
     height: 100% !important;
 }
 
+#applicationHost{
+    overflow-x: hidden;
+}
+
+#header{
+        position: fixed;
+    left: 0;
+    right: 0;
+}
+
 td{
     word-break: break-all;
     height: 37px !important;
 }
+
 
 
 .color-red{
@@ -195,7 +206,7 @@ td{
 .page-control-nav{
     display: inline-block;
     vertical-align: bottom;
-    margin-left: calc(100% - 3350px);
+    margin-left: calc(100% - 335px);
     margin-left: -webkit-calc(100% - 335px);
 }
 
@@ -303,8 +314,8 @@ ul{
     text-align: left;
 }
 
-#selDay select,#mysearch2 select{
-    width: 132px;
+#selDay select,#mysearch2 select,#dayWorkReport select{
+    width: 172px;
     height: 23px;
     border-style: solid;
     border-width: 1px;
@@ -312,13 +323,13 @@ ul{
     border-radius: 4px;
     margin-left: 3.125%;
     margin-top: 8px;
-    font-size: 11px;
+    font-size: 14px;
     color: #666666;
             -moz-appearance:none;
             -webkit-appearance:none;
             -ms-appearance:none;
 
-  background:url('../img/xiala.png') no-repeat ; 
+  /*background:url('../img/xiala.png') no-repeat ; */
     background-size: 13px 7px;
     background-position: 95.091% 8px;
     text-indent: 6.818%;

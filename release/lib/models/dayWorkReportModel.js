@@ -1,6 +1,6 @@
-define(function () {
-    var workDefaultTime = '166.6';
-    var typeArr = ['排班出勤', '加班', '年假', '事假', '病假', '调休', '欠班', '其它'];
+define(['untilRE'],function () {
+    var workDefaultTime = '166.66';
+    var typeArr = ['排班出勤', '加班', '年假', '事假', '病假', '调休', '欠班', '其他'];
     var countProp = ['A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28', 'A29', 'A30', 'A31', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'];
     var workOnVacationProp = ['A21', 'A22','A28', 'A29', 'A30','B03', 'B04', 'B10', 'B11'];
 
@@ -101,7 +101,7 @@ define(function () {
                     var isHave = false;
                     val.forEach(function (item) {
                         if (item['考勤项目'] == title) {
-                            console.log("----------->" + title);
+                            // console.log("----------->" + title);
                             newVal.push(item);
                             isHave = true;
                         }
@@ -129,7 +129,7 @@ define(function () {
                     //月标准工时
                     item.workDefaultTime = workDefaultTime;
                     //月超出工时
-                    item.workExtraTime = parseFloat(workTime) - parseFloat(workDefaultTime);
+                    item.workExtraTime = fixFloatNum(parseFloat(workTime) - parseFloat(workDefaultTime));
                     //加班工时
                     item.workOverTime = workOverTime;
                     //年假
@@ -154,7 +154,7 @@ define(function () {
                     item.workOnVacationCount = workOnVacationCount;
 
                     //备注(总加班工时）
-                    item.allWorkTime = item.workExtraTime + item.workOverTime -item.dateChangeVacation - item.noWorkVacation -item.thingVacation
+                    item.allWorkTime = fixFloatNum(item.workExtraTime + item.workOverTime -item.dateChangeVacation - item.noWorkVacation -item.thingVacation)
                 })
 
                 

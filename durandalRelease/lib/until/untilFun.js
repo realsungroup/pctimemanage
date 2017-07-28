@@ -32,19 +32,17 @@ function deepCopy(obj) {
 }
 
 function cmAlert(title) {
-    // alert(title);
-    // dialog.showMessage(title)
     var options = {}
     $('#modalTitle').html('提示');
     $('#modalSubTitle').html(title);
 
-    $('#myModal').modal(options)
-
-    
-    
+    if($('#myModal').modal) $('#myModal').modal(options)
+    else alert(title)
 }
 
-
+function fixFloatNum(num){
+    return Math.round(num * 100) / 100;
+}
 
 function customLoading() {
 

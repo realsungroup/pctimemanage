@@ -101,6 +101,10 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
             self.model.pageMark(pageMarkIndex + "/" + pageMarkTotal);
         }
 
+        this.setPageMarkWithNum = function(index,total){
+            self.model.pageMark(index + "/" + total);
+        }
+
     }
 
 });

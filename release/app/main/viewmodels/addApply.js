@@ -179,7 +179,11 @@ define(['durandal/app',
 
         console.log(tmpData);
         if (action == 'save') tmpData.C3_541449538456 = "N"
-        else tmpData.C3_541449538456 = "Y"
+        else {
+          tmpData.C3_541449538456 = "Y";
+          if(!self.model.approver().length) cmAlert("审批人数据错误");
+          return;
+        }
 
         var validateData = self.valiateForm(tmpData);
         if (!validateData) return;
@@ -344,6 +348,7 @@ define(['durandal/app',
 
         self.model.attachUrlArray(tmpImgUrlArray)
       },
+
       valiateForm: function (data) {//验证提交数据
 
         if (data.C3_533398158705 != '补打卡') {//非补打卡时长的验证
