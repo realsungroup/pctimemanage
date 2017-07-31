@@ -4,7 +4,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
     return {
       data: {
         vacationCategorySuccess: false,
-        teamApproveSuccess: false,
         refuseArrSuccess: false,
         radomPhotoNum: ko.observable(1)
       },
@@ -12,7 +11,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         self = this;
 
         self.data.vacationCategorySuccess = false;
-        self.data.teamApproveSuccess = false;
         self.data.refuseArrSuccess = false;
 
         // 随机背景图片
@@ -28,7 +26,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        if (localDebug) console.log("--------->" + userStr + passWordStr)
         if (localDebug) userStr = "80881"
         if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
@@ -52,7 +49,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
           } else {
             cmAlert(e.ErrorMsg);
           }
-          
+
         }, function () {
           $("#loginBtn").button('reset')
           cmAlert('系统错误');
@@ -95,7 +92,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
             }
 
             if (localDebug) console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
-            self.data.teamApproveSuccess = true;
             self.gotoApplyPage();
           } else {
             cmAlert('获取审批组长类别失败');

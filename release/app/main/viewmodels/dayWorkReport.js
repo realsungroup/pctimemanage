@@ -1,6 +1,6 @@
 //dayWorkReportModel
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'xlsxRE'],
-    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel) {
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel','FileSaverRE'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel,saveA) {
 
         var selfVM = new baseVM();
 
@@ -49,7 +49,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             selfVM.model.isLoading = true;
 
             var cmswhere = '';
-            if (selfVM.model.selectDate().length > 0) {
+            if (selfVM.model.selectDate() && selfVM.model.selectDate().length > 0) {
                 cmswhere = "考勤月份 ='" + selfVM.model.selectDate() + "'";
             }
             var param = {
@@ -57,7 +57,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                 'key': self.model.inputVal() ? self.model.inputVal() : ''
             }
 
-            // param.pageSize = 20;
+            if(localDebug)  param.pageSize = 20;
             if (!type) {//刷新
                 param.pageIndex = 0;
 
@@ -83,7 +83,6 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
 
 
-                exportExcel();
 
                 selfVM.model.isLoading = false;
             }, function () {
@@ -116,26 +115,21 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             getLocalFilterData(selfVM.model.pageIndex)
         }
 
-        function exportExcel() {
-            // $("#dayWorkReport table").tableExport({
-            //     // exclude CSS class
-            //     exclude: ".noExl",
-            //     name: "Worksheet Name",
-            //     filename: "酒店星级评定总表" //do not include extension
-            // });
+        selfVM.exportExcel = function() {
+            var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
 
-            TableExport($("#dayWorkReport table")[0], {
-                headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
-                footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
-                formats: ['xls', 'csv', 'txt'],             // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
-                filename: 'id',                             // (id, String), filename for the downloaded file, (default: 'id')
-                bootstrap: true,                           // (Boolean), style buttons using bootstrap, (default: true)
-                exportButtons: true,                        // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
-                position: 'bottom',                         // (top, bottom), position of the caption element relative to table, (default: 'bottom')
-                ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
-                ignoreCols: null,                           // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
-                trimWhitespace: true                        // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
-            });
+            var worksheet = XLSX.utils.table_to_book($("#dayWorkReport table")[0]);
+            var wbout = XLSX.write(worksheet, wopts);
+
+            function s2ab(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                return buf;
+            }
+
+            /* the saveAs call downloads a file on the local machine */
+            saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "考勤日报.xlsx");
         }
 
         function getLocalFilterData(index) {

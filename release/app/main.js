@@ -20,13 +20,11 @@ requirejs.config({
         'ifvisibleRE': '../lib/ifvisible/ifvisible.min',
         'configSeed':'../js/app.config.seed',
         'smartNot':'../js/notification/SmartNotification.min',
-        'bootstrapRE':'../js/bootstrap/bootstrap.min',
+        'bootstrapRE':'../lib/bootstrap/js/bootstrap.min',
         'appSeedRE':'../js/app.seed',
         'dayWorkReportModel':'../lib/models/dayWorkReportModel',
-        'tableexportRE':'../lib/tableexport/tableexport.min',
-        'BlobRE':'../lib/Blob/Blob.min',
         'FileSaverRE':'../lib/FileSaver/FileSaver.min',
-        'xlsxRE':'../lib/xlsx/xlsx.full.min'
+        // 'xlsxRE':'../lib/xlsx/xlsx.core.min'
 
     },
 
@@ -44,20 +42,15 @@ requirejs.config({
 　　　　　　　　exports: 'smartNot'
 　　　　　　},
         'bootstrapRE': {
-　　　　　　　　deps: ['jquery'],
+　　　　　　　　deps: ['jqueryUI'],
 　　　　　　　　exports: 'bootstrapRE'
 　　　　　　},
         'jqueryUI': {
 　　　　　　　　deps: ['jquery'],
 　　　　　　　　exports: 'jqueryUI'
 　　　　　　},
-        'tableexportRE':{
-　　　　　　　　deps: ['jquery','xlsxRE','BlobRE','FileSaverRE'],
-　　　　　　　　exports: 'tableexportRE'
-        },
-        'xlsxRE':{
-            deps: ['BlobRE','FileSaverRE'],
-　　　　　　　　exports: 'xlsxRE'
+        'FileSaverRE':{
+            exports:'FileSaverRE'
         }
     }
 
@@ -95,10 +88,6 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
 
                 system.debug(appConfig.app.debug);
                 system.log(appConfig);
-
-                // initApp.SmartActions();
-                // initApp.leftNav();
-                // initApp.domReadyMisc();
                 
                 app.setRoot('login', 'entrance');
             });

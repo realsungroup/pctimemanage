@@ -27,8 +27,8 @@ define(['durandal/app',
         console.log('aaaaaaaaa' + applying.model.data());
 
         self.init();
-        if(e) e.data =globSingleData
-        else  e = {"data": globSingleData}
+        if (e) e.data = globSingleData
+        else e = { "data": globSingleData }
         globSingleData = null;
         if (e && e.data) {
           // var idx = parseInt(e.d);
@@ -181,12 +181,9 @@ define(['durandal/app',
         if (action == 'save') tmpData.C3_541449538456 = "N"
         else {
           tmpData.C3_541449538456 = "Y";
-          if(!self.model.approver().length) cmAlert("审批人数据错误");
-          return;
+          var validateData = self.valiateForm(tmpData);
+          if (!validateData) return;
         }
-
-        var validateData = self.valiateForm(tmpData);
-        if (!validateData) return;
 
         var param = {
           'data': tmpData
@@ -357,6 +354,8 @@ define(['durandal/app',
             return false;
           }
         }
+
+        if (!appConfig.app.teamApprove || appConfig.app.teamApprove.length == 0) { cmAlert("审批人不能为空！"); return false; }
 
         var selectRuleM = common.getVactionObject(data.C3_533398158705);
 

@@ -85,7 +85,7 @@ define([
   //ajax请求
   function baseRequest(type, url, data, method, doSuccess, doFail) {
     data = fixDataWithMethod(data, method);
-    printUrl(url, data);
+    // printUrl(url, data);
     var headers = getHeader(url);
 
 

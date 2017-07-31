@@ -20,7 +20,7 @@ requirejs.config({
         'ifvisibleRE': '../lib/ifvisible/ifvisible.min',
         'configSeed':'../js/app.config.seed',
         'smartNot':'../js/notification/SmartNotification.min',
-        'bootstrapRE':'../js/bootstrap/bootstrap.min',
+        'bootstrapRE':'../lib/bootstrap/js/bootstrap.min',
         'appSeedRE':'../js/app.seed',
         'dayWorkReportModel':'../lib/models/dayWorkReportModel',
         'FileSaverRE':'../lib/FileSaver/FileSaver.min',
@@ -42,7 +42,7 @@ requirejs.config({
 　　　　　　　　exports: 'smartNot'
 　　　　　　},
         'bootstrapRE': {
-　　　　　　　　deps: ['jquery'],
+　　　　　　　　deps: ['jqueryUI'],
 　　　　　　　　exports: 'bootstrapRE'
 　　　　　　},
         'jqueryUI': {
@@ -88,10 +88,6 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
 
                 system.debug(appConfig.app.debug);
                 system.log(appConfig);
-
-                // initApp.SmartActions();
-                // initApp.leftNav();
-                // initApp.domReadyMisc();
                 
                 app.setRoot('login', 'entrance');
             });
