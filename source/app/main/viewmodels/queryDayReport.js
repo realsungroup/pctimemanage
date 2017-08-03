@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/viewmodels/queryDayReportDetail','components/headerCpt'],
+define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/viewmodels/queryDayReportDetail','components/headerCpt','untilRE'],
     function (app, ko, router, httpService,queryDayReportDetail) {
         var monthDayCountArr;
         var myaction, myresid, myrecid, mye;

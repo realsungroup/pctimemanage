@@ -19,9 +19,9 @@
         <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-6 col-md-offset-6 col-lg-offset-6">
             <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
         </div>
-        <div class="col-sm-1 col-md-1 col-lg-1">
+        <!--<div class="col-sm-1 col-md-1 col-lg-1">
             <button class="btn btn-info " data-bind="click:exportExcel">EXCEL</button>
-        </div>
+        </div>-->
     </div>
 
     <article class="col-sm-12 col-md-12 col-lg-12"  style="overflow: scroll" > <!--data-bind="style:{height:model.tableHeight() + 'px'}">-->
@@ -35,41 +35,9 @@
                     <th>姓名</th>
                     <th>类型</th>
 
-                    <th>二</th>
-                    <th>三</th>
-                    <th>四</th>
-                    <th>五</th>
-                    <th>六</th>
-                    <th>日</th>
-                    <th>一</th>
-
-                    <th>二</th>
-                    <th>三</th>
-                    <th>四</th>
-                    <th>五</th>
-                    <th>六</th>
-                    <th>日</th>
-                    <th>一</th>
-
-                    <th>二</th>
-                    <th>三</th>
-                    <th>四</th>
-                    <th>五</th>
-                    <th>六</th>
-                    <th>日</th>
-                    <th>一</th>
-
-                    <th>二</th>
-                    <th>三</th>
-                    <th>四</th>
-                    <th>五</th>
-                    <th>六</th>
-                    <th>日</th>
-                    <th>一</th>
-
-                    <th>二</th>
-                    <th>三</th>
-                    <th>四</th>
+                    <!--ko foreach:model.weekTitleArr-->
+                        <th data-bind="text:week,visible:visible"></th>
+                    <!--/ko-->
 
                     <th rowspan="2">月排班工时</th>
                     <th rowspan="2">月标准工时</th>
@@ -91,41 +59,9 @@
                     <th></th>
                     <th></th>
 
-                    <th>16</th>
-                    <th>17</th>
-                    <th>18</th>
-                    <th>19</th>
-                    <th>20</th>
-                    <th>21</th>
-                    <th>22</th>
-
-                    <th>23</th>
-                    <th>24</th>
-                    <th>25</th>
-                    <th>26</th>
-                    <th>27</th>
-                    <th>28</th>
-                    <th>29</th>
-
-                    <th>30</th>
-                    <th>31</th>
-                    <th>01</th>
-                    <th>02</th>
-                    <th>03</th>
-                    <th>04</th>
-                    <th>05</th>
-
-                    <th>06</th>
-                    <th>07</th>
-                    <th>08</th>
-                    <th>09</th>
-                    <th>10</th>
-                    <th>11</th>
-                    <th>12</th>
-
-                    <th>13</th>
-                    <th>14</th>
-                    <th>15</th>
+                    <!--ko foreach:model.weekTitleArr-->
+                        <th data-bind="text:num,visible:visible"></th>
+                    <!--/ko-->
 
                     <th>年假</th>
                     <th>事假</th>
@@ -165,10 +101,10 @@
                     <td data-bind="text:A25"></td>
                     <td data-bind="text:A26"></td>
                     <td data-bind="text:A27"></td>
-                    <td data-bind="text:A28"></td>
-                    <td data-bind="text:A29"></td>
-                    <td data-bind="text:A30"></td>
-                    <td data-bind="text:A31"></td>
+                    <td data-bind="text:A28,visible:$root.model.weekTitleArr()[12].visible"></td>
+                    <td data-bind="text:A29,visible:$root.model.weekTitleArr()[13].visible"></td>
+                    <td data-bind="text:A30,visible:$root.model.weekTitleArr()[14].visible"></td>
+                    <td data-bind="text:A31,visible:$root.model.weekTitleArr()[15].visible"></td>
                     <td data-bind="text:B01"></td>
                     <td data-bind="text:B02"></td>
                     <td data-bind="text:B03"></td>

@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt'],
-    function (app, ko, router, httpService) {
+define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt',],
+    function (app, ko, router, httpService,headerCpt,unt) {
         var monthDayCountArr, dateM;
         var entMonth, entYear;
         var firstWeek;
@@ -49,11 +49,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
             var y = date.getFullYear();
 
 
-            function is_leap(year) {//是否闰年
-                return (year % 100 == 0 ? res = (year % 400 == 0 ? 1 : 0) : res = (year % 4 == 0 ? 1 : 0));
-            }
-
-            monthDayCountArr = [31, 28 + is_leap(y), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//每月天数
+            monthDayCountArr = until.getMonthDayCount(y);
 
             var firstDate = new Date(entYear, entMonth - 1, 1);
             firstWeek = firstDate.getDay();//1号星期几

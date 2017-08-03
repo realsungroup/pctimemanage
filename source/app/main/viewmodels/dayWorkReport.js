@@ -1,6 +1,6 @@
 //dayWorkReportModel
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel','FileSaverRE'],
-    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel,saveA) {
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'FileSaverRE', 'untilRE'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel, saveA, ut) {
 
         var selfVM = new baseVM();
 
@@ -8,6 +8,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         selfVM.model.subTitle = '考勤日报';
         selfVM.model.selectDateArr = ko.observable([]);
         selfVM.model.selectDate = ko.observable();
+        selfVM.model.weekTitleArr = ko.observable([]);
 
         selfVM.model.tableHeight = ko.observable(0);
         selfVM.model.allData = null;
@@ -57,7 +58,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                 'key': self.model.inputVal() ? self.model.inputVal() : ''
             }
 
-            if(localDebug)  param.pageSize = 20;
+            if (localDebug) param.pageSize = 20;
             if (!type) {//刷新
                 param.pageIndex = 0;
 
@@ -65,8 +66,9 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                 param.pageIndex = self.model.pageIndex;
             }
 
+            selfVM.model.data([]); 
             httpService.getDayWorkReportData(param, function (data) {
-                selfVM.model.data([]);
+                
                 if (data && data.data) {
                     var dataArr = data.data;
 
@@ -86,6 +88,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
                 selfVM.model.isLoading = false;
             }, function () {
+                
                 selfVM.model.isLoading = false;
             });
         }
@@ -98,6 +101,8 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         selfVM.model.selectDate.subscribe(function (newVal) {
             selfVM.model.pageIndex = 0;
             selfVM.getData(0);
+
+            getWeekArrFormMonth(newVal);
         })
 
         selfVM.pageUp = function () {
@@ -115,7 +120,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             getLocalFilterData(selfVM.model.pageIndex)
         }
 
-        selfVM.exportExcel = function() {
+        selfVM.exportExcel = function () {
             var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
 
             var worksheet = XLSX.utils.table_to_book($("#dayWorkReport table")[0]);
@@ -167,6 +172,68 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         //     selfVM.model.tableHeight(window.innerHeight - 300);
         // }
 
+        function getWeekArrFormMonth(dateStr) {
+            var curYear = dateStr.substring(0, 4);
+            var curMonth = parseInt(dateStr.substring(4, 6)) - 2;
+
+            var nextYear = curMonth >= 11 ? curYear + 1 : curYear;
+            var nextMonth = curMonth >= 11 ? 0 : curMonth + 1;
+
+            var curYearMonthDayCount = until.getMonthDayCount(curYear)[curMonth];
+            var nextYearMonthDayCount = until.getMonthDayCount(curYear)[nextMonth];
+
+            var dateWeekArr = []
+            for (var i = 16; i < 31 + 1; i++) {
+                if (i > curYearMonthDayCount) {
+                    dateWeekArr.push({
+                        "week": '',
+                        "num": '',
+                        "visible": false
+                    })
+                    continue;
+                }
+                var tmpDate = new Date(curYear, curMonth, i);
+                var tmpWeek = tranformNumToWeek(tmpDate.getDay());
+                dateWeekArr.push({
+                    "week": tmpWeek,
+                    "num": i,
+                    "visible": true
+                })
+            }
+
+            for (var i = 1; i < 15 + 1; i++) {
+                var tmpDate = new Date(nextYear, nextMonth, i);
+                var tmpWeek = tranformNumToWeek(tmpDate.getDay());
+                dateWeekArr.push({
+                    "week": tmpWeek,
+                    "num": i,
+                    "visible": true
+                })
+            }
+            console.info(dateWeekArr)
+            selfVM.model.weekTitleArr(dateWeekArr);
+        }
+
+        function tranformNumToWeek(num) {
+            var week = '';
+            switch (num) {
+                case 0: week = '日';
+                    break;
+                case 1: week = '一';
+                    break;
+                case 2: week = '二';
+                    break;
+                case 3: week = '三';
+                    break;
+                case 4: week = '四';
+                    break;
+                case 5: week = '五';
+                    break;
+                case 6: week = '六';
+                    break;
+            }
+            return week;
+        }
         return selfVM;
 
     });

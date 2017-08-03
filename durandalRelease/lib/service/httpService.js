@@ -7,14 +7,7 @@ define([
 ], function (until) {
 
   // 发起get请求
-  var path = {
-    baseUrl: 'http://kingofdinner.realsun.me:9091/',
-    loginBaseUrl: 'http://192.168.1.113:9091/',
-    getData: 'api/100/table/Retrieve',
-    getSubData: 'api/100/table/RetrieveRelTableByHostRecord',
-    saveData: 'api/100/table/Save',
-    login: 'api/Account/Login'
-  }
+  var path = appConfig.app.path;
   // if(localDebug) path.loginBaseUrl = path.baseUrl;
 
 

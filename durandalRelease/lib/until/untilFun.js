@@ -104,6 +104,16 @@ function attachShow(imgUrlArr,PhotoSwipe,PhotoSwipeUI_Default) {
     gallery.init();
 }
 
+function getMonthDayCount(y){
+     function is_leap(year) {//是否闰年
+                return (year % 100 == 0 ? res = (year % 400 == 0 ? 1 : 0) : res = (year % 4 == 0 ? 1 : 0));
+            }
+
+     return [31, 28 + is_leap(y), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//每月天数
+
+}
+
 var until = {
-    transformFuncToVal: transformFuncToVal
+    transformFuncToVal: transformFuncToVal,
+    getMonthDayCount:getMonthDayCount
 }

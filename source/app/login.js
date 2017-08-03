@@ -49,7 +49,7 @@
           } else {
             cmAlert(e.ErrorMsg);
           }
-
+          $("#loginBtn").button('reset')
         }, function () {
           $("#loginBtn").button('reset')
           cmAlert('系统错误');
@@ -92,7 +92,7 @@
             }
 
             if (localDebug) console.log('appConfig.app.teamApprove' + appConfig.app.teamApprove);
-            self.gotoApplyPage();
+            // self.gotoApplyPage();
           } else {
             cmAlert('获取审批组长类别失败');
           }
@@ -138,6 +138,7 @@
           router.reset();
           app.setRoot('shell');
           $("#loginBtn").button('reset');
+          if(localDebug) console.log("go to shell invoke")
         }
       }
     };
