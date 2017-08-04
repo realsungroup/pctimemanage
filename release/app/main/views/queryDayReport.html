@@ -1,0 +1,65 @@
+<div data-bind='component: {
+     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}
+}'>
+
+</div>
+
+<div id="mysearch2">
+
+    <!--<div id="msPageOne">
+        <div>
+            <select name="" id="" data-bind="options:dayOptionT,value:selectDate">
+        </select>
+
+            <span data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>
+            <span>异常</span>
+        </div>
+    </div>-->
+        <!-- row -->
+        <div class="row">
+
+            <!-- NEW WIDGET START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>班次</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>时长</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <select name="" id="" data-bind="options:dayOptionT,value:selectDate">
+                                </select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                               <span class="my-switch" data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>
+                               <span class="my-switch-title">异常</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:dataArr">
+                        <tr>
+                            <td data-bind="text:DATES"></td>
+                            <td data-bind="text:C3_375377576828"></td>
+
+                            <td data-bind="text:STARTTIMES == '00:00' ? '' : STARTTIMES"></td>
+                            <td data-bind="text:ENDTIMES == '00:00' ? '' : ENDTIMES"></td>
+
+                            <td data-bind="text:F_5"></td>
+                            <td><button class="btn btn-primary" data-bind="click:function(){$parent.gotoDetailClick($index)}">详情</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+            <!-- WIDGET END -->
+
+        </div>
+        <!-- end row -->

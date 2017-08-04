@@ -24,6 +24,7 @@ requirejs.config({
         'appSeedRE': '../js/app.seed',
         'dayWorkReportModel': '../lib/models/dayWorkReportModel',
         'FileSaverRE': '../lib/FileSaver/FileSaver.min',
+        'wangEditorRE':'../lib/wangEditor/wangEditor.min'
         // 'xlsxRE':'../lib/xlsx/xlsx.core.min'
 
     },
