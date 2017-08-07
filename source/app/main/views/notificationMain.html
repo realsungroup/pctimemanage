@@ -1,0 +1,34 @@
+<div data-bind='component: {
+     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}
+}'>
+
+</div>
+
+</div>
+
+
+<!-- row -->
+<div class="row">
+
+    <article class="col-sm-12 col-md-12 col-lg-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <th>公告名称</th>
+                <th>发布日期</th>
+                <th>政策公告</th>
+                <th colspan="2">操作</th>
+            </thead>
+            <tbody data-bind="foreach:model.data">
+                <tr>
+                    <td><input data-bind="value:C3_548337699631,disable:!isEdit(),css:{'no-border-bg' : !isEdit()}" ></td>
+                    <td><input data-bind="value:C3_548337775429,disable:!isEdit(),css:{'no-border-bg' : !isEdit()}" ></td>
+                    <td><input data-bind="value:C3_555413311927,disable:!isEdit(),css:{'no-border-bg' : !isEdit()}"></td>
+                    <td><button class="btn btn-primary" data-bind="click:function(){$root.editClick($index)}">编辑</button></td>
+                    <td><button class="btn btn-primary" data-bind="text:isEdit() ?  '保存' : '设置',click:function(){$root.settingClick($index)}"></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+
+</div>
+<!-- end row -->

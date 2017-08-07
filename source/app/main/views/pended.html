@@ -11,7 +11,7 @@
 	<!-- NEW WIDGET START -->
 	<article class="col-sm-12 col-md-12 col-lg-12">
 		<table class="table table-hover table-bordered">
-			<!--ko component:"cellMainCategory"-->
+			<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->
 			<!--/ko-->
 			
 			<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,
@@ -20,7 +20,7 @@
 
 			<tbody data-bind="foreach:model.data">
 				<tr>
-					<!--ko component:{name:"cellMainData",params:{item:$data}}-->
+					<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->
 					<!--/ko-->
 					<!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->
 					<!--/ko-->

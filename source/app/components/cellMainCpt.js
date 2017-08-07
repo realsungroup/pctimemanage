@@ -3,10 +3,12 @@ var ko = require('knockout');
 ko.components.register('cellMainCategory', {
     viewModel: function (params) {
         this.colspan = params && params.colspan || '2';
+        // this.isPend = params && params.isPend || false;
     },
     template: "<thead>\
 				<tr>\
 					<th>类型</th>\
+                    <th>员工姓名</th>\
 					<th>开始时间</th>\
 					<th>结束时间</th>\
 					<th>时长</th>\
@@ -36,6 +38,7 @@ ko.components.register('cellMainFilter', {
 						</div>\
 					</th>\
 					<th></th>\
+                    <th></th>\
 					<th></th>\
 					<th></th>\
 					<th></th>\
@@ -49,14 +52,16 @@ ko.components.register('cellMainFilter', {
 ko.components.register('cellMainData', {
     viewModel: function (params) {
         this.item = params && params.item || '';
+        // this.isPend = params && params.isPend || '';
     },
     template: "<td data-bind='text:item.C3_533398158705'>1</td>\
+                    <td data-bind='text:item.C3_533143303788'>1</td>\
 					<td data-bind='text:item.C3_555171774775 + \"月\" + item.C3_541449959569 + \"日\" + item.C3_541450006047 + item.C3_541450072499 + \":\" + item.C3_541450107087'></td>\
 					<td data-bind='text:item.C3_555171782681 + \"月\" + item.C3_541449974021 + \"日\" + item.C3_541450008801 + item.C3_541450084259 + \":\" + item.C3_541450125786'></td>\
 					<td data-bind='text:item.C3_541449935726'></td>\
 					<td data-bind='text:item.C3_533407351131'></td>"
 
-                    
+
 });
 
 ko.components.register('cellMainSubmitBtn', {
@@ -130,6 +135,7 @@ ko.components.register('cellMainFilterSearch', {
 						</div>\
 					</th>\
 					<th></th>\
+                    <th></th>\
 					<th></th>\
 					<th></th>\
 					<th data-bind="attr:{colspan:isPend ? \'2\' : \'3\'}" ><input data-bind="textInput:inputVal,event:{change:$root.kvoInput}" class="form-control" /></th>\

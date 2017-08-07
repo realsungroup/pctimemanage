@@ -8,7 +8,7 @@ define([
 
   // 发起get请求
   var path = appConfig.app.path;
-  // if(localDebug) path.loginBaseUrl = path.baseUrl;
+  if(localDebug) path.loginBaseUrl = path.baseUrl;
 
 
   function fixDataWithMethod(data, method) {
@@ -384,6 +384,32 @@ define([
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
+  //获取手册列表 
+  function getReadBookListData(params, doSuccess, doFail) {
+    params.resid = '555413706936';
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //修改手册日期和政策公告
+  function saveReadBookListData(params, doSuccess, doFail) {
+    params.resid = '555413706936';
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
+
+  //获取手册内容
+  function getReadBookData(params, doSuccess, doFail) {
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //保存手册内容
+  function saveReadBookData(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -415,7 +441,11 @@ define([
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
     cancelApplyDataForWX: cancelApplyDataForWX,
-    getDayWorkReportData:getDayWorkReportData
+    getDayWorkReportData:getDayWorkReportData,
+    getReadBookListData:getReadBookListData,
+    getReadBookData:getReadBookData,
+    saveReadBookData:saveReadBookData,
+    saveReadBookListData:saveReadBookListData
   }
   return httpService
 });

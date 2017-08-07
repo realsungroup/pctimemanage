@@ -83,6 +83,8 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
         });
 
         app.start().then(function () {
+            window.location.hash = "#applying";
+            
             viewLocator.useConvention();
             $.getJSON("app.config.json", function (data, textStatus, hr) {
                 appConfig = data;

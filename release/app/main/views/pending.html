@@ -11,7 +11,7 @@
 	<!-- NEW WIDGET START -->
 	<article class="col-sm-12 col-md-12 col-lg-12">
 		<table class="table table-hover table-bordered">
-			<!--ko component:{name:"cellMainCategory",params:{colspan:3}}-->
+			<!--ko component:{name:"cellMainCategory",params:{isPend:true,colspan:3}}-->
 			<!--/ko-->
 
 			
@@ -28,7 +28,7 @@
 
 			<tbody data-bind="foreach:model.data">
 				<tr>
-					<!--ko component:{name:"cellMainData",params:{item:$data}}-->
+					<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->
 					<!--/ko-->
                     <!--ko component:{name:"cellMainRefuseBtn",params:{item:$data}}-->
 					<!--/ko-->
