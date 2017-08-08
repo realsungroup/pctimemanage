@@ -80,6 +80,7 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
             router.reset();
             app.setRoot('login')
             window.location.hash = "#applying";
+
         });
 
         app.start().then(function () {

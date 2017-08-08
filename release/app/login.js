@@ -5,6 +5,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
       data: {
         vacationCategorySuccess: false,
         refuseArrSuccess: false,
+        routeDataSuccess:false,
         radomPhotoNum: ko.observable(1)
       },
       activate: function () {
@@ -12,6 +13,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
 
         self.data.vacationCategorySuccess = false;
         self.data.refuseArrSuccess = false;
+        self.data.routeDataSuccess = false;
 
         // 随机背景图片
         var radmomNum = Math.floor(Math.random() * 4) + 1
@@ -26,7 +28,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        if (localDebug) userStr = "80881"
+        // if (localDebug) userStr = "80881"
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
@@ -44,7 +46,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
             self.getVacationCategory();
             self.getTeamApprove();
             self.getRefuseData();
-
+            self.getRouteData();
 
           } else {
             cmAlert(e.ErrorMsg);
@@ -133,13 +135,50 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
 
       // 跳转到主路由
       gotoApplyPage: function () {
-        if (self.data.vacationCategorySuccess && self.data.refuseArrSuccess) {
+        if (self.data.vacationCategorySuccess && self.data.refuseArrSuccess && self.data.routeDataSuccess) {
           router.deactivate();
           router.reset();
           app.setRoot('shell');
           $("#loginBtn").button('reset');
           if(localDebug) console.log("go to shell invoke")
         }
+      },
+
+      //获取路由
+      getRouteData :function(){
+
+        
+        httpService.getRouteData({},function(data){
+          if(data && data.data){
+            appConfig.app.routeTypeArr = [];
+            appConfig.app.routeList = [];
+
+            var dataArr = data.data;
+            // console.info( data.data);
+            var routeTypeModel = {};
+            var routeTypeArr = appConfig.app.routeTypeArr;
+
+             dataArr.forEach(function(item){
+              if(item.type && item.type.length && !routeTypeModel.hasOwnProperty(item.type)) {
+                routeTypeModel[item.type] = '';
+                routeTypeArr.push(item.type);
+              }
+
+              if(item.defaultroute == "Y") item.route = ["",item.route];
+
+              if(item.nav == 'true') item.nav = true;
+              else item.nav = false;
+            });
+
+            appConfig.app.routeList = dataArr;
+
+            self.data.routeDataSuccess = true;
+            self.gotoApplyPage();
+          }
+
+        },function(data){
+
+        })
       }
     };
   }); 

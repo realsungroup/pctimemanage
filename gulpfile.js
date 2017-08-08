@@ -166,7 +166,7 @@ gulp.task('durandal', function () {
     durandal({
         baseDir: 'source/app',   //same as default, so not really required.
         main: 'main.js',  //same as default, so not really required.
-        output: 'main.js', //same as default, so not really required.
+        output: 'main-1.1.js', //same as default, so not really required.
         almond: true,
         minify: false
 

@@ -19,8 +19,6 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
         }
 
         this.activate = function (e) {
-            // if(self.model.isActivated) return;
-            // self.init();
 
             //配置所有类型
             var allVacationCategory = ['全部'];
@@ -77,7 +75,7 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
 
         this.pageUp = function () {
             if(self.model.isLoading) {console.log("loading"); return;};//判断当前是否处于加载数据中 
-            if (self.model.pageIndex <= 0) self.model.pageIndex = 0
+            if (self.model.pageIndex <= 0){ self.model.pageIndex = 0 ; return}
             else self.model.pageIndex--;
             self.getData(1);
         }

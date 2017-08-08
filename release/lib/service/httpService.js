@@ -387,7 +387,7 @@ define([
   //获取手册列表 
   function getReadBookListData(params, doSuccess, doFail) {
     params.resid = '555413706936';
-    var url = path.loginBaseUrl + path.getData;
+    var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -400,7 +400,7 @@ define([
 
   //获取手册内容
   function getReadBookData(params, doSuccess, doFail) {
-    var url = path.loginBaseUrl + path.getData;
+    var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -408,6 +408,13 @@ define([
   function saveReadBookData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
+
+  //获取路由
+  function getRouteData(params, doSuccess, doFail) {
+    params.resid = appConfig.app.routeResid;
+    var url = path.baseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   var httpService = {
@@ -445,7 +452,8 @@ define([
     getReadBookListData:getReadBookListData,
     getReadBookData:getReadBookData,
     saveReadBookData:saveReadBookData,
-    saveReadBookListData:saveReadBookListData
+    saveReadBookListData:saveReadBookListData,
+    getRouteData:getRouteData
   }
   return httpService
 });

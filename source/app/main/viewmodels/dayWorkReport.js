@@ -107,7 +107,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
         selfVM.pageUp = function () {
             if (selfVM.model.isLocalLoading) { console.log("loading"); return; };//判断当前是否处于加载数据中 
-            if (selfVM.model.pageIndex <= 0) selfVM.model.pageIndex = 0
+            if (selfVM.model.pageIndex <= 0) {selfVM.model.pageIndex = 0; return;}
             else selfVM.model.pageIndex--;
             getLocalFilterData(selfVM.model.pageIndex)
         }

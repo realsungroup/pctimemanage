@@ -19,8 +19,8 @@ td{
 }
 
 .no-border-bg{
-    border: 0;
     background-color: transparent;
+    border-color: transparent;
 }
 
 .color-red{
@@ -39,6 +39,10 @@ td{
 
 .padding-bt-10{
     padding-bottom: 10px !important;
+}
+
+.margin-top-ten{
+    margin-top: 10px;
 }
 
 .height-auto{

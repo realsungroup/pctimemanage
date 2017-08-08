@@ -8,6 +8,9 @@
          "saveData": "api/100/table/Save",
          "login": "api/Account/Login"
         },
+        "routeResid":"555517391524",
+        "routeTypeArr":[],
+        "routeList":[],
         "uploadFileUrl": "http://kingofdinner.realsun.me:8081/rispweb/rispservice/SvcUploadFile2.aspx",
         "httppath": "http://kingofdinner.realsun.me:8081/rispweb/upfiles",
         "canteenname": "",
