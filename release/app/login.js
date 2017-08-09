@@ -28,7 +28,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        // if (localDebug) userStr = "80881"
+        if (localDebug) userStr = "80881"
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
