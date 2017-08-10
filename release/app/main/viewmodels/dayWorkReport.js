@@ -19,7 +19,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             // selfVM.model.tableHeight(window.innerHeight - 300);
             selfVM.init();
 
-            if (selfVM.model.data().length) return;
+            // if (selfVM.model.data().length) return;
 
             httpService.getDayOptions({}, function (data) {
                 var yearMonthArr = [];
@@ -140,7 +140,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         function getLocalFilterData(index) {
             if (selfVM.model.isLocalLoading) return;
             selfVM.model.isLocalLoading = true;
-            var pageSize = 2;
+            var pageSize = 100;
             var pageIndex = index;
 
 
