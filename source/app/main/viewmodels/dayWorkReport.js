@@ -1,6 +1,6 @@
 //dayWorkReportModel
-define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'FileSaverRE', 'untilRE'],
-    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel, saveA, ut) {
+define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'FileSaverRE', 'untilRE','xlsxRE'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel, saveA, ut,xlsxRE) {
 
         var selfVM = new baseVM();
 
@@ -120,7 +120,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             getLocalFilterData(selfVM.model.pageIndex)
         }
 
-        selfVM.exportExcel = function () {
+        selfVM.exportExcel = function () { if(localDebug) console.info(xlsxRE);
             var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
 
             var worksheet = XLSX.utils.table_to_book($("#dayWorkReport table")[0]);

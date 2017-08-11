@@ -163,10 +163,49 @@ var durandal = require('gulp-durandal');
 var durandalReleaseDir = 'durandalRelease'
 var appdir = 'app'
 gulp.task('durandal', function () {
+     durandal({
+        baseDir: 'source/app',   //same as default, so not really required.
+        main: 'main.js',  //same as default, so not really required.
+        output: 'main.js', //same as default, so not really required.
+        almond: true,
+        minify: false
+
+    })
+        .pipe(gulp.dest(durandalReleaseDir + '/' + appdir));
+    gulp.src("scripts/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/scripts"));
+    gulp.src("source/img/**")
+        .pipe(gulp.dest(durandalReleaseDir + '/img'));
+    gulp.src("source/fonts/**")
+        .pipe(gulp.dest(durandalReleaseDir + '/fonts'));
+    gulp.src("source/index.html")
+        .pipe(gulp.dest(durandalReleaseDir));
+    gulp.src("source/app.html")
+        .pipe(gulp.dest(durandalReleaseDir));
+    gulp.src("source/app.manifest")
+        .pipe(gulp.dest(durandalReleaseDir));
+    gulp.src("source/cache.manifest")
+        .pipe(gulp.dest(durandalReleaseDir));
+    gulp.src("source/css/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/css"));
+    gulp.src("source/lib/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/lib"));
+    gulp.src("source/js/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/js"));
+    gulp.src("vendor/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/vendor"));
+    gulp.src("swfupload/**")
+        .pipe(gulp.dest(durandalReleaseDir + "/swfupload"));
+    gulp.src("source/*.json")
+        .pipe(gulp.dest(durandalReleaseDir));
+
+});
+
+gulp.task('durandal-pack', function () {
     durandal({
         baseDir: 'source/app',   //same as default, so not really required.
         main: 'main.js',  //same as default, so not really required.
-        output: 'main-1.1.js', //same as default, so not really required.
+        output: 'main-1.3.js', //same as default, so not really required.
         almond: true,
         minify: false
 

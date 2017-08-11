@@ -24,34 +24,37 @@ requirejs.config({
         'appSeedRE': '../js/app.seed',
         'dayWorkReportModel': '../lib/models/dayWorkReportModel',
         'FileSaverRE': '../lib/FileSaver/FileSaver.min',
-        'wangEditorRE':'../lib/wangEditor/wangEditor.min'
-        // 'xlsxRE':'../lib/xlsx/xlsx.core.min'
+        'wangEditorRE': '../lib/wangEditor/wangEditor.min',
+        'xlsxRE': '../lib/xlsx/xlsx.full.min'
 
     },
 
     shim: {
         'configSeed': {
-            　　　　　　　　deps: ['jquery'],
-            　　　　　　　　exports: 'configSeed'
-        　　　　　　},
+            deps: ['jquery'],
+            exports: 'configSeed'
+        },
         'appSeedRE': {
-            　　　　　　　　deps: ['jquery'],
-            　　　　　　　　exports: 'appSeedRE'
-        　　　　　　},
+            deps: ['jquery'],
+            exports: 'appSeedRE'
+        },
         'smartNot': {
-            　　　　　　　　deps: ['jquery'],
-            　　　　　　　　exports: 'smartNot'
-        　　　　　　},
+            deps: ['jquery'],
+            exports: 'smartNot'
+        },
         'bootstrapRE': {
-            　　　　　　　　deps: ['jqueryUI'],
-            　　　　　　　　exports: 'bootstrapRE'
-        　　　　　　},
+            deps: ['jqueryUI'],
+            exports: 'bootstrapRE'
+        },
         'jqueryUI': {
-            　　　　　　　　deps: ['jquery'],
-            　　　　　　　　exports: 'jqueryUI'
-        　　　　　　},
+            deps: ['jquery'],
+            exports: 'jqueryUI'
+        },
         'FileSaverRE': {
             exports: 'FileSaverRE'
+        },
+        'xlsxRE': {
+            exports: 'xlsxRE'
         }
     }
 
@@ -85,7 +88,7 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
 
         app.start().then(function () {
             window.location.hash = "#applying";
-            
+
             viewLocator.useConvention();
             $.getJSON("app.config.json", function (data, textStatus, hr) {
                 appConfig = data;
