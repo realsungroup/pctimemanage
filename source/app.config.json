@@ -6,7 +6,9 @@
           "getData": "api/100/table/Retrieve",
          "getSubData": "api/100/table/RetrieveRelTableByHostRecord",
          "saveData": "api/100/table/Save",
-         "login": "api/Account/Login"
+         "login": "api/Account/Login",
+         "changePassWrod":"api/user/ChangePassword",
+         "forgetPassWord":"api/account/ForgetPass"
         },
         "routeResid":"555517391524",
         "routeTypeArr":[],

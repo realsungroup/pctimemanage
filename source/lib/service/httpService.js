@@ -1,7 +1,3 @@
-
-
-
-
 define([
   'untilRE'
 ], function (until) {
@@ -12,6 +8,7 @@ define([
 
 
   function fixDataWithMethod(data, method) {
+    if(method == -1) return data;
     if (method == 0) {//登录
       data.loginMethod = "badgeno";//工号
       data.enterprisecode = enterprisecode;
@@ -60,7 +57,7 @@ define([
     if (str != path.loginBaseUrl + path.login) {
       if (!appConfig.app.userInfo) {
         console.error("用户信息错误")
-        return;
+        return {};
       }
       var headers = {
         "userCode": appConfig.app.userInfo.UserCode,
@@ -417,6 +414,19 @@ define([
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
+  //修改密码
+  function changePassWord(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.changePassWrod;
+    baseRequest("POST", url, params, -1, doSuccess, doFail);
+  }
+
+  //忘记密码
+  function forgetPassWord(params, doSuccess, doFail) {
+    params.resid = '557247856756';
+    var url = path.baseUrl + path.forgetPassWord;
+    baseRequest("GET", url, params, -1, doSuccess, doFail);
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -453,7 +463,9 @@ define([
     getReadBookData:getReadBookData,
     saveReadBookData:saveReadBookData,
     saveReadBookListData:saveReadBookListData,
-    getRouteData:getRouteData
+    getRouteData:getRouteData,
+    changePassWord:changePassWord,
+    forgetPassWord:forgetPassWord
   }
   return httpService
 });

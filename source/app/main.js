@@ -97,7 +97,9 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
                 system.debug(appConfig.app.debug);
                 system.log(appConfig);
 
-                app.setRoot('login', 'entrance');
+                // if(localDebug) app.setRoot('main/viewmodels/changePassWord', 'entrance');
+                // else 
+                    app.setRoot('login', 'entrance');
             });
 
         });

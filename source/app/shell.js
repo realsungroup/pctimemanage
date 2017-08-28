@@ -27,20 +27,11 @@
             return router.activate();
         },
         attached: function () {
-
-
             initApp.SmartActions();
             initApp.leftNav();
             initApp.domReadyMisc();
-
-
-
-
         },
         logoutClick: function () {
-
-
-
             // ask verification
             $.SmartMessageBox({
                 title: "<i class='fa fa-sign-out txt-color-orangeDark'></i> 退出 <span class='txt-color-orangeDark'><strong>" + $('#show-shortcut').text() + "</strong></span> ?",
@@ -53,11 +44,15 @@
                 if (ButtonPressed == "确定") {
                     router.deactivate();
                     router.reset();
-                    app.setRoot('login')
+                    app.setRoot('login');
                     window.location.hash = "#applying";
                 }
             });
 
+        },
+        //修改密码
+        changePassWord:function(){
+            router.navigate("#changePassWord");
         },
         toggleMenu: function () {
             if (!$.root_.hasClass("menu-on-top")) {

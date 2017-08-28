@@ -11,6 +11,14 @@
       activate: function () {
         self = this;
 
+        // var loginRoutes = [{
+        //   "route":"forgetPassWord",
+        //   "title":"forgetPassWord",
+        //   "nav":"true",
+        //   "moduleId":"main/viewmodels/forgetPassWord"
+        // }]
+        // router.map(loginRoutes).buildNavigationModel();
+
         self.data.vacationCategorySuccess = false;
         self.data.refuseArrSuccess = false;
         self.data.routeDataSuccess = false;
@@ -18,6 +26,8 @@
         // 随机背景图片
         var radmomNum = Math.floor(Math.random() * 4) + 1
         self.data.radomPhotoNum("url('../../img/img/photo" + radmomNum + ".jpg')")
+
+        // return router.activate();
       },
 
       // 登录
@@ -28,7 +38,7 @@
         var userStr = $("#account").val();
         var passWordStr = $("#passWord").val();
 
-        if (localDebug) userStr = "80881"
+        // if (localDebug) {userStr = "80881"; passWordStr = "1234567";}
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
@@ -138,7 +148,11 @@
         if (self.data.vacationCategorySuccess && self.data.refuseArrSuccess && self.data.routeDataSuccess) {
           router.deactivate();
           router.reset();
-          app.setRoot('shell');
+          var passWordStr = $("#passWord").val();
+          if(!passWordStr.length){
+            cmAlert('您的初始密码为空，请设置密码！');
+             app.setRoot('main/viewmodels/changePassWord');
+          }else app.setRoot('shell');
           $("#loginBtn").button('reset');
           if(localDebug) console.log("go to shell invoke")
         }
@@ -179,6 +193,12 @@
         },function(data){
 
         })
+      },
+
+      //跳转到忘记密码
+      gotoForgetPage:function(){
+        app.setRoot("main/viewmodels/forgetPassWord")
+        // router.navigate("#forgetPassWord");
       }
     };
   }); 

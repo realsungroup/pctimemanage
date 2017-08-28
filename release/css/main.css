@@ -13,6 +13,18 @@ html,body,#applicationHost,#main-login{
     right: 0;
 }
 
+.color-link-blue{
+    color: #108ee9;
+}
+
+.f-r{
+    float: right;
+}
+
+.clear-f{
+    clear: both;
+}
+
 td{
     word-break: break-all;
     height: 37px !important;

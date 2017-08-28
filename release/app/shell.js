@@ -27,20 +27,11 @@ define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko
             return router.activate();
         },
         attached: function () {
-
-
             initApp.SmartActions();
             initApp.leftNav();
             initApp.domReadyMisc();
-
-
-
-
         },
         logoutClick: function () {
-
-
-
             // ask verification
             $.SmartMessageBox({
                 title: "<i class='fa fa-sign-out txt-color-orangeDark'></i> 退出 <span class='txt-color-orangeDark'><strong>" + $('#show-shortcut').text() + "</strong></span> ?",
@@ -53,11 +44,15 @@ define(['plugins/router', 'durandal/app', 'knockout'], function (router, app, ko
                 if (ButtonPressed == "确定") {
                     router.deactivate();
                     router.reset();
-                    app.setRoot('login')
+                    app.setRoot('login');
                     window.location.hash = "#applying";
                 }
             });
 
+        },
+        //修改密码
+        changePassWord:function(){
+            router.navigate("#changePassWord");
         },
         toggleMenu: function () {
             if (!$.root_.hasClass("menu-on-top")) {
