@@ -18286,7 +18286,7 @@ define('httpServiceRE',[
 
   //修改密码
   function changePassWord(params, doSuccess, doFail) {
-    var url = path.loginBaseUrl + path.changePassWrod;
+    var url = path.baseUrl + path.changePassWrod;
     baseRequest("POST", url, params, -1, doSuccess, doFail);
   }
 
@@ -23578,4 +23578,4 @@ define('text!shell.html',[],function () { return '<!-- #HEADER -->\r\n<header id
 
 require(["main"]);
 }());
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=main-1.4.js.map

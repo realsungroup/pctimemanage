@@ -416,7 +416,7 @@ define([
 
   //修改密码
   function changePassWord(params, doSuccess, doFail) {
-    var url = path.baseUrl + path.changePassWrod;
+    var url = path.loginBaseUrl + path.changePassWrod;
     baseRequest("POST", url, params, -1, doSuccess, doFail);
   }
 
