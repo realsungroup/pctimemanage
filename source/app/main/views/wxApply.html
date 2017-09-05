@@ -1,10 +1,7 @@
 <div data-bind='component: {
      name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}
 }'>
-
 </div>
-
-
 
 <!-- row -->
 <div class="row">
@@ -30,6 +27,7 @@
                 <th>申请原因</th>
                 <th>已审核</th>
                 <th>已添加</th>
+                <th>已撤销</th>
                 <th colspan="2">操作</th>
             </thead>
             <tbody data-bind="foreach:model.data">
@@ -43,6 +41,7 @@
                     <td data-bind="text:C3_546778314589"></td>
                     <td data-bind="text:C3_546778341515"></td>
                     <td data-bind="text:C3_546786924740"></td>
+                    <td data-bind="text:C3_553774879841"></td>
                     <td><button class="btn btn-primary" data-bind="click:function(){$parent.detailClick($index)}">详情</button></td>
                     <td><button class="btn btn-primary" data-bind="click:function(){$parent.cancelClick($index)}">撤销</button></td>
                 </tr>
