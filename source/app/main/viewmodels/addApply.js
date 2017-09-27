@@ -38,7 +38,7 @@ define(['durandal/app',
           self.model.selectedCategory(passData.C3_533398158705);
           self.kvoSelectCategory('draft')
           self.model.data(passData);
-        }
+        }else self.model.isDraft = false;
         self.bindProperty();
       },
       init: function () {
@@ -209,7 +209,7 @@ define(['durandal/app',
         } else {
 
 
-
+          param['data']['C3_542556605600'] = self.model.approver();
           httpService.addApply(param, function (resData) {
             if (resData.error == 0 && resData && resData.data && resData.data[0]) {
               cmAlert("添加成功");
