@@ -123,6 +123,12 @@ ko.components.register('cellMainFilterSearch', {
         this.inputVal = params && params.inputVal || '';
         this.allSelected = params && params.allSelected || '';
         this.isPend = params && params.isPend || '';
+        var tmpThCount = params && params.thCount || 5;
+        var tmpThCountArr = [];
+        for(var i = 0 ; i < tmpThCount ; i ++){
+            tmpThCountArr.push('');
+        }
+        this.thCount = tmpThCountArr;
     },
     template: '<thead>\
 				<tr>\
@@ -136,12 +142,10 @@ ko.components.register('cellMainFilterSearch', {
 								<li><a href="#" data-bind="text:$data,click:function(){$root.categoryFilterClick($index)}"></a></li>\
 							</ul>\
 						</div>\
-					</th>\
-					<th></th>\
+                    </th>\
+                    <!-- ko foreach:thCount-->\
                     <th></th>\
-					<th></th>\
-                    <th></th>\
-					<th></th>\
+                    <!-- /ko -->\
 					<th data-bind="attr:{colspan:isPend ? \'2\' : \'3\'}" ><input data-bind="textInput:inputVal,event:{change:$root.kvoInput}" class="form-control" /></th>\
                     <!-- ko if:isPend -->\
 					<th ><button class="btn btn-primary btn-block" data-bind="click:$root.approve">审批</button></th>\

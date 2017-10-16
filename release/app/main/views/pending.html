@@ -11,14 +11,24 @@
 	<!-- NEW WIDGET START -->
 	<article class="col-sm-12 col-md-12 col-lg-12">
 		<table class="table table-hover table-bordered">
-			<!--ko component:{name:"cellMainCategory",params:{isPend:true,colspan:3}}-->
-			<!--/ko-->
+			<thead>
+				<tr>
+					<th>类型</th>
+                    <th>员工工号</th>
+                    <th>员工姓名</th>
+					<th>开始时间</th>
+					<th>结束时间</th>
+					<th>时长</th>
+					<th>审批状态</th>
+					<th>累计小时</th>
+					<th data-bind='attr:{colspan:3}' >操作</th>
+				</tr>
+			</thead>
 
-			
 			<!--ko component:{
 				name:"cellMainFilterSearch",
 				params:{
-					colspan:8,
+					thCount:6,
 					title:model.selectedCategory,
 					subTitle:model.vacationCategory,
 					inputVal:model.inputVal,
@@ -30,7 +40,8 @@
 				<tr>
 					<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->
 					<!--/ko-->
-                    <!--ko component:{name:"cellMainRefuseBtn",params:{item:$data}}-->
+					<td data-bind="text:C3_561214800197"></td>
+					<!--ko component:{name:"cellMainRefuseBtn",params:{item:$data}}-->
 					<!--/ko-->
 				</tr>
 			</tbody>
@@ -39,9 +50,9 @@
 	<!-- WIDGET END -->
 
 	<!-- 分页pageSelectCpt-->
-    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->
-    <!--/ko-->
-			
+	<!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->
+	<!--/ko-->
+
 </div>
 
 <!-- end row -->
