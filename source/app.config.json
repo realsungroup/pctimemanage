@@ -22,7 +22,8 @@
         "poslogincode": "10198742719",
         "displaymode": "none",
         "dbh": null,
-        "posrecordsjson": null
+        "posrecordsjson": null,
+        "excelUploadCount":100
     },
     "appfunction": null
 }

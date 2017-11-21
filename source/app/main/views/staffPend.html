@@ -12,8 +12,15 @@
     <!-- NEW WIDGET START -->
 
     <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-7 col-md-offset-7 col-lg-offset-7">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
                  <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <!-- <input type="file" class="form-control" /> -->
+                <button class="btn btn-primary">
+                    <input id="uploaderInput" style="cursor:pointer" class="weui-uploader__input"  data-bind="event:{change:function(data,event){readExcel(data,event)}}" type="file" />
+                    上传EXCEL表格
+                </button>
             </div>
              <div class="col-sm-1 col-md-1 col-lg-1">
                  <button class="btn btn-primary" data-bind="click:addClick">新增</button>
@@ -21,9 +28,6 @@
         </div>
 
     <article class="col-sm-12 col-md-12 col-lg-12">
-        
-       
-
         <table class="table table-hover table-bordered">
             <thead>
                 <th>产线</th>
