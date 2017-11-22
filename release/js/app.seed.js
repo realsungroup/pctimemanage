@@ -131,7 +131,7 @@ var calc_navbar_height = function() {
 			
 			if (!ismobile) {
 				// Desktop
-				$.root_.addClass("desktop-detected");
+				if($.root_) $.root_.addClass("desktop-detected");
 				thisDevice = "desktop";
 				return false; 
 			} else {

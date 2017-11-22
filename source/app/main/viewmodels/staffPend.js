@@ -104,22 +104,23 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
                 var excelData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 excelData = checkExcelDataMap(excelData);
 
-                if (excelData.length > appConfig.app.excelUploadCount) alert("数据量过大，100条以内");
-                else if (!excelData.length) alert("数据长度为0");
-                else {
-                    let params = {
-                        "data": excelData,
-                        "uniquecolumns":"C3_542058915408,C3_542062213811"
+                if (Array.isArray(excelData)) {
+                    if (excelData.length > appConfig.app.excelUploadCount) alert("数据量过大，100条以内");
+                    else {
+                        let params = {
+                            "data": excelData,
+                            "uniquecolumns": "C3_542058915408,C3_542062213811"
+                        }
+                        httpService.addMorePendPerson(params, function (data) {
+                            console.info('addMorePendPerson', data);
+                            if (data && (data.error == 0 || data.Error == 0)) {
+                                cmAlert("上传成功");
+                            } else cmAlert(data.message || "失败");
+                        }, function (error) {
+                            cmAlert("上传错误");
+                            // console.info('addMorePendPerson', error)
+                        })
                     }
-                    httpService.addMorePendPerson(params, function (data) {
-                        console.info('addMorePendPerson', data);
-                        if(data && (data.error == 0 || data.Error == 0)){
-                            cmAlert("上传成功");
-                        }else cmAlert(data.message || "失败");
-                    }, function (error) {
-                        cmAlert("上传错误");
-                        // console.info('addMorePendPerson', error)
-                    })
                 }
                 //wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
                 //wb.Sheets[Sheet名]获取第一个Sheet的数据
@@ -145,11 +146,16 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             if (Array.isArray(data) && data.length > 0) {
                 let firstObj = data[0];
                 for (var key in firstObj) {
-                    if (dataMap[key] != firstObj[key]) return [];
+                    if (dataMap[key] != firstObj[key]) {
+                        cmAlert(key + firstObj[key] + '不匹配');
+                        return
+                    }
                 }
                 data.splice(0, 1);
                 return data
-            } else return [];
+            } else {
+                cmAlert("数据解析错误")
+            }
         }
 
         return selfVM;
