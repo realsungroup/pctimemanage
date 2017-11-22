@@ -127,7 +127,7 @@ var root = this,
 
 /*---------------------------------------------*/
 
-localDebug = true;
+localDebug = false;
 
 enterprisecode = '9063'//全局企业编号
 

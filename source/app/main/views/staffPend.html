@@ -12,20 +12,20 @@
     <!-- NEW WIDGET START -->
 
     <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
-                 <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2">
-                <!-- <input type="file" class="form-control" /> -->
-                <button class="btn btn-primary">
-                    <input id="uploaderInput" style="cursor:pointer" class="weui-uploader__input"  data-bind="event:{change:function(data,event){readExcel(data,event)}}" type="file" />
-                    上传EXCEL表格
-                </button>
-            </div>
-             <div class="col-sm-1 col-md-1 col-lg-1">
-                 <button class="btn btn-primary" data-bind="click:addClick">新增</button>
-            </div>
+        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
+            <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
         </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <a href="javascript:void(0)" class="btn btn-primary">
+                上传EXCEL表格
+            </a>
+            <input id="uploaderInput" style="cursor:pointer" class="weui-uploader__input" data-bind="event:{change:function(data,event){readExcel(data,event)}}"
+                type="file" />
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1">
+            <button class="btn btn-primary" data-bind="click:addClick">新增</button>
+        </div>
+    </div>
 
     <article class="col-sm-12 col-md-12 col-lg-12">
         <table class="table table-hover table-bordered">
@@ -54,7 +54,9 @@
                     <td data-bind="text:C3_542385852578"></td>
                     <td data-bind="text:C3_542385880907"></td>
                     <td data-bind="text:C3_542385904547"></td>
-                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.editClick($index)}">编辑</button></td>
+                    <td>
+                        <button class="btn btn-primary" data-bind="click:function(){$parent.editClick($index)}">编辑</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

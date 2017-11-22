@@ -4,11 +4,11 @@ define([
 
   // 发起get请求
   var path = appConfig.app.path;
-  if(localDebug) path.loginBaseUrl = path.baseUrl;
+  if (localDebug) path.loginBaseUrl = path.baseUrl;
 
 
   function fixDataWithMethod(data, method) {
-    if(method == -1) return data;
+    if (method == -1) return data;
     if (method == 0) {//登录
       data.loginMethod = "badgeno";//工号
       data.enterprisecode = enterprisecode;
@@ -40,6 +40,15 @@ define([
       //修改多条数据
     } else if (method == 5) {
       data.data = JSON.stringify(data.data);
+      //增加或者保存多条数据
+    } else if (method == 6) {
+      if (Array.isArray(data.data)) {
+        data.data.forEach(function (item) {
+          item._id = 1;
+          item._state = "editoradd";
+        })
+        data.data = JSON.stringify(data.data);
+      }
     }
     return data;
   }
@@ -427,6 +436,13 @@ define([
     baseRequest("GET", url, params, -1, doSuccess, doFail);
   }
 
+  //添加多个审批人设置数据
+  function addMorePendPerson(params, doSuccess, doFail) {
+    params.resid = '542065063018';
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params,6,doSuccess,doFail)
+  }
+
   var httpService = {
     accountLogin: accountLogin,
     getApplyingData: getApplyingData,
@@ -458,14 +474,15 @@ define([
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
     cancelApplyDataForWX: cancelApplyDataForWX,
-    getDayWorkReportData:getDayWorkReportData,
-    getReadBookListData:getReadBookListData,
-    getReadBookData:getReadBookData,
-    saveReadBookData:saveReadBookData,
-    saveReadBookListData:saveReadBookListData,
-    getRouteData:getRouteData,
-    changePassWord:changePassWord,
-    forgetPassWord:forgetPassWord
+    getDayWorkReportData: getDayWorkReportData,
+    getReadBookListData: getReadBookListData,
+    getReadBookData: getReadBookData,
+    saveReadBookData: saveReadBookData,
+    saveReadBookListData: saveReadBookListData,
+    getRouteData: getRouteData,
+    changePassWord: changePassWord,
+    forgetPassWord: forgetPassWord,
+    addMorePendPerson:addMorePendPerson
   }
   return httpService
 });
