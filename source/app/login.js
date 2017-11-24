@@ -3,6 +3,8 @@
     var self;
     return {
       data: {
+        account:'80881',
+        passWord:'123456',
         vacationCategorySuccess: false,
         refuseArrSuccess: false,
         routeDataSuccess:false,
@@ -35,10 +37,10 @@
         if (localDebug) console.log("loginClick")
         $("#loginBtn").button('loading');
 
-        var userStr = $("#account").val();
-        var passWordStr = $("#passWord").val();
+        // if (localDebug) {self.data.account = "80881"; self.data.passWord = "123456";}
+        var userStr =  self.data.account;
+        var passWordStr = self.data.passWord;
 
-        // if (localDebug) {userStr = "80881"; passWordStr = "123456";}
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
