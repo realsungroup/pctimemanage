@@ -68,29 +68,31 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
             httpService.getMonthWorkData(params, function (data) {
                 data = data.data;
 
-                if(localDebug){
-                    var  a = []
-                     for(var i = 0 ; i < 31 ;i ++){
-                        a.push({"C3_375377576828":"白班"});
-                    } 
-                    data = a;
-                }
+                // if(localDebug){
+                //     var  a = []
+                //      for(var i = 0 ; i < 31 ;i ++){
+                //         a.push({"C3_375377576828":"白班"});
+                //     } 
+                //     data = a;
+                // }
                 var textColorArr = [];//字体颜色数组
                 var monthDayCount = monthDayCountArr[dateM];//当月天数
                 // data.splice(10, 5);
                 var arrLength = data.length;
                 if (data.length != monthDayCount) {//返回数据有误处理
-                    for (var i = 0; i < arrLength; i++) {
-                        var str = data[i].DATES;
+                    var fixData = [];
+                    for (var i = 0; i < monthDayCount; i++) {
                         var curDay = new Date(entYear, entMonth - 1, i + 1).format('yyyyMMdd');
-                        if (parseInt(str) != curDay) {
-                            var dataM = new Object();
-                            dataM.C3_375377576828 = '';
-                            data.splice(i, 0, dataM);
+                        var filterArr = data.filter(item => item.DATES == curDay);
+                        var dataM = {
+                            "C3_375377576828":""
+                        };
+                        if(filterArr.length == 1){
+                            dataM = filterArr[0];
                         }
-
-
+                        fixData.push(dataM);
                     }
+                    data = fixData;
                 }
 
                 for (var i = 0; i < data.length; i++) {

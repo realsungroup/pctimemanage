@@ -204,8 +204,8 @@ define([
   // 上传图片
   function uploadImg(param, doSuccess, doFail) {
     var xhr = new XMLHttpRequest();
-    var uploadFileUrl = 'http://kingofdinner.realsun.me:8081/rispweb/rispservice/SvcUploadFile2.aspx'
-    httppath = "http://kingofdinner.realsun.me:8081/rispweb/upfiles"
+    var uploadFileUrl = appConfig.app.uploadFileUrl;
+    httppath = appConfig.app.httppath;
     var upUrlStr = uploadFileUrl + '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//cmAlert(upUrlStr);
     xhr.open('POST', upUrlStr);
     xhr.onload = function () {

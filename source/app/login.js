@@ -3,8 +3,8 @@
     var self;
     return {
       data: {
-        account:'80881',
-        passWord:'123456',
+        account:'',
+        passWord:'',
         vacationCategorySuccess: false,
         refuseArrSuccess: false,
         routeDataSuccess:false,
