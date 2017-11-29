@@ -64,8 +64,12 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
             cmAlert(e.ErrorMsg);
           }
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
         }, function () {
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
           cmAlert('系统错误');
         })
 
