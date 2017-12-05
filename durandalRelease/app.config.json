@@ -23,7 +23,8 @@
         "displaymode": "none",
         "dbh": null,
         "posrecordsjson": null,
-        "excelUploadCount":100
+        "excelUploadCount":100,
+        "dayReportExportCount":300
     },
     "appfunction": null
 }
