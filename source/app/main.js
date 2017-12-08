@@ -72,19 +72,18 @@ define(['durandal/system', 'plugins/router', 'durandal/app', 'durandal/viewLocat
             dialog: true
         });
 
+        // ifvisible.setIdleDuration(globActiveDuration);
+        // ifvisible.on("idle", function () {
+        //     console.log(" shut down invoke")
+        //     appConfig.app.userInfo = undefined;
+        //     globBadgeno = undefined;
 
-        ifvisible.setIdleDuration(globActiveDuration);
-        ifvisible.on("idle", function () {
-            console.log(" shut down invoke")
-            appConfig.app.userInfo = undefined;
-            globBadgeno = undefined;
+        //     router.deactivate();
+        //     router.reset();
+        //     app.setRoot('login')
+        //     window.location.hash = "#applying";
 
-            router.deactivate();
-            router.reset();
-            app.setRoot('login')
-            window.location.hash = "#applying";
-
-        });
+        // });
 
         app.start().then(function () {
             window.location.hash = "#applying";
