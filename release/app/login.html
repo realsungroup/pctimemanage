@@ -18,7 +18,7 @@
 						<!--<label class="label">用户名</label>-->
 						<label class="input"> 
 							<i class="icon-append fa fa-user"></i>
-							<input id="account" type="email" name="email">
+							<input id="account" data-bind="value:data.account" type="email" name="email">
 							<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入用户名</b>
 						</label>
 					</section>
@@ -27,7 +27,7 @@
 						<!--<label class="label">密码</label>-->
 						<label class="input"> 
 							<i class="icon-append fa fa-lock"></i>
-							<input id="passWord" type="password" name="password">
+							<input id="passWord" data-bind="value:data.passWord" type="password" name="password">
 							<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入密码</b>
 						 </label>
 

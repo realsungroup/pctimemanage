@@ -7,8 +7,8 @@
     'untilRE',
     'photoswipeRE/photoswipe-ui-default.min',
     'photoswipeRE/photoswipe.min',
-    'baseVM',"durandal/viewEngine"],
-    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM,viewEngine) {
+    'baseVM', "durandal/viewEngine","commonRE"],
+    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM, viewEngine,co) {
         var selfVM = new baseVM();
         selfVM.model.subTitle = '申请中'
         var self = selfVM;
@@ -43,8 +43,8 @@
                     var dataArr = data.data;
                     self.model.data(dataArr);
 
-                     //设置页标（base中）
-                    self.setPageMark(param,data);
+                    //设置页标（base中）
+                    self.setPageMark(param, data);
 
                     if (dataArr.length < param.pageSize) self.model.noMore = true;
                     else self.model.noMore = false;
@@ -73,13 +73,13 @@
         }
 
         selfVM.goToApplyDetailPage = function (index) {
-                var tmpData = self.model.data()[index()];
-                // var tmpJsonData = JSON.stringify(tmpData);
-                // router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
+            var tmpData = self.model.data()[index()];
+            // var tmpJsonData = JSON.stringify(tmpData);
+            // router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
 
-                globSingleData = JSON.stringify(tmpData);
-                router.navigate("#applyDetail?willCancel=true");
-            }
+            globSingleData = JSON.stringify(tmpData);
+            router.navigate("#applyDetail?willCancel=true");
+        }
 
         //提交
         selfVM.submit = function (index) {
@@ -87,22 +87,25 @@
             var tmpData = self.model.data()[index];
             tmpData.C3_541449538456 = "Y"
 
+            var validateData = common.valiateForm(tmpData);
+            if (!validateData) return;
+
             var param = {
                 'data': tmpData
             }
 
             httpService.saveApply(param, function (resData) {
-                if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-                    cmAlert("");
+                if (resData && (resData.error == 0 && resData.Error == 0) && resData.data && resData.data[0]) {
                     var returnData = resData.data[0];
                     self.model.data()[index] = returnData;
                     self.model.data(self.model.data());
+                    cmAlert(resData.message || '提交成功');
                 } else {
-                    cmAlert("error");
+                    cmAlert(resData.message || '提交失败');
                 }
 
             }, function () {
-
+                cmAlert('提交错误')
             });
         }
         return selfVM

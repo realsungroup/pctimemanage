@@ -153,17 +153,21 @@ define(['durandal/app',
         }
 
         httpService.hourCalculate(param, function (data) {
-          if (data && data.data && data.data[0]) {
+          if (data && (data.error == 0 || data.Error == 0) && data.data && data.data[0]) {
             param2.data.C3_546180817741 = data.data[0].C3_546130076462;
             httpService.hourCalculate(param2, function (data) {
 
-              self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
-              self.model.data(self.model.data());
+              if(data && (data.error == 0 || data.Error == 0) && Array.isArray(data.data) && data.data[0]){
+                self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
+                self.model.data(self.model.data());
+              }else cmAlert(data.message || '获取时长失败')
 
             }, function () {
             });
 
-          } else self.setData({ data: [] });
+          } else {
+            cmAlert(data.message || '获取时长失败')
+          }
 
         }, function () {
 
@@ -179,7 +183,7 @@ define(['durandal/app',
         if (action == 'save') tmpData.C3_541449538456 = "N"
         else {
           tmpData.C3_541449538456 = "Y";
-          var validateData = self.valiateForm(tmpData);
+          var validateData = common.valiateForm(tmpData);
           if (!validateData) return;
         }
 
@@ -189,7 +193,7 @@ define(['durandal/app',
 
         if (self.model.isDraft) {
           httpService.saveApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+            if ((resData.error == 0 || resData.Error == 0) && resData && resData.data && resData.data[0]) {
               cmAlert("保存成功");
               // var returnData = resData.data[0];
               // applying.model.data().unshift(returnData);
@@ -197,7 +201,7 @@ define(['durandal/app',
               router.navigateBack();
 
             } else {
-              cmAlert("保存错误");
+              cmAlert(resData.message || "保存错误");
             }
 
           }, function () {
@@ -209,7 +213,7 @@ define(['durandal/app',
 
           param['data']['C3_542556605600'] = self.model.approver();
           httpService.addApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+            if ((resData.error == 0 || resData.Error == 0) && resData && resData.data && resData.data[0]) {
               cmAlert("添加成功");
               // var returnData = resData.data[0];
               // applying.model.data().unshift(returnData);
@@ -217,7 +221,7 @@ define(['durandal/app',
               router.navigateBack();
 
             } else {
-              cmAlert("添加错误");
+              cmAlert(resData.message || "添加错误");
             }
 
           }, function () {
@@ -344,34 +348,7 @@ define(['durandal/app',
         self.model.attachUrlArray(tmpImgUrlArray)
       },
 
-      valiateForm: function (data) {//验证提交数据
-
-        if (data.C3_533398158705 != '补打卡') {//非补打卡时长的验证
-          if (data.C3_541449935726 == undefined || data.C3_541449935726 == '') {
-            cmAlert("时长不能为空！");
-            return false;
-          }
-        }
-
-        if (!appConfig.app.teamApprove || appConfig.app.teamApprove.length == 0) { cmAlert("审批人不能为空！"); return false; }
-
-        var selectRuleM = common.getVactionObject(data.C3_533398158705);
-
-        var cameraNeccesseryArr = [selectRuleM.C3_545770982165,
-        selectRuleM.C3_545770982361,
-        selectRuleM.C3_545770982566,
-        selectRuleM.C3_545770990395];
-
-        var addressArr = [data.C3_541450276993, data.C3_545771156108, data.C3_545771157350, data.C3_545771158420];
-        for (var i = 0; i < addressArr.length; i++) {
-          if (i >= cameraNeccesseryArr.length) { alert(cameraNeccesseryArr); return false; }
-          if (cameraNeccesseryArr[i] == 'Y' && (addressArr[i] == undefined || addressArr[i] == '' || addressArr[i] == null)) {
-            cmAlert("请上传必需附件！");
-            return false;
-          }
-        }
-        return true;
-      },
+  
 
 
       bindProperty: function () {

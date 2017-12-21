@@ -3,6 +3,8 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
     var self;
     return {
       data: {
+        account:'',
+        passWord:'',
         vacationCategorySuccess: false,
         refuseArrSuccess: false,
         routeDataSuccess:false,
@@ -35,10 +37,10 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
         if (localDebug) console.log("loginClick")
         $("#loginBtn").button('loading');
 
-        var userStr = $("#account").val();
-        var passWordStr = $("#passWord").val();
+        // if (localDebug) {self.data.account = "80881"; self.data.passWord = "123456";}
+        var userStr =  self.data.account;
+        var passWordStr = self.data.passWord;
 
-        // if (localDebug) {userStr = "80881"; passWordStr = "1234567";}
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
@@ -62,8 +64,12 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'
             cmAlert(e.ErrorMsg);
           }
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
         }, function () {
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
           cmAlert('系统错误');
         })
 

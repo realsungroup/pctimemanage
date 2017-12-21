@@ -68,13 +68,20 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
             selfVM.model.data([]); 
             httpService.getDayWorkReportData(param, function (data) {
+<<<<<<< HEAD
                 var dataArr = []
                 if (data && data.data) {
                     dataArr = data.data;
 
                     console.log("time ==> " + new Date());
+=======
+                var dataArr = [];
+                if (data && data.data) {
+                    dataArr = data.data;
+                    if(localDebug) console.log("time ==> " + new Date());
+>>>>>>> origin/master
                     var modelArr = new dayWorkReportModel(dataArr);
-                    console.log("time ==> " + new Date());
+                    if(localDebug) console.log("time ==> " + new Date());
                     selfVM.model.allData = modelArr;
                     getLocalFilterData(0)
 
@@ -140,9 +147,8 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         function getLocalFilterData(index) {
             if (selfVM.model.isLocalLoading) return;
             selfVM.model.isLocalLoading = true;
-            var pageSize = 100;
+            var pageSize = appConfig.app.dayReportExportCount;
             var pageIndex = index;
-
 
             var startIndex = pageSize * index;
             var endIndex = pageSize * (index + 1);
