@@ -129,11 +129,11 @@ var root = this,
 
 localDebug = false;
 
-enterprisecode = '9063'//全局企业编号
+enterprisecode = '9063'//全局伝业编坷
 
-globBadgeno = null;//全局工号
+globBadgeno = null;//全局工坷
 
-globSingleData = null;//全局传入内页的数据变量
+globSingleData = null;//全局传入内页的数杮坘針
 
 globActiveDuration = 30;//页面活跃时间（s）
 

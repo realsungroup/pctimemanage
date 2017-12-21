@@ -1,6 +1,6 @@
 define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt','untilRE'],
     function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt,unt) {
-
+        var rowI=0;
         var selfVM = new baseVM();
         selfVM.model.title = '微信考勤申请'
         selfVM.model.subTitle = '微信考勤申请记录'
@@ -24,8 +24,12 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             selfVM.model.isLoading = true;
             httpService.getApplyDataForWX(param, function (data) {
 
+             
+
                 if (data && data.data) {
-                    var dataArr = data.data;    
+                    var dataArr = data.data;   
+                    
+                    
 
                     dataArr.forEach(function(item){
                         item.C3_546778248258 = new Date(item.C3_546778248258).format("yyyy-MM-dd hh:mm:ss");
@@ -56,18 +60,25 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
         }
 
         selfVM.cancelClick = function (index) {
-            index = index();
-            var tmpData = selfVM.model.data()[index];
-            tmpData.C3_553774879841 = 'Y';
-            var params = {
-                'data':tmpData
-            }
-            httpService.cancelApplyDataForWX(params,function(data){
-                cmAlert("撤销成功");
-                selfVM.getData(1);
-            })
+            rowI=index();
+          
+
+            $('#myModalConfirm').modal({})
         }
-     
+     selfVM.EnsureClick=function(){
+           
+            var tmpData = selfVM.model.data()[rowI];
+         
+            tmpData.C3_553774879841 = 'Y';
+             var params = {
+                 'data':tmpData
+             }
+             httpService.cancelApplyDataForWX(params,function(data){
+                cmAlert("撤销成功");
+                 selfVM.getData(1);
+             })
+             $('#myModalConfirm').modal('hide');
+     }
 
 
         return selfVM;

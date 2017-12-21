@@ -24,8 +24,6 @@ define(['durandal/app',
       },
       activate: function (e) {
         self = this;
-        console.log('aaaaaaaaa' + applying.model.data());
-
         self.init();
         if (e) e.data = globSingleData
         else e = { "data": globSingleData }

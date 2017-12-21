@@ -68,9 +68,9 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
 
             selfVM.model.data([]); 
             httpService.getDayWorkReportData(param, function (data) {
-                
+                var dataArr = []
                 if (data && data.data) {
-                    var dataArr = data.data;
+                    dataArr = data.data;
 
                     console.log("time ==> " + new Date());
                     var modelArr = new dayWorkReportModel(dataArr);

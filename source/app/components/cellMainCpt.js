@@ -3,7 +3,7 @@ var ko = require('knockout');
 ko.components.register('cellMainCategory', {
     viewModel: function (params) {
         this.colspan = params && params.colspan || '2';
-        // this.isPend = params && params.isPend || false;
+        this.isPend = params && params.isPend || false;
     },
     template: "<thead>\
 				<tr>\
@@ -12,7 +12,10 @@ ko.components.register('cellMainCategory', {
                     <th>员工姓名</th>\
 					<th>开始时间</th>\
 					<th>结束时间</th>\
-					<th>时长</th>\
+                    <th>时长</th>\
+                    <!-- ko if:isPend -->\
+                    <th>审批人</th>\
+                    <!-- /ko-->\
 					<th>审批状态</th>\
 					<th data-bind='attr:{colspan:colspan}' >操作</th>\
 				</tr>\
@@ -54,14 +57,17 @@ ko.components.register('cellMainFilter', {
 ko.components.register('cellMainData', {
     viewModel: function (params) {
         this.item = params && params.item || '';
-        // this.isPend = params && params.isPend || '';
+        this.isPend = params && params.isPend || '';
     },
     template: "<td data-bind='text:item.C3_533398158705'></td>\
                     <td data-bind='text:item.C3_546777382153'></td>\
                     <td data-bind='text:item.C3_533143303788'></td>\
 					<td data-bind='text:item.C3_555171774775 + \"月\" + item.C3_541449959569 + \"日\" + item.C3_541450006047 + item.C3_541450072499 + \":\" + item.C3_541450107087'></td>\
 					<td data-bind='text:item.C3_555171782681 + \"月\" + item.C3_541449974021 + \"日\" + item.C3_541450008801 + item.C3_541450084259 + \":\" + item.C3_541450125786'></td>\
-					<td data-bind='text:item.C3_541449935726'></td>\
+                    <td data-bind='text:item.C3_541449935726'></td>\
+                    <!-- ko if:isPend-->\
+                    <td data-bind='text:item.C3_541451111065'></td>\
+                    <!-- /ko -->\
 					<td data-bind='text:item.C3_533407351131'></td>"
 
 
@@ -123,7 +129,7 @@ ko.components.register('cellMainFilterSearch', {
         this.inputVal = params && params.inputVal || '';
         this.allSelected = params && params.allSelected || '';
         this.isPend = params && params.isPend || '';
-        var tmpThCount = params && params.thCount || 5;
+        var tmpThCount = params && params.thCount || 6;
         var tmpThCountArr = [];
         for(var i = 0 ; i < tmpThCount ; i ++){
             tmpThCountArr.push('');
