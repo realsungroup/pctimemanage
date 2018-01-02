@@ -205,11 +205,7 @@ gulp.task('durandal-pack', function () {
     durandal({
         baseDir: 'source/app',   //same as default, so not really required.
         main: 'main.js',  //same as default, so not really required.
-<<<<<<< HEAD
-        output: 'main-1.4.4.js', //same as default, so not really required.
-=======
-        output: 'main-1.5.5.js', //same as default, so not really required.
->>>>>>> origin/master
+        output: 'main-1.5.6.js', //same as default, so not really required.
         almond: true,
         minify: false
 
