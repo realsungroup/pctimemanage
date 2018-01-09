@@ -102,16 +102,12 @@ define([
         } else {
 
           if (typeof doSuccess == "function") {
+            if (res  && ('error' in res || 'Error' in res)) {
 
-            if (res != '' && 'error' in res) {
-
-              if (res.error == 0) {
+              if (res.error == 0 || res.Error == 0) {
                 doSuccess(res);
               } else {
-
                 if (res.message) cmAlert(res.message);
-                else cmAlert("操作失败");
-
                 if (typeof doFail == "function") {
                   doFail();
                 }
