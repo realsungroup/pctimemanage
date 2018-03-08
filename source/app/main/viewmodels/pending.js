@@ -35,8 +35,13 @@
 
 
         selfVM.model.isLoading = true;
-        httpService.getPendingData(param, function (data) {
+        httpService.getApplyingData(param, function (data) {
 
+          // if(localDebug) {
+          //   data ={
+          //     "data":[{},{},{}]
+          //   } 
+          // }
           if (data && data.data) {
             var dataArr = data.data;
             dataArr.forEach(function (val) {

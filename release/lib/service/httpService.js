@@ -102,7 +102,7 @@ define([
         } else {
 
           if (typeof doSuccess == "function") {
-            if (res  && ('error' in res || 'Error' in res)) {
+            if (res && ('error' in res || 'Error' in res)) {
 
               if (res.error == 0 || res.Error == 0) {
                 doSuccess(res);
@@ -436,7 +436,7 @@ define([
   function addMorePendPerson(params, doSuccess, doFail) {
     params.resid = '542065063018';
     var url = path.baseUrl + path.saveData;
-    baseRequest("POST", url, params,6,doSuccess,doFail)
+    baseRequest("POST", url, params, 6, doSuccess, doFail)
   }
 
   var httpService = {
@@ -478,7 +478,7 @@ define([
     getRouteData: getRouteData,
     changePassWord: changePassWord,
     forgetPassWord: forgetPassWord,
-    addMorePendPerson:addMorePendPerson
+    addMorePendPerson: addMorePendPerson
   }
   return httpService
 });
