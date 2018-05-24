@@ -5,6 +5,7 @@
           "loginBaseUrl": "http://10.108.2.66:9091/",
           "getData": "api/100/table/Retrieve",
          "getSubData": "api/100/table/RetrieveRelTableByHostRecord",
+         "batchAuditApplication":"api/200/Attendance/BatchAuditApplication",
          "saveData": "api/100/table/Save",
          "login": "api/Account/Login",
           "changePassWrod":"api/user/ChangePassword",

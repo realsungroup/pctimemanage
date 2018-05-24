@@ -102,7 +102,7 @@ define([
         } else {
 
           if (typeof doSuccess == "function") {
-            if (res && ('error' in res || 'Error' in res)) {
+            if (res  && ('error' in res || 'Error' in res)) {
 
               if (res.error == 0 || res.Error == 0) {
                 doSuccess(res);
@@ -143,7 +143,8 @@ define([
   //获取审批中数据
   function getPendingData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518842754
+   // params.resid = 541518842754579635634837
+    params.resid = 579635634837;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -277,7 +278,7 @@ define([
       'resid': 541518842754,
       'data': param
     }
-    var url = path.baseUrl + path.saveData;
+    var url = path.baseUrl + path.batchAuditApplication;
     baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
@@ -436,7 +437,7 @@ define([
   function addMorePendPerson(params, doSuccess, doFail) {
     params.resid = '542065063018';
     var url = path.baseUrl + path.saveData;
-    baseRequest("POST", url, params, 6, doSuccess, doFail)
+    baseRequest("POST", url, params,6,doSuccess,doFail)
   }
 
   var httpService = {
@@ -478,7 +479,7 @@ define([
     getRouteData: getRouteData,
     changePassWord: changePassWord,
     forgetPassWord: forgetPassWord,
-    addMorePendPerson: addMorePendPerson
+    addMorePendPerson:addMorePendPerson
   }
   return httpService
 });

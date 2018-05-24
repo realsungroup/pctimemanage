@@ -16,6 +16,7 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             param.pageSize = 10;
             if (!type) {//刷新
                 param.pageIndex = 0;
+
             } else {//加载
                 param.pageIndex = self.model.pageIndex;
             }
@@ -23,20 +24,28 @@ define(['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'h
             selfVM.model.isLoading = true;
             httpService.getApplyDataForWX(param, function (data) {
 
+             
+
                 if (data && data.data) {
                     var dataArr = data.data;   
                     
+                    
+
                     dataArr.forEach(function(item){
                         item.C3_546778248258 = new Date(item.C3_546778248258).format("yyyy-MM-dd hh:mm:ss");
                         item.C3_546778254638 = new Date(item.C3_546778254638).format("yyyy-MM-dd hh:mm:ss");
                     })
+
+
                     self.model.data(dataArr);
 
                     //设置页标（base中）
                     self.setPageMark(param,data);
-    
+                    
+
                     if (dataArr.length < param.pageSize) self.model.noMore = true;
                     else self.model.noMore = false;
+
                 }
                 selfVM.model.isLoading = false;
             }, function () {
