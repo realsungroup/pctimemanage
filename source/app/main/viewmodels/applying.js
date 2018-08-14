@@ -12,7 +12,7 @@
         var selfVM = new baseVM();
         selfVM.model.subTitle = '申请中'
         var self = selfVM;
-
+        console.log("selfVM"+selfVM.model)
         //获取数据
         selfVM.getData = function (type) {
             selfVM.model.isLoading = true;
@@ -80,7 +80,38 @@
             globSingleData = JSON.stringify(tmpData);
             router.navigate("#applyDetail?willCancel=true");
         }
+        //删除
+        selfVM.delete = function (index) {
+            // alert("确定删除吗")
+            if(confirm("确定删除吗?")){
+           
+            index = index()
+            var tmpData = self.model.data()[index];
+            // tmpData.C3_541449538456 = "Y"
 
+            // var validateData = common.valiateForm(tmpData);
+            // if (!validateData) return;
+
+            var param = {
+                'data': tmpData
+            }
+
+            httpService.deleteApply(param, function (resData) {
+                if (resData && resData.Error == 0 ) {
+                    cmAlert(resData.message || '删除成功');
+                    
+                    self.getData(1);
+                } else {
+                    cmAlert(resData.message || '删除失败');
+                }
+
+            }, function () {
+                cmAlert('删除错误')
+            });
+            }else{
+            // alert("取消")
+        }
+        }
         //提交
         selfVM.submit = function (index) {
             index = index()

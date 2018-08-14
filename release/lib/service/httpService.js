@@ -22,14 +22,16 @@ define([
     if (method == 1) {
 
       //增 改 数据
-    } else if (method == 2 || method == 4) {
+    } else if (method == 2 || method == 4 || method == 7) {
       data.data._id = 1;
 
       if (method == 2) {
         data.data._state = "added";
         data.data.REC_ID = 0;
-      } else {
-        data.data._state = "modified";
+      } else if(method == 7){
+        data.data._state = "removed";
+      }else{
+        data.data._state = "modified"
       }
 
       data.data = JSON.stringify([data.data]);
@@ -190,6 +192,12 @@ define([
     var url = path.baseUrl + path.saveData;
     params.resid = 541502768110;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
+  //删除请假数据
+  function deleteApply(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.saveData;
+    params.resid = 541502768110;
+    baseRequest("POST", url, params, 7, doSuccess, doFail);
   }
 
   //计算时长
@@ -449,6 +457,7 @@ define([
     getRefuseHttpData: getRefuseHttpData,
     addApply: addApply,
     saveApply: saveApply,
+    deleteApply:deleteApply,
     hourCalculate: hourCalculate,
     uploadImg: uploadImg,
     getPendingPepleData: getPendingPepleData,

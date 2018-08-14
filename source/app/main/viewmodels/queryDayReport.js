@@ -22,22 +22,46 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','main/view
         queryDayReportVM.selectDate = ko.observable("");
 
 
-
         //attached
         queryDayReportVM.attached = function () {
             httpService.getDayOptions({}, function (data) {
                 data = data.data;
                 var yearMonthArr = [];
+                var currentMonth;
                 data.forEach(function (item) {
                     var yearMonthM = item.C3_542128471153;
                     var yearMonthStr = yearMonthM.toString();
                     yearMonthArr.push(yearMonthStr);
 
+                    if(item.C3_547308103102 === "Y"){
+                        currentMonth = item.C3_542128471153
+                    }
+                   
                 });
-                queryDayReportVM.dayOptionT(yearMonthArr);
+                
+                queryDayReportVM.selectDate(currentMonth);
+                
+
             });
         }
 
+        queryDayReportVM.activate = function (e) {
+            var self = this;
+
+            httpService.getDayOptions({}, function (data) {
+                var yearMonthArr = [];
+                data.data.forEach(function (item) {
+                    
+                    var yearMonthM = item.C3_542128471153;
+                    var yearMonthStr = yearMonthM.toString();
+                    yearMonthArr.push(yearMonthStr);
+
+                });
+               // yearMonthArr.reverse();
+               // yearMonthArr.splice(0,1)
+                self.dayOptionT(yearMonthArr);
+            });
+        }
 
 
         function getWorkDay(defaultYM) {

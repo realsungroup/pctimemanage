@@ -82,6 +82,7 @@ ko.components.register('cellMainSubmitBtn', {
                             <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.submit($index)}'>提交</button>\
 						</td>\
 					<td>\
+                    <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.delete($index)}'>删除</button>\
 						<button class='btn btn-primary btn-block' data-bind='visible:(!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\"),click:function(){$root.goToApplyDetailPage($index)}'>详情</button>\
                             <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.goToEditPage($index)}'>修改</button>\
 					</td>"

@@ -1066,7 +1066,8 @@ pre code {
     margin-left: 50%;
   }
   .col-sm-offset-5 {
-    margin-left: 41.66666667%;
+    /* margin-left: 41.66666667%; */
+    margin-left:32%; 
   }
   .col-sm-offset-4 {
     margin-left: 33.33333333%;

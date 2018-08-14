@@ -11,8 +11,8 @@
 
     <!-- NEW WIDGET START -->
 
-    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">
-        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
+    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12" >
+        <div style="margin-left: 0px" class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
             <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
         </div>
         <div class="col-sm-2 col-md-2 col-lg-2">
@@ -21,6 +21,11 @@
             </a>
             <input id="uploaderInput" style="cursor:pointer" class="weui-uploader__input" data-bind="event:{change:function(data,event){readExcel(data,event)}}"
                 type="file" />
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1" >
+            <a href="http://finisar.realsun.me/mobileTimeManage/download/菜单订购统计.xls" class="btn btn-primary">
+                下载模板
+            </a>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1">
             <button class="btn btn-primary" data-bind="click:addClick">新增</button>

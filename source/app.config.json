@@ -1,15 +1,16 @@
 {
     "app": {
         "path": {
-          "baseUrl": "http://10.108.2.66:9096/",
-          "loginBaseUrl": "http://10.108.2.66:9091/",
+          "baseUrl": "https://finisar.realsun.me:9092/",
+          "loginBaseUrl": "http://114.55.58.57:9095/",
           "getData": "api/100/table/Retrieve",
          "getSubData": "api/100/table/RetrieveRelTableByHostRecord",
          "batchAuditApplication":"api/200/Attendance/BatchAuditApplication",
          "saveData": "api/100/table/Save",
          "login": "api/Account/Login",
           "changePassWrod":"api/user/ChangePassword",
-         "forgetPassWord":"api/account/ForgetPass"
+         "forgetPassWord":"api/account/ForgetPass",
+         "xlspath":"http://finisar.realsun.me/mobileTimeManage/download/菜单订购统计.xls"
         },
 	"routeResid":"555517391524",
         "routeTypeArr":[],

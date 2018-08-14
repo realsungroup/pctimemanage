@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt',],
+define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt'],
     function (app, ko, router, httpService,headerCpt,unt) {
         var monthDayCountArr, dateM;
         var entMonth, entYear;
@@ -6,20 +6,44 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
 
         var queryMonthVM = {};
 
+        const nowTimeStamp = Date.now();
+        const now = new Date(nowTimeStamp);
         queryMonthVM.model = {
             title: '我的查询',
             subTitle: '当月排班',
             selectDate: ko.observable(''),//当前选择的日期
+            
             dayOption: ko.observable([]),//日期范围
             dateArr: ko.observable([])//排班和日历数据
+            
         }
+        queryMonthVM.attached = function () {
+            httpService.getDayOptions({}, function (data) {
+                data = data.data;
+                var yearMonthArr = [];
+                var currentMonth ;
+                data.forEach(function (item) {
+                    var yearMonthM = item.C3_542128471153;
+                    var yearMonthStr = yearMonthM.toString();
+                    yearMonthArr.push(yearMonthStr);
+                    if(item.C3_547308103102 === "Y"){
+                        currentMonth = item.C3_542128471153
+                    }
+                   
+                });
+                queryMonthVM.model.selectDate(currentMonth);
+                
 
+            });
+        }
 
         queryMonthVM.model.selectDate.subscribe(function (newVal) {
             var dateStr = newVal;
             if (dateStr != '' && dateStr != undefined) {
                 queryMonthVM.getCalendar(dateStr);
+                
             }
+            console.log("dateStr"+dateStr)
         })
 
         queryMonthVM.activate = function (e) {
@@ -28,12 +52,14 @@ define(['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','component
             httpService.getDayOptions({}, function (data) {
                 var yearMonthArr = [];
                 data.data.forEach(function (item) {
-
+                    
                     var yearMonthM = item.C3_542128471153;
                     var yearMonthStr = yearMonthM.toString();
                     yearMonthArr.push(yearMonthStr);
 
                 });
+               // yearMonthArr.reverse();
+               // yearMonthArr.splice(0,1)
                 self.model.dayOption(yearMonthArr);
             });
         }
