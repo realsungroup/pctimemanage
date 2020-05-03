@@ -1,158 +1,225 @@
-<div data-bind='component: {
+<div
+  data-bind='component: {
      name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}
-}'>
-
-</div>
-
-
+}'
+></div>
 
 <!-- row style="height: 700px;overflow: scroll"-->
-<div id="dayWorkReport" class="row" >
+<div id="dayWorkReport" class="row">
+  <!-- NEW WIDGET START -->
 
-    <!-- NEW WIDGET START -->
-
-    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">
-        <div class="col-sm-1 col-md-1 col-lg-1">
-            <select name="" id="YMSelect" data-bind="options: model.selectDateArr,value:model.selectDate">
-             </select>
-        </div>
-        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-6 col-md-offset-6 col-lg-offset-6">
-            <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">
-        </div>
-        <div class="col-sm-1 col-md-1 col-lg-1">
-            <button class="btn btn-info " data-bind="click:exportExcel">EXCEL</button>
-        </div>
+  <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-sm-1 col-md-1 col-lg-1">
+      <select
+        name=""
+        id="YMSelect"
+        data-bind="options: model.selectDateArr,value:model.selectDate"
+      >
+      </select>
     </div>
+    <div
+      class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5"
+    >
+      <input
+        type="text"
+        class="form-control"
+        data-bind="textInput:model.inputVal,event:{change:kvoInput}"
+      />
+    </div>
+    <div class="col-sm-1 col-md-1 col-lg-1">
+      <button class="btn btn-info" data-bind="click:exportExcel">EXCEL</button>
+    </div>
+    <div class="col-sm-1 col-md-1 col-lg-1">
+      <button class="btn btn-info" data-bind="click:syncRecords">同步</button>
+    </div>
+  </div>
 
-    <article class="col-sm-12 col-md-12 col-lg-12"  style="overflow: scroll" > <!--data-bind="style:{height:model.tableHeight() + 'px'}">-->
-       
-        <div style="width:4000px">
-        <table class="table table-hover table-bordered" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>班组</th>
-                    <th>工号</th>
-                    <th>姓名</th>
-                    <th>类型</th>
+  <article class="col-sm-12 col-md-12 col-lg-12" style="overflow: scroll;">
+    <!--data-bind="style:{height:model.tableHeight() + 'px'}">-->
 
-                    <!--ko foreach:model.weekTitleArr-->
-                        <th data-bind="text:week,visible:visible"></th>
-                    <!--/ko-->
+    <div style="width: 4000px;">
+      <table class="table table-hover table-bordered" style="width: 100%;">
+        <thead>
+          <tr>
+            <th rowspan="2"></th>
+            <th>班组</th>
+            <th>工号</th>
+            <th>姓名</th>
+            <th>类型</th>
 
-                    <th rowspan="2">月排班工时</th>
-                    <th rowspan="2">月标准工时</th>
-                    <th rowspan="2">月超出工时</th>
-                    <th rowspan="2">加班工时</th>
-
-                    <th colspan="6">假期汇总（小时）</th>
-
-                    <th colspan="4">补贴次数</th>
-
-                    <th rowspan="2">备注(总加班工时）</th>
-                    <th rowspan="2">在职状态</th>
-
-                </tr>
-
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-
-                    <!--ko foreach:model.weekTitleArr-->
-                        <th data-bind="text:num,visible:visible"></th>
-                    <!--/ko-->
-
-                    <th>年假</th>
-                    <th>事假</th>
-                    <th>病假</th>
-                    <th>调休</th>
-                    <th>欠班</th>
-                    <th>其它</th>
-
-                    <th>中班次数</th>
-                    <th>小夜班次数</th>
-                    <th>大夜班次数</th>
-                    <th>休息日加班次数</th>
-
-
-                </tr>
-            </thead>
-            <!--ko foreach:model.data-->
-            
-            <tbody data-bind="foreach:$data">
-                <tr>
-                    <!--ko if:$index() == 0-->
-                    <td rowspan="8" data-bind="text:班组名称"></td>
-                    <td rowspan="8" data-bind="text:员工工号"></td>
-                    <td rowspan="8" data-bind="text:员工姓名"></td>
-                    <!--/ko-->
-
-                    <td data-bind="text:考勤项目"></td>
-                    <td data-bind="text:A16"></td>
-                    <td data-bind="text:A17"></td>
-                    <td data-bind="text:A18"></td>
-                    <td data-bind="text:A19"></td>
-                    <td data-bind="text:A20"></td>
-                    <td data-bind="text:A21"></td>
-                    <td data-bind="text:A22"></td>
-                    <td data-bind="text:A23"></td>
-                    <td data-bind="text:A24"></td>
-                    <td data-bind="text:A25"></td>
-                    <td data-bind="text:A26"></td>
-                    <td data-bind="text:A27"></td>
-                    <td data-bind="text:A28,visible:$root.model.weekTitleArr()[12].visible"></td>
-                    <td data-bind="text:A29,visible:$root.model.weekTitleArr()[13].visible"></td>
-                    <td data-bind="text:A30,visible:$root.model.weekTitleArr()[14].visible"></td>
-                    <td data-bind="text:A31,visible:$root.model.weekTitleArr()[15].visible"></td>
-                    <td data-bind="text:B01"></td>
-                    <td data-bind="text:B02"></td>
-                    <td data-bind="text:B03"></td>
-                    <td data-bind="text:B04"></td>
-                    <td data-bind="text:B05"></td>
-                    <td data-bind="text:B06"></td>
-                    <td data-bind="text:B07"></td>
-                    <td data-bind="text:B08"></td>
-                    <td data-bind="text:B09"></td>
-                    <td data-bind="text:B10"></td>
-                    <td data-bind="text:B11"></td>
-                    <td data-bind="text:B12"></td>
-                    <td data-bind="text:B13"></td>
-                    <td data-bind="text:B14"></td>
-                    <td data-bind="text:B15"></td>
-
-                    <!--ko if:$index() == 0-->
-                    <td rowspan="8" data-bind="text:workTime,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:workDefaultTime,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:workExtraTime,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:workOverTime,visible:$index() == 0"></td>
-
-                    <td rowspan="8" data-bind="text:yearVacation,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:thingVacation,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:sickVacation,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:dateChangeVacation,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:noWorkVacation,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:otherVacation,visible:$index() == 0"></td>
-
-                    <td rowspan="8" data-bind="text:middleWorkTypeCount,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:littleNightWorkTypeCount,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:bigNightWorkTypeCount,visible:$index() == 0"></td>
-                    <td rowspan="8" data-bind="text:workOnVacationCount,visible:$index() == 0"></td>
-
-                    <td rowspan="8" data-bind="text:allWorkTime,visible:$index() == 0"></td>
-                    <!--/ko-->
-                </tr>
-            </tbody>
+            <!--ko foreach:model.weekTitleArr-->
+            <th data-bind="text:week,visible:visible"></th>
             <!--/ko-->
-        </table>
-        </div>
-    </article>
-    <!-- WIDGET END -->
 
-    <!-- 分页pageSelectCpt-->
-    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->
-    <!--/ko-->
+            <th rowspan="2">月排班工时</th>
+            <th rowspan="2">月标准工时</th>
+            <th rowspan="2">月超出工时</th>
+            <th rowspan="2">加班工时</th>
 
+            <th colspan="6">假期汇总（小时）</th>
+
+            <th colspan="4">补贴次数</th>
+
+            <th rowspan="2">备注(总加班工时）</th>
+            <th rowspan="2">在职状态</th>
+          </tr>
+
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+
+            <!--ko foreach:model.weekTitleArr-->
+            <th data-bind="text:num,visible:visible"></th>
+            <!--/ko-->
+
+            <th>年假</th>
+            <th>事假</th>
+            <th>病假</th>
+            <th>调休</th>
+            <th>欠班</th>
+            <th>其它</th>
+
+            <th>中班次数</th>
+            <th>小夜班次数</th>
+            <th>大夜班次数</th>
+            <th>休息日加班次数</th>
+          </tr>
+        </thead>
+        <!--ko foreach:model.data-->
+
+        <tbody data-bind="foreach:$data">
+          <tr>
+            <!--ko if:$index() == 0-->
+            <td class="width-min-50" rowspan="8">
+              <input
+                class="form-control"
+                type="checkbox"
+                data-bind="checked:selected"
+              />
+            </td>
+            <td rowspan="8" data-bind="text:班组名称"></td>
+            <td rowspan="8" data-bind="text:员工工号"></td>
+            <td rowspan="8" data-bind="text:员工姓名"></td>
+            <!--/ko-->
+
+            <td data-bind="text:考勤项目"></td>
+            <td data-bind="text:A16"></td>
+            <td data-bind="text:A17"></td>
+            <td data-bind="text:A18"></td>
+            <td data-bind="text:A19"></td>
+            <td data-bind="text:A20"></td>
+            <td data-bind="text:A21"></td>
+            <td data-bind="text:A22"></td>
+            <td data-bind="text:A23"></td>
+            <td data-bind="text:A24"></td>
+            <td data-bind="text:A25"></td>
+            <td data-bind="text:A26"></td>
+            <td data-bind="text:A27"></td>
+            <td
+              data-bind="text:A28,visible:$root.model.weekTitleArr()[12].visible"
+            ></td>
+            <td
+              data-bind="text:A29,visible:$root.model.weekTitleArr()[13].visible"
+            ></td>
+            <td
+              data-bind="text:A30,visible:$root.model.weekTitleArr()[14].visible"
+            ></td>
+            <td
+              data-bind="text:A31,visible:$root.model.weekTitleArr()[15].visible"
+            ></td>
+            <td data-bind="text:B01"></td>
+            <td data-bind="text:B02"></td>
+            <td data-bind="text:B03"></td>
+            <td data-bind="text:B04"></td>
+            <td data-bind="text:B05"></td>
+            <td data-bind="text:B06"></td>
+            <td data-bind="text:B07"></td>
+            <td data-bind="text:B08"></td>
+            <td data-bind="text:B09"></td>
+            <td data-bind="text:B10"></td>
+            <td data-bind="text:B11"></td>
+            <td data-bind="text:B12"></td>
+            <td data-bind="text:B13"></td>
+            <td data-bind="text:B14"></td>
+            <td data-bind="text:B15"></td>
+
+            <!--ko if:$index() == 0-->
+            <td
+              rowspan="8"
+              data-bind="text:workTime,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:workDefaultTime,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:workExtraTime,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:workOverTime,visible:$index() == 0"
+            ></td>
+
+            <td
+              rowspan="8"
+              data-bind="text:yearVacation,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:thingVacation,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:sickVacation,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:dateChangeVacation,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:noWorkVacation,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:otherVacation,visible:$index() == 0"
+            ></td>
+
+            <td
+              rowspan="8"
+              data-bind="text:middleWorkTypeCount,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:littleNightWorkTypeCount,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:bigNightWorkTypeCount,visible:$index() == 0"
+            ></td>
+            <td
+              rowspan="8"
+              data-bind="text:workOnVacationCount,visible:$index() == 0"
+            ></td>
+
+            <td
+              rowspan="8"
+              data-bind="text:allWorkTime,visible:$index() == 0"
+            ></td>
+            <!--/ko-->
+          </tr>
+        </tbody>
+        <!--/ko-->
+      </table>
+    </div>
+  </article>
+  <!-- WIDGET END -->
+
+  <!-- 分页pageSelectCpt-->
+  <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->
+  <!--/ko-->
 </div>
 <!-- end row -->
-

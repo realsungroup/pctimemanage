@@ -1,26 +1,22 @@
-define([
-  'untilRE'
-], function (until) {
-
+define(["untilRE"], function (until) {
   // 发起get请求
   var path = appConfig.app.path;
   if (localDebug) path.loginBaseUrl = path.baseUrl;
 
-
   function fixDataWithMethod(data, method) {
     if (method == -1) return data;
-    if (method == 0) {//登录
-      data.loginMethod = "badgeno";//工号
+    if (method == 0) {
+      //登录
+      data.loginMethod = "badgeno"; //工号
       data.enterprisecode = enterprisecode;
       return data;
-    };
+    }
 
     data.uiver = 200;
     data.dynlogin = 1;
 
     //获取主表数据
     if (method == 1) {
-
       //增 改 数据
     } else if (method == 2 || method == 4 || method == 7) {
       data.data._id = 1;
@@ -28,17 +24,16 @@ define([
       if (method == 2) {
         data.data._state = "added";
         data.data.REC_ID = 0;
-      } else if(method == 7){
+      } else if (method == 7) {
         data.data._state = "removed";
-      }else{
-        data.data._state = "modified"
+      } else {
+        data.data._state = "modified";
       }
 
       data.data = JSON.stringify([data.data]);
 
       //获取附表数据
     } else if (method == 3) {
-
       //修改多条数据
     } else if (method == 5) {
       data.data = JSON.stringify(data.data);
@@ -48,7 +43,7 @@ define([
         data.data.forEach(function (item) {
           item._id = 1;
           item._state = "editoradd";
-        })
+        });
         data.data = JSON.stringify(data.data);
       }
     }
@@ -57,9 +52,9 @@ define([
 
   //打印url
   function printUrl(url, data) {
-    var str = path.baseUrl + url + '?';
+    var str = path.baseUrl + url + "?";
     for (var key in data) {
-      str = str + '&' + key + '=' + data[key];
+      str = str + "&" + key + "=" + data[key];
     }
     console.log(str);
   }
@@ -67,20 +62,19 @@ define([
   function getHeader(str) {
     if (str != path.loginBaseUrl + path.login) {
       if (!appConfig.app.userInfo) {
-        console.error("用户信息错误")
+        console.error("用户信息错误");
         return {};
       }
       var headers = {
-        "userCode": appConfig.app.userInfo.UserCode,
-        "accessToken": appConfig.app.userInfo.AccessToken,
-        "loginmethod": "badgeno",
-        "badgeno": globBadgeno,
-        "enterprisecode": enterprisecode,
-        "unionid": "11"
-      }
-      return headers
-
-    } else return {}
+        userCode: appConfig.app.userInfo.UserCode,
+        accessToken: appConfig.app.userInfo.AccessToken,
+        loginmethod: "badgeno",
+        badgeno: globBadgeno,
+        enterprisecode: enterprisecode,
+        unionid: "11",
+      };
+      return headers;
+    } else return {};
   }
 
   //ajax请求
@@ -88,7 +82,6 @@ define([
     data = fixDataWithMethod(data, method);
     // printUrl(url, data);
     var headers = getHeader(url);
-
 
     $.ajax({
       url: url,
@@ -98,14 +91,11 @@ define([
       headers: headers,
       success: function (res) {
         if (res.statusCode == 401) {
-
         } else if (res.statusCode == 404) {
-          cmAlert('请求出错');
+          cmAlert("请求出错");
         } else {
-
           if (typeof doSuccess == "function") {
-            if (res  && ('error' in res || 'Error' in res)) {
-
+            if (res && ("error" in res || "Error" in res)) {
               if (res.error == 0 || res.Error == 0) {
                 doSuccess(res);
               } else {
@@ -114,7 +104,6 @@ define([
                   doFail();
                 }
               }
-
             } else {
               doSuccess(res);
             }
@@ -125,7 +114,7 @@ define([
         if (typeof doFail == "function") {
           doFail();
         }
-      }
+      },
     });
   }
 
@@ -138,14 +127,14 @@ define([
   //获取申请中数据
   function getApplyingData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541502768110
+    params.resid = 541502768110;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批中数据
   function getPendingData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-   // params.resid = 541518842754579635634837
+    // params.resid = 541518842754579635634837
     params.resid = 579635634837;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
@@ -154,11 +143,11 @@ define([
   function getVacationHttpCategory(doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
     var params = {
-      'resid': 542128856156,
-      'subresid': '',
-      'cmswhere': '',
-      'key': ''
-    }
+      resid: 542128856156,
+      subresid: "",
+      cmswhere: "",
+      key: "",
+    };
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -166,11 +155,11 @@ define([
   function getTeamHttpApprove(doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
     var params = {
-      'resid': 542225544503,
-      'subresid': '',
-      'cmswhere': '',
-      'key': ''
-    }
+      resid: 542225544503,
+      subresid: "",
+      cmswhere: "",
+      key: "",
+    };
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -211,8 +200,11 @@ define([
     var xhr = new XMLHttpRequest();
     var uploadFileUrl = appConfig.app.uploadFileUrl;
     httppath = appConfig.app.httppath;
-    var upUrlStr = uploadFileUrl + '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//cmAlert(upUrlStr);
-    xhr.open('POST', upUrlStr);
+    var upUrlStr =
+      uploadFileUrl +
+      "?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=" +
+      httppath; //cmAlert(upUrlStr);
+    xhr.open("POST", upUrlStr);
     xhr.onload = function () {
       var data = JSON.parse(xhr.response);
       if (xhr.status === 200) {
@@ -223,36 +215,34 @@ define([
       } else {
         if (doFail) doFail();
         // 处理错误
-        cmAlert('error==' + data);
+        cmAlert("error==" + data);
       }
     };
 
-
     var fd = new FormData();
-    fd.append("file", param, 'hello.png');//新建formdata提交，png格式
+    fd.append("file", param, "hello.png"); //新建formdata提交，png格式
     xhr.send(fd);
   }
 
   //获取审批流
   function getPendingPepleData(paramREC_ID, doSuccess, doFail) {
     var params = {
-      'resid': 541502768110,
-      'subresid': 541521075674,
+      resid: 541502768110,
+      subresid: 541521075674,
       // 'cmswhere': "",
-      'hostrecid': paramREC_ID,
+      hostrecid: paramREC_ID,
       // 'cmsorder': ""
-    }
+    };
     var url = path.baseUrl + path.getSubData;
     baseRequest("GET", url, params, 3, doSuccess, doFail);
   }
 
-
   //撤销
   function cancelApply(data, doSuccess, doFail) {
     var params = {
-      'resid': 541502768110,
-      'data': data
-    }
+      resid: 541502768110,
+      data: data,
+    };
     var url = path.baseUrl + path.saveData;
     customLoading();
     baseRequest("POST", url, params, 4, doSuccess, doFail);
@@ -261,150 +251,163 @@ define([
   // 获取已审核数据
   function getAppledData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518522808
+    params.resid = 541518522808;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
-  //获取退回修改数据 
+  //获取退回修改数据
   function getFixSubmitData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 543000345781
+    params.resid = 543000345781;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
-
 
   // 获取我的申请历史记录
   function getApplyHistoryData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518678060
+    params.resid = 541518678060;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批
   function approveDataArr(param, doSuccess, doFail) {
     var params = {
-      'resid': 541518842754,
-      'data': param
-    }
+      resid: 541518842754,
+      data: param,
+    };
     var url = path.baseUrl + path.batchAuditApplication;
     baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
   //已审批数据
   function getPendedData(params, doSuccess, doFail) {
-    params.resid = 541518986783
+    params.resid = 541518986783;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批退回数据
   function getPendedRefuseData(params, doSuccess, doFail) {
-    params.resid = 541519417864
+    params.resid = 541519417864;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批历史记录数据
   function getPendedHistoryData(params, doSuccess, doFail) {
-    params.resid = 541520707421
+    params.resid = 541520707421;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取时间选项
   function getDayOptions(params, doSuccess, doFail) {
-    params.cmswhere = '';
-    params.resid = '543946502584';
+    params.cmswhere = "";
+    params.resid = "543946502584";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取当月排班
   function getMonthWorkData(params, doSuccess, doFail) {
-    params.resid = '543666594803';
+    params.resid = "543666594803";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取考勤日报
   function getDayReportData(params, doSuccess, doFail) {
-    getMonthWorkData(params, doSuccess, doFail)
+    getMonthWorkData(params, doSuccess, doFail);
   }
 
   //获取考勤月报
   function getMonthReportData(params, doSuccess, doFail) {
-    params.resid = '543666672286';
+    params.resid = "543666672286";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //查询所有员工审批定义数据
   function getAllStaffPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //查询个人所对应的组长，主管，经理列表
   function getSelectPesonData(params, doSuccess, doFail) {
-    params.resid = '554233627911';
+    params.resid = "554233627911";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //增加个人设置的组长，主管，经理列表
   function addPesonPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 2, doSuccess, doFail);
   }
 
   //保存（编辑）个人设置的组长，主管，经理列表
   function savePesonPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   //获取微信考勤申请记录
   function getApplyDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
+    params.resid = "552993482400";
     var url = path.loginBaseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取微信考勤申请审批数据
   function getApplyPendDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
-    params.subresid = '554315806876';
+    params.resid = "552993482400";
+    params.subresid = "554315806876";
     var url = path.loginBaseUrl + path.getSubData;
     baseRequest("GET", url, params, 3, doSuccess, doFail);
   }
 
   //撤销微信考勤申请记录
   function cancelApplyDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
+    params.resid = "552993482400";
     var url = path.loginBaseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   //获取考勤员日报数据
-  function getDayWorkReportData(params, doSuccess, doFail) {
-    params.resid = '554407385613';
+  function getEmployeeDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = "375296167687";
     var url = path.loginBaseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
-  //获取手册列表 
+  //获取员工日报数据
+  function getDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = "554407385613";
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //同步考勤员日报数据
+  function syncDailyData(params, doSuccess, doFail) {
+    params.resid = "543418244671";
+    var url = path.extranetBaseUrl + path.saveData;
+    baseRequest("POST", url, params, 6, doSuccess, doFail);
+  }
+
+  //获取手册列表
   function getReadBookListData(params, doSuccess, doFail) {
-    params.resid = '555413706936';
+    params.resid = "555413706936";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //修改手册日期和政策公告
   function saveReadBookListData(params, doSuccess, doFail) {
-    params.resid = '555413706936';
+    params.resid = "555413706936";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
@@ -436,16 +439,16 @@ define([
 
   //忘记密码
   function forgetPassWord(params, doSuccess, doFail) {
-    params.resid = '557247856756';
+    params.resid = "557247856756";
     var url = path.baseUrl + path.forgetPassWord;
     baseRequest("GET", url, params, -1, doSuccess, doFail);
   }
 
   //添加多个审批人设置数据
   function addMorePendPerson(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.saveData;
-    baseRequest("POST", url, params,6,doSuccess,doFail)
+    baseRequest("POST", url, params, 6, doSuccess, doFail);
   }
 
   var httpService = {
@@ -457,7 +460,7 @@ define([
     getRefuseHttpData: getRefuseHttpData,
     addApply: addApply,
     saveApply: saveApply,
-    deleteApply:deleteApply,
+    deleteApply: deleteApply,
     hourCalculate: hourCalculate,
     uploadImg: uploadImg,
     getPendingPepleData: getPendingPepleData,
@@ -488,7 +491,9 @@ define([
     getRouteData: getRouteData,
     changePassWord: changePassWord,
     forgetPassWord: forgetPassWord,
-    addMorePendPerson:addMorePendPerson
-  }
-  return httpService
+    addMorePendPerson: addMorePendPerson,
+    getEmployeeDayWorkReportData: getEmployeeDayWorkReportData,
+    syncDailyData: syncDailyData,
+  };
+  return httpService;
 });

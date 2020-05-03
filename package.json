@@ -41,6 +41,7 @@
   "dependencies": {
     "ifvisible.js": "^1.0.6",
     "jquery": "^2.2.0",
-    "moment": "^2.22.2"
+    "moment": "^2.22.2",
+    "natives": "^1.1.6"
   }
 }
