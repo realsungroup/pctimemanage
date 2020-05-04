@@ -46,3 +46,7 @@ $ typings install
 ![](https://raw.githubusercontent.com/remojansen/ts-vscode-boilerplate/master/assets/wallaby.gif)
  
 8) Enjoy coding with TypeScript
+9）运行命令
+gulp watch-durandal
+10)发布命令 
+gulp durandal

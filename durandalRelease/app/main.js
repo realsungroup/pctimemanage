@@ -15646,11 +15646,11 @@ var root = this,
 
 localDebug = false;
 
-enterprisecode = '9063'//全局企业编号
+enterprisecode = '9063'//全局伝业编坷
 
-globBadgeno = null;//全局工号
+globBadgeno = null;//全局工坷
 
-globSingleData = null;//全局传入内页的数据变量
+globSingleData = null;//全局传入内页的数杮坘針
 
 globActiveDuration = 30;//页面活跃时间（s）
 
@@ -15813,7 +15813,7 @@ var calc_navbar_height = function() {
 			
 			if (!ismobile) {
 				// Desktop
-				$.root_.addClass("desktop-detected");
+				if($.root_) $.root_.addClass("desktop-detected");
 				thisDevice = "desktop";
 				return false; 
 			} else {
@@ -17250,19 +17250,18 @@ define('main',['durandal/system', 'plugins/router', 'durandal/app', 'durandal/vi
             dialog: true
         });
 
+        // ifvisible.setIdleDuration(globActiveDuration);
+        // ifvisible.on("idle", function () {
+        //     console.log(" shut down invoke")
+        //     appConfig.app.userInfo = undefined;
+        //     globBadgeno = undefined;
 
-        ifvisible.setIdleDuration(globActiveDuration);
-        ifvisible.on("idle", function () {
-            console.log(" shut down invoke")
-            appConfig.app.userInfo = undefined;
-            globBadgeno = undefined;
+        //     router.deactivate();
+        //     router.reset();
+        //     app.setRoot('login')
+        //     window.location.hash = "#applying";
 
-            router.deactivate();
-            router.reset();
-            app.setRoot('login')
-            window.location.hash = "#applying";
-
-        });
+        // });
 
         app.start().then(function () {
             window.location.hash = "#applying";
@@ -17315,7 +17314,7 @@ var ko = require('knockout');
 ko.components.register('cellMainCategory', {
     viewModel: function (params) {
         this.colspan = params && params.colspan || '2';
-        // this.isPend = params && params.isPend || false;
+        this.isPend = params && params.isPend || false;
     },
     template: "<thead>\
 				<tr>\
@@ -17324,7 +17323,10 @@ ko.components.register('cellMainCategory', {
                     <th>员工姓名</th>\
 					<th>开始时间</th>\
 					<th>结束时间</th>\
-					<th>时长</th>\
+                    <th>时长</th>\
+                    <!-- ko if:isPend -->\
+                    <th>审批人</th>\
+                    <!-- /ko-->\
 					<th>审批状态</th>\
 					<th data-bind='attr:{colspan:colspan}' >操作</th>\
 				</tr>\
@@ -17366,14 +17368,17 @@ ko.components.register('cellMainFilter', {
 ko.components.register('cellMainData', {
     viewModel: function (params) {
         this.item = params && params.item || '';
-        // this.isPend = params && params.isPend || '';
+        this.isPend = params && params.isPend || '';
     },
     template: "<td data-bind='text:item.C3_533398158705'></td>\
                     <td data-bind='text:item.C3_546777382153'></td>\
                     <td data-bind='text:item.C3_533143303788'></td>\
 					<td data-bind='text:item.C3_555171774775 + \"月\" + item.C3_541449959569 + \"日\" + item.C3_541450006047 + item.C3_541450072499 + \":\" + item.C3_541450107087'></td>\
 					<td data-bind='text:item.C3_555171782681 + \"月\" + item.C3_541449974021 + \"日\" + item.C3_541450008801 + item.C3_541450084259 + \":\" + item.C3_541450125786'></td>\
-					<td data-bind='text:item.C3_541449935726'></td>\
+                    <td data-bind='text:item.C3_541449935726'></td>\
+                    <!-- ko if:isPend-->\
+                    <td data-bind='text:item.C3_541451111065'></td>\
+                    <!-- /ko -->\
 					<td data-bind='text:item.C3_533407351131'></td>"
 
 
@@ -17388,6 +17393,7 @@ ko.components.register('cellMainSubmitBtn', {
                             <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.submit($index)}'>提交</button>\
 						</td>\
 					<td>\
+                    <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.delete($index)}'>删除</button>\
 						<button class='btn btn-primary btn-block' data-bind='visible:(!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\"),click:function(){$root.goToApplyDetailPage($index)}'>详情</button>\
                             <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.goToEditPage($index)}'>修改</button>\
 					</td>"
@@ -17435,6 +17441,12 @@ ko.components.register('cellMainFilterSearch', {
         this.inputVal = params && params.inputVal || '';
         this.allSelected = params && params.allSelected || '';
         this.isPend = params && params.isPend || '';
+        var tmpThCount = params && params.thCount || 6;
+        var tmpThCountArr = [];
+        for(var i = 0 ; i < tmpThCount ; i ++){
+            tmpThCountArr.push('');
+        }
+        this.thCount = tmpThCountArr;
     },
     template: '<thead>\
 				<tr>\
@@ -17448,12 +17460,10 @@ ko.components.register('cellMainFilterSearch', {
 								<li><a href="#" data-bind="text:$data,click:function(){$root.categoryFilterClick($index)}"></a></li>\
 							</ul>\
 						</div>\
-					</th>\
-					<th></th>\
+                    </th>\
+                    <!-- ko foreach:thCount-->\
                     <th></th>\
-					<th></th>\
-                    <th></th>\
-					<th></th>\
+                    <!-- /ko -->\
 					<th data-bind="attr:{colspan:isPend ? \'2\' : \'3\'}" ><input data-bind="textInput:inputVal,event:{change:$root.kvoInput}" class="form-control" /></th>\
                     <!-- ko if:isPend -->\
 					<th ><button class="btn btn-primary btn-block" data-bind="click:$root.approve">审批</button></th>\
@@ -17862,42 +17872,42 @@ function getMonthDayCount(y){
 
 }
 
+    
+
 var until = {
     transformFuncToVal: transformFuncToVal,
-    getMonthDayCount:getMonthDayCount
+    getMonthDayCount:getMonthDayCount,
 };
 define("untilRE", function(){});
 
-define('httpServiceRE',[
-  'untilRE'
-], function (until) {
-
+define('httpServiceRE',["untilRE"], function (until) {
   // 发起get请求
   var path = appConfig.app.path;
-  if(localDebug) path.loginBaseUrl = path.baseUrl;
-
+  if (localDebug) path.loginBaseUrl = path.baseUrl;
 
   function fixDataWithMethod(data, method) {
-    if(method == -1) return data;
-    if (method == 0) {//登录
-      data.loginMethod = "badgeno";//工号
+    if (method == -1) return data;
+    if (method == 0) {
+      //登录
+      data.loginMethod = "badgeno"; //工号
       data.enterprisecode = enterprisecode;
       return data;
-    };
+    }
 
     data.uiver = 200;
     data.dynlogin = 1;
 
     //获取主表数据
     if (method == 1) {
-
       //增 改 数据
-    } else if (method == 2 || method == 4) {
+    } else if (method == 2 || method == 4 || method == 7) {
       data.data._id = 1;
 
       if (method == 2) {
         data.data._state = "added";
         data.data.REC_ID = 0;
+      } else if (method == 7) {
+        data.data._state = "removed";
       } else {
         data.data._state = "modified";
       }
@@ -17906,19 +17916,27 @@ define('httpServiceRE',[
 
       //获取附表数据
     } else if (method == 3) {
-
       //修改多条数据
     } else if (method == 5) {
       data.data = JSON.stringify(data.data);
+      //增加或者保存多条数据
+    } else if (method == 6) {
+      if (Array.isArray(data.data)) {
+        data.data.forEach(function (item) {
+          item._id = 1;
+          item._state = "editoradd";
+        });
+        data.data = JSON.stringify(data.data);
+      }
     }
     return data;
   }
 
   //打印url
   function printUrl(url, data) {
-    var str = path.baseUrl + url + '?';
+    var str = path.baseUrl + url + "?";
     for (var key in data) {
-      str = str + '&' + key + '=' + data[key];
+      str = str + "&" + key + "=" + data[key];
     }
     console.log(str);
   }
@@ -17926,20 +17944,19 @@ define('httpServiceRE',[
   function getHeader(str) {
     if (str != path.loginBaseUrl + path.login) {
       if (!appConfig.app.userInfo) {
-        console.error("用户信息错误")
+        console.error("用户信息错误");
         return {};
       }
       var headers = {
-        "userCode": appConfig.app.userInfo.UserCode,
-        "accessToken": appConfig.app.userInfo.AccessToken,
-        "loginmethod": "badgeno",
-        "badgeno": globBadgeno,
-        "enterprisecode": enterprisecode,
-        "unionid": "11"
-      }
-      return headers
-
-    } else return {}
+        userCode: appConfig.app.userInfo.UserCode,
+        accessToken: appConfig.app.userInfo.AccessToken,
+        loginmethod: "badgeno",
+        badgeno: globBadgeno,
+        enterprisecode: enterprisecode,
+        unionid: "11",
+      };
+      return headers;
+    } else return {};
   }
 
   //ajax请求
@@ -17947,7 +17964,6 @@ define('httpServiceRE',[
     data = fixDataWithMethod(data, method);
     // printUrl(url, data);
     var headers = getHeader(url);
-
 
     $.ajax({
       url: url,
@@ -17957,27 +17973,19 @@ define('httpServiceRE',[
       headers: headers,
       success: function (res) {
         if (res.statusCode == 401) {
-
         } else if (res.statusCode == 404) {
-          cmAlert('请求出错');
+          cmAlert("请求出错");
         } else {
-
           if (typeof doSuccess == "function") {
-
-            if (res != '' && 'error' in res) {
-
-              if (res.error == 0) {
+            if (res && ("error" in res || "Error" in res)) {
+              if (res.error == 0 || res.Error == 0) {
                 doSuccess(res);
               } else {
-
                 if (res.message) cmAlert(res.message);
-                else cmAlert("操作失败");
-
                 if (typeof doFail == "function") {
                   doFail();
                 }
               }
-
             } else {
               doSuccess(res);
             }
@@ -17988,7 +17996,7 @@ define('httpServiceRE',[
         if (typeof doFail == "function") {
           doFail();
         }
-      }
+      },
     });
   }
 
@@ -18001,14 +18009,15 @@ define('httpServiceRE',[
   //获取申请中数据
   function getApplyingData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541502768110
+    params.resid = 541502768110;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批中数据
   function getPendingData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518842754
+    // params.resid = 541518842754579635634837
+    params.resid = 579635634837;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -18016,11 +18025,11 @@ define('httpServiceRE',[
   function getVacationHttpCategory(doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
     var params = {
-      'resid': 542128856156,
-      'subresid': '',
-      'cmswhere': '',
-      'key': ''
-    }
+      resid: 542128856156,
+      subresid: "",
+      cmswhere: "",
+      key: "",
+    };
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -18028,11 +18037,11 @@ define('httpServiceRE',[
   function getTeamHttpApprove(doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
     var params = {
-      'resid': 542225544503,
-      'subresid': '',
-      'cmswhere': '',
-      'key': ''
-    }
+      resid: 542225544503,
+      subresid: "",
+      cmswhere: "",
+      key: "",
+    };
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
@@ -18055,6 +18064,12 @@ define('httpServiceRE',[
     params.resid = 541502768110;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
+  //删除请假数据
+  function deleteApply(params, doSuccess, doFail) {
+    var url = path.baseUrl + path.saveData;
+    params.resid = 541502768110;
+    baseRequest("POST", url, params, 7, doSuccess, doFail);
+  }
 
   //计算时长
   function hourCalculate(params, doSuccess, doFail) {
@@ -18065,10 +18080,13 @@ define('httpServiceRE',[
   // 上传图片
   function uploadImg(param, doSuccess, doFail) {
     var xhr = new XMLHttpRequest();
-    var uploadFileUrl = 'http://kingofdinner.realsun.me:8081/rispweb/rispservice/SvcUploadFile2.aspx'
-    httppath = "http://kingofdinner.realsun.me:8081/rispweb/upfiles"
-    var upUrlStr = uploadFileUrl + '?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=' + httppath;//cmAlert(upUrlStr);
-    xhr.open('POST', upUrlStr);
+    var uploadFileUrl = appConfig.app.uploadFileUrl;
+    httppath = appConfig.app.httppath;
+    var upUrlStr =
+      uploadFileUrl +
+      "?savepath=c:\\web\\web\\rispweb\\upfiles&httppath=" +
+      httppath; //cmAlert(upUrlStr);
+    xhr.open("POST", upUrlStr);
     xhr.onload = function () {
       var data = JSON.parse(xhr.response);
       if (xhr.status === 200) {
@@ -18079,36 +18097,34 @@ define('httpServiceRE',[
       } else {
         if (doFail) doFail();
         // 处理错误
-        cmAlert('error==' + data);
+        cmAlert("error==" + data);
       }
     };
 
-
     var fd = new FormData();
-    fd.append("file", param, 'hello.png');//新建formdata提交，png格式
+    fd.append("file", param, "hello.png"); //新建formdata提交，png格式
     xhr.send(fd);
   }
 
   //获取审批流
   function getPendingPepleData(paramREC_ID, doSuccess, doFail) {
     var params = {
-      'resid': 541502768110,
-      'subresid': 541521075674,
+      resid: 541502768110,
+      subresid: 541521075674,
       // 'cmswhere': "",
-      'hostrecid': paramREC_ID,
+      hostrecid: paramREC_ID,
       // 'cmsorder': ""
-    }
+    };
     var url = path.baseUrl + path.getSubData;
     baseRequest("GET", url, params, 3, doSuccess, doFail);
   }
 
-
   //撤销
   function cancelApply(data, doSuccess, doFail) {
     var params = {
-      'resid': 541502768110,
-      'data': data
-    }
+      resid: 541502768110,
+      data: data,
+    };
     var url = path.baseUrl + path.saveData;
     customLoading();
     baseRequest("POST", url, params, 4, doSuccess, doFail);
@@ -18117,150 +18133,163 @@ define('httpServiceRE',[
   // 获取已审核数据
   function getAppledData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518522808
+    params.resid = 541518522808;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
-  //获取退回修改数据 
+  //获取退回修改数据
   function getFixSubmitData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 543000345781
+    params.resid = 543000345781;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
-
 
   // 获取我的申请历史记录
   function getApplyHistoryData(params, doSuccess, doFail) {
     var url = path.baseUrl + path.getData;
-    params.resid = 541518678060
+    params.resid = 541518678060;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批
   function approveDataArr(param, doSuccess, doFail) {
     var params = {
-      'resid': 541518842754,
-      'data': param
-    }
-    var url = path.baseUrl + path.saveData;
+      resid: 541518842754,
+      data: param,
+    };
+    var url = path.baseUrl + path.batchAuditApplication;
     baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
   //已审批数据
   function getPendedData(params, doSuccess, doFail) {
-    params.resid = 541518986783
+    params.resid = 541518986783;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取审批退回数据
   function getPendedRefuseData(params, doSuccess, doFail) {
-    params.resid = 541519417864
+    params.resid = 541519417864;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //审批历史记录数据
   function getPendedHistoryData(params, doSuccess, doFail) {
-    params.resid = 541520707421
+    params.resid = 541520707421;
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取时间选项
   function getDayOptions(params, doSuccess, doFail) {
-    params.cmswhere = '';
-    params.resid = '543946502584';
+    params.cmswhere = "";
+    params.resid = "543946502584";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取当月排班
   function getMonthWorkData(params, doSuccess, doFail) {
-    params.resid = '543666594803';
+    params.resid = "543666594803";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取考勤日报
   function getDayReportData(params, doSuccess, doFail) {
-    getMonthWorkData(params, doSuccess, doFail)
+    getMonthWorkData(params, doSuccess, doFail);
   }
 
   //获取考勤月报
   function getMonthReportData(params, doSuccess, doFail) {
-    params.resid = '543666672286';
+    params.resid = "543666672286";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //查询所有员工审批定义数据
   function getAllStaffPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //查询个人所对应的组长，主管，经理列表
   function getSelectPesonData(params, doSuccess, doFail) {
-    params.resid = '554233627911';
+    params.resid = "554233627911";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //增加个人设置的组长，主管，经理列表
   function addPesonPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 2, doSuccess, doFail);
   }
 
   //保存（编辑）个人设置的组长，主管，经理列表
   function savePesonPendData(params, doSuccess, doFail) {
-    params.resid = '542065063018';
+    params.resid = "542065063018";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   //获取微信考勤申请记录
   function getApplyDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
+    params.resid = "552993482400";
     var url = path.loginBaseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //获取微信考勤申请审批数据
   function getApplyPendDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
-    params.subresid = '554315806876';
+    params.resid = "552993482400";
+    params.subresid = "554315806876";
     var url = path.loginBaseUrl + path.getSubData;
     baseRequest("GET", url, params, 3, doSuccess, doFail);
   }
 
   //撤销微信考勤申请记录
   function cancelApplyDataForWX(params, doSuccess, doFail) {
-    params.resid = '552993482400';
+    params.resid = "552993482400";
     var url = path.loginBaseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
 
   //获取考勤员日报数据
-  function getDayWorkReportData(params, doSuccess, doFail) {
-    params.resid = '554407385613';
+  function getEmployeeDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = "375296167687";
     var url = path.loginBaseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
-  //获取手册列表 
+  //获取员工日报数据
+  function getDayWorkReportData(params, doSuccess, doFail) {
+    params.resid = "554407385613";
+    var url = path.loginBaseUrl + path.getData;
+    baseRequest("GET", url, params, 1, doSuccess, doFail);
+  }
+
+  //同步考勤员日报数据
+  function syncDailyData(params, doSuccess, doFail) {
+    params.resid = "543418244671";
+    var url = path.extranetBaseUrl + path.saveData;
+    baseRequest("POST", url, params, 6, doSuccess, doFail);
+  }
+
+  //获取手册列表
   function getReadBookListData(params, doSuccess, doFail) {
-    params.resid = '555413706936';
+    params.resid = "555413706936";
     var url = path.baseUrl + path.getData;
     baseRequest("GET", url, params, 1, doSuccess, doFail);
   }
 
   //修改手册日期和政策公告
   function saveReadBookListData(params, doSuccess, doFail) {
-    params.resid = '555413706936';
+    params.resid = "555413706936";
     var url = path.baseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
@@ -18292,9 +18321,16 @@ define('httpServiceRE',[
 
   //忘记密码
   function forgetPassWord(params, doSuccess, doFail) {
-    params.resid = '557247856756';
+    params.resid = "557247856756";
     var url = path.baseUrl + path.forgetPassWord;
     baseRequest("GET", url, params, -1, doSuccess, doFail);
+  }
+
+  //添加多个审批人设置数据
+  function addMorePendPerson(params, doSuccess, doFail) {
+    params.resid = "542065063018";
+    var url = path.baseUrl + path.saveData;
+    baseRequest("POST", url, params, 6, doSuccess, doFail);
   }
 
   var httpService = {
@@ -18306,6 +18342,7 @@ define('httpServiceRE',[
     getRefuseHttpData: getRefuseHttpData,
     addApply: addApply,
     saveApply: saveApply,
+    deleteApply: deleteApply,
     hourCalculate: hourCalculate,
     uploadImg: uploadImg,
     getPendingPepleData: getPendingPepleData,
@@ -18328,22 +18365,28 @@ define('httpServiceRE',[
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
     cancelApplyDataForWX: cancelApplyDataForWX,
-    getDayWorkReportData:getDayWorkReportData,
-    getReadBookListData:getReadBookListData,
-    getReadBookData:getReadBookData,
-    saveReadBookData:saveReadBookData,
-    saveReadBookListData:saveReadBookListData,
-    getRouteData:getRouteData,
-    changePassWord:changePassWord,
-    forgetPassWord:forgetPassWord
-  }
-  return httpService
+    getDayWorkReportData: getDayWorkReportData,
+    getReadBookListData: getReadBookListData,
+    getReadBookData: getReadBookData,
+    saveReadBookData: saveReadBookData,
+    saveReadBookListData: saveReadBookListData,
+    getRouteData: getRouteData,
+    changePassWord: changePassWord,
+    forgetPassWord: forgetPassWord,
+    addMorePendPerson: addMorePendPerson,
+    getEmployeeDayWorkReportData: getEmployeeDayWorkReportData,
+    syncDailyData: syncDailyData,
+  };
+  return httpService;
 });
+
 define('login',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', 'untilRE'],
   function (app, ko, router, httpService, ut) {
     var self;
     return {
       data: {
+        account:'',
+        passWord:'',
         vacationCategorySuccess: false,
         refuseArrSuccess: false,
         routeDataSuccess:false,
@@ -18376,10 +18419,10 @@ define('login',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', '
         if (localDebug) console.log("loginClick")
         $("#loginBtn").button('loading');
 
-        var userStr = $("#account").val();
-        var passWordStr = $("#passWord").val();
+        // if (localDebug) {self.data.account = "80881"; self.data.passWord = "123456";}
+        var userStr =  self.data.account;
+        var passWordStr = self.data.passWord;
 
-        // if (localDebug) {userStr = "80881"; passWordStr = "1234567";}
         // if (localDebug) { userStr = "20465"; passWordStr = "095028"; }
         //  if (localDebug){ userStr = "demo1"   ;passWordStr = "66287175";} 
         var data = { "badgeno": userStr, "Password": passWordStr };
@@ -18403,8 +18446,12 @@ define('login',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE', '
             cmAlert(e.ErrorMsg);
           }
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
         }, function () {
           $("#loginBtn").button('reset')
+          self.data.account = '';
+          self.data.passWord = '';
           cmAlert('系统错误');
         })
 
@@ -19023,6 +19070,96 @@ function (ko,router,ut,PhotoSwipeUI_Default, PhotoSwipe) {
     }
 
 });
+
+
+
+//筛选出请假规则
+function getRule(str) {
+  var ruleArr = appConfig.app.rule;
+  for (var i = 0; i < ruleArr.length; i++) {
+    var tempRuleM = ruleArr[i];
+    if (tempRuleM.C3_533402301362 == str) {
+      return tempRuleM.C3_545771115865
+
+    }
+  }
+  return '';
+}
+
+//筛选出那一条请假规则
+function getVactionObject(str) {
+  var ruleArr = appConfig.app.rule;
+  for (var i = 0; i < ruleArr.length; i++) {
+    var tempRuleM = ruleArr[i];
+    if (tempRuleM.C3_533402301362 == str) {
+      return tempRuleM
+
+    }
+  }
+  return null;
+}
+
+//获取所有请假类型
+function getAllRuleCategory() {
+  var ruleArr = Array.from(appConfig.app.rule);
+  var dataArr = ['全部'];
+  for (var i = 0; i < ruleArr.length; i++) {
+    var tempRuleM = ruleArr[i];
+    dataArr.push(tempRuleM.C3_533402301362);
+  }
+  return dataArr;
+}
+
+//获取照片非必填
+function getCarmeShow(selectRuleM) {//附件
+  if (selectRuleM == null) return ["", "", "", ""];
+  var imgShowArr = [];//拍照是否显示
+  imgShowArr.push([selectRuleM.C3_545770918237 == 'Y' ? true : false, selectRuleM.C3_545770982165 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032511]);
+  imgShowArr.push([selectRuleM.C3_545770921226 == 'Y' ? true : false, selectRuleM.C3_545770982361 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032706]);
+  imgShowArr.push([selectRuleM.C3_545770922361 == 'Y' ? true : false, selectRuleM.C3_545770982566 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032913]);
+  imgShowArr.push([selectRuleM.C3_545770923478 == 'Y' ? true : false, selectRuleM.C3_545770990395 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771067208]);
+  return imgShowArr;
+}
+
+function valiateForm(data) {//验证提交数据
+
+  if (data.C3_533398158705 != '补打卡') {//非补打卡时长的验证
+    if (data.C3_541449935726 == undefined || data.C3_541449935726 == '') {
+      cmAlert("时长不能为空！");
+      return false;
+    }
+  }
+
+  if (!appConfig.app.teamApprove || appConfig.app.teamApprove.length == 0) { cmAlert("审批人不能为空！"); return false; }
+
+  var selectRuleM = getVactionObject(data.C3_533398158705);
+
+  var cameraNeccesseryArr = [selectRuleM.C3_545770982165,
+  selectRuleM.C3_545770982361,
+  selectRuleM.C3_545770982566,
+  selectRuleM.C3_545770990395];
+
+  var addressArr = [data.C3_541450276993, data.C3_545771156108, data.C3_545771157350, data.C3_545771158420];
+  for (var i = 0; i < addressArr.length; i++) {
+    if (i >= cameraNeccesseryArr.length) { alert(cameraNeccesseryArr); return false; }
+    if (cameraNeccesseryArr[i] == 'Y' && (addressArr[i] == undefined || addressArr[i] == '' || addressArr[i] == null)) {
+      cmAlert("请上传必需附件！");
+      return false;
+    }
+  }
+  return true;
+}
+
+var common = {
+  getRule: getRule,
+  getVactionObject: getVactionObject,
+  getAllRuleCategory: getAllRuleCategory,
+  getCarmeShow: getCarmeShow,
+  valiateForm:valiateForm
+}
+;
+define("commonRE", function(){});
+
 define('main/viewmodels/applying',['durandal/app',
     'knockout',
     'plugins/router',
@@ -19032,12 +19169,12 @@ define('main/viewmodels/applying',['durandal/app',
     'untilRE',
     'photoswipeRE/photoswipe-ui-default.min',
     'photoswipeRE/photoswipe.min',
-    'baseVM',"durandal/viewEngine"],
-    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM,viewEngine) {
+    'baseVM', "durandal/viewEngine","commonRE"],
+    function (app, ko, router, httpService, hCpt, cellCpt, ut, PhotoSwipeUI_Default, PhotoSwipe, baseVM, viewEngine,co) {
         var selfVM = new baseVM();
         selfVM.model.subTitle = '申请中'
         var self = selfVM;
-
+        console.log("selfVM"+selfVM.model)
         //获取数据
         selfVM.getData = function (type) {
             selfVM.model.isLoading = true;
@@ -19068,8 +19205,8 @@ define('main/viewmodels/applying',['durandal/app',
                     var dataArr = data.data;
                     self.model.data(dataArr);
 
-                     //设置页标（base中）
-                    self.setPageMark(param,data);
+                    //设置页标（base中）
+                    self.setPageMark(param, data);
 
                     if (dataArr.length < param.pageSize) self.model.noMore = true;
                     else self.model.noMore = false;
@@ -19098,100 +19235,74 @@ define('main/viewmodels/applying',['durandal/app',
         }
 
         selfVM.goToApplyDetailPage = function (index) {
-                var tmpData = self.model.data()[index()];
-                // var tmpJsonData = JSON.stringify(tmpData);
-                // router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
+            var tmpData = self.model.data()[index()];
+            // var tmpJsonData = JSON.stringify(tmpData);
+            // router.navigate("#applyDetail?data=" + tmpJsonData + '&willCancel=true');
 
-                globSingleData = JSON.stringify(tmpData);
-                router.navigate("#applyDetail?willCancel=true");
+            globSingleData = JSON.stringify(tmpData);
+            router.navigate("#applyDetail?willCancel=true");
+        }
+        //删除
+        selfVM.delete = function (index) {
+            // alert("确定删除吗")
+            if(confirm("确定删除吗?")){
+           
+            index = index()
+            var tmpData = self.model.data()[index];
+            // tmpData.C3_541449538456 = "Y"
+
+            // var validateData = common.valiateForm(tmpData);
+            // if (!validateData) return;
+
+            var param = {
+                'data': tmpData
             }
 
+            httpService.deleteApply(param, function (resData) {
+                if (resData && resData.Error == 0 ) {
+                    cmAlert(resData.message || '删除成功');
+                    
+                    self.getData(1);
+                } else {
+                    cmAlert(resData.message || '删除失败');
+                }
+
+            }, function () {
+                cmAlert('删除错误')
+            });
+            }else{
+            // alert("取消")
+        }
+        }
         //提交
         selfVM.submit = function (index) {
             index = index()
             var tmpData = self.model.data()[index];
             tmpData.C3_541449538456 = "Y"
 
+            var validateData = common.valiateForm(tmpData);
+            if (!validateData) return;
+
             var param = {
                 'data': tmpData
             }
 
             httpService.saveApply(param, function (resData) {
-                if (resData.error == 0 && resData && resData.data && resData.data[0]) {
-                    cmAlert("");
+                if (resData && (resData.error == 0 && resData.Error == 0) && resData.data && resData.data[0]) {
                     var returnData = resData.data[0];
                     self.model.data()[index] = returnData;
                     self.model.data(self.model.data());
+                    cmAlert(resData.message || '提交成功');
                 } else {
-                    cmAlert("error");
+                    cmAlert(resData.message || '提交失败');
                 }
 
             }, function () {
-
+                cmAlert('提交错误')
             });
         }
         return selfVM
     }); 
-
-
-
-  //筛选出请假规则
-  function getRule(str) {
-    var ruleArr = appConfig.app.rule;
-    for (var i = 0; i < ruleArr.length; i++) {
-      var tempRuleM = ruleArr[i];
-      if (tempRuleM.C3_533402301362 == str) {
-        return tempRuleM.C3_545771115865
-
-      }
-    }
-    return '';
-  }
-
-  //筛选出那一条请假规则
-  function getVactionObject(str) {
-    var ruleArr = appConfig.app.rule;
-    for (var i = 0; i < ruleArr.length; i++) {
-      var tempRuleM = ruleArr[i];
-      if (tempRuleM.C3_533402301362 == str) {
-        return tempRuleM
-
-      }
-    }
-    return null;
-  }
-
-  //获取所有请假类型
-  function getAllRuleCategory() {
-    var ruleArr = Array.from(appConfig.app.rule);
-    var dataArr = ['全部'];
-    for (var i = 0; i < ruleArr.length; i++) {
-      var tempRuleM = ruleArr[i];
-      dataArr.push(tempRuleM.C3_533402301362);
-    }
-    return dataArr;
-  }
-
-  //获取照片非必填
-  function getCarmeShow(selectRuleM) {//附件
-    if (selectRuleM == null) return ["", "", "", ""];
-    var imgShowArr = [];//拍照是否显示
-    imgShowArr.push([selectRuleM.C3_545770918237 == 'Y' ? true : false, selectRuleM.C3_545770982165 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032511]);
-    imgShowArr.push([selectRuleM.C3_545770921226 == 'Y' ? true : false, selectRuleM.C3_545770982361 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032706]);
-    imgShowArr.push([selectRuleM.C3_545770922361 == 'Y' ? true : false, selectRuleM.C3_545770982566 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771032913]);
-    imgShowArr.push([selectRuleM.C3_545770923478 == 'Y' ? true : false, selectRuleM.C3_545770990395 == 'Y' ? "必填" : "非必填", selectRuleM.C3_545771067208]);
-    return imgShowArr;
-  }
-
-  var common = {
-    getRule: getRule,
-    getVactionObject: getVactionObject,
-    getAllRuleCategory: getAllRuleCategory,
-    getCarmeShow: getCarmeShow
-  }
-;
-define("commonRE", function(){});
-
 define('main/viewmodels/addApply',['durandal/app',
   'knockout',
   'plugins/router',
@@ -19218,8 +19329,6 @@ define('main/viewmodels/addApply',['durandal/app',
       },
       activate: function (e) {
         self = this;
-        console.log('aaaaaaaaa' + applying.model.data());
-
         self.init();
         if (e) e.data = globSingleData
         else e = { "data": globSingleData }
@@ -19232,7 +19341,7 @@ define('main/viewmodels/addApply',['durandal/app',
           self.model.selectedCategory(passData.C3_533398158705);
           self.kvoSelectCategory('draft')
           self.model.data(passData);
-        }
+        }else self.model.isDraft = false;
         self.bindProperty();
       },
       init: function () {
@@ -19349,17 +19458,21 @@ define('main/viewmodels/addApply',['durandal/app',
         }
 
         httpService.hourCalculate(param, function (data) {
-          if (data && data.data && data.data[0]) {
+          if (data && (data.error == 0 || data.Error == 0) && data.data && data.data[0]) {
             param2.data.C3_546180817741 = data.data[0].C3_546130076462;
             httpService.hourCalculate(param2, function (data) {
 
-              self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
-              self.model.data(self.model.data());
+              if(data && (data.error == 0 || data.Error == 0) && Array.isArray(data.data) && data.data[0]){
+                self.model.data().C3_541449935726 = data.data[0].C3_545928354975;
+                self.model.data(self.model.data());
+              }else cmAlert(data.message || '获取时长失败')
 
             }, function () {
             });
 
-          } else self.setData({ data: [] });
+          } else {
+            cmAlert(data.message || '获取时长失败')
+          }
 
         }, function () {
 
@@ -19375,7 +19488,7 @@ define('main/viewmodels/addApply',['durandal/app',
         if (action == 'save') tmpData.C3_541449538456 = "N"
         else {
           tmpData.C3_541449538456 = "Y";
-          var validateData = self.valiateForm(tmpData);
+          var validateData = common.valiateForm(tmpData);
           if (!validateData) return;
         }
 
@@ -19385,7 +19498,7 @@ define('main/viewmodels/addApply',['durandal/app',
 
         if (self.model.isDraft) {
           httpService.saveApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+            if ((resData.error == 0 || resData.Error == 0) && resData && resData.data && resData.data[0]) {
               cmAlert("保存成功");
               // var returnData = resData.data[0];
               // applying.model.data().unshift(returnData);
@@ -19393,7 +19506,7 @@ define('main/viewmodels/addApply',['durandal/app',
               router.navigateBack();
 
             } else {
-              cmAlert("保存错误");
+              cmAlert(resData.message || "保存错误");
             }
 
           }, function () {
@@ -19403,9 +19516,9 @@ define('main/viewmodels/addApply',['durandal/app',
         } else {
 
 
-
+          param['data']['C3_542556605600'] = self.model.approver();
           httpService.addApply(param, function (resData) {
-            if (resData.error == 0 && resData && resData.data && resData.data[0]) {
+            if ((resData.error == 0 || resData.Error == 0) && resData && resData.data && resData.data[0]) {
               cmAlert("添加成功");
               // var returnData = resData.data[0];
               // applying.model.data().unshift(returnData);
@@ -19413,7 +19526,7 @@ define('main/viewmodels/addApply',['durandal/app',
               router.navigateBack();
 
             } else {
-              cmAlert("添加错误");
+              cmAlert(resData.message || "添加错误");
             }
 
           }, function () {
@@ -19540,34 +19653,7 @@ define('main/viewmodels/addApply',['durandal/app',
         self.model.attachUrlArray(tmpImgUrlArray)
       },
 
-      valiateForm: function (data) {//验证提交数据
-
-        if (data.C3_533398158705 != '补打卡') {//非补打卡时长的验证
-          if (data.C3_541449935726 == undefined || data.C3_541449935726 == '') {
-            cmAlert("时长不能为空！");
-            return false;
-          }
-        }
-
-        if (!appConfig.app.teamApprove || appConfig.app.teamApprove.length == 0) { cmAlert("审批人不能为空！"); return false; }
-
-        var selectRuleM = common.getVactionObject(data.C3_533398158705);
-
-        var cameraNeccesseryArr = [selectRuleM.C3_545770982165,
-        selectRuleM.C3_545770982361,
-        selectRuleM.C3_545770982566,
-        selectRuleM.C3_545770990395];
-
-        var addressArr = [data.C3_541450276993, data.C3_545771156108, data.C3_545771157350, data.C3_545771158420];
-        for (var i = 0; i < addressArr.length; i++) {
-          if (i >= cameraNeccesseryArr.length) { alert(cameraNeccesseryArr); return false; }
-          if (cameraNeccesseryArr[i] == 'Y' && (addressArr[i] == undefined || addressArr[i] == '' || addressArr[i] == null)) {
-            cmAlert("请上传必需附件！");
-            return false;
-          }
-        }
-        return true;
-      },
+  
 
 
       bindProperty: function () {
@@ -20245,244 +20331,356 @@ f:parse_MDXKPI},2186:{n:"MDB",f:parse_MDB},2187:{n:"PLV",f:parse_PLV},2188:{n:"C
 reset_cp();if(safegetzipfile(zip,"META-INF/manifest.xml"))return parse_ods(zip,opts);if(safegetzipfile(zip,"objectdata.xml"))return parse_ods(zip,opts);var entries=keys(zip.files).filter(nodirs).sort();var dir=parse_ct(getzipstr(zip,"[Content_Types].xml"),opts);var xlsb=false;var sheets,binname;if(dir.workbooks.length===0){binname="xl/workbook.xml";if(getzipdata(zip,binname,true))dir.workbooks.push(binname)}if(dir.workbooks.length===0){binname="xl/workbook.bin";if(!getzipdata(zip,binname,true))throw new Error("Could not find workbook");dir.workbooks.push(binname);xlsb=true}if(dir.workbooks[0].slice(-3)=="bin")xlsb=true;if(xlsb)set_cp(1200);var themes={};var styles={};if(!opts.bookSheets&&!opts.bookProps){strs=[];if(dir.sst)strs=parse_sst(getzipdata(zip,dir.sst.replace(/^\//,"")),dir.sst,opts);if(opts.cellStyles&&dir.themes.length)themes=parse_theme(getzipstr(zip,dir.themes[0].replace(/^\//,""),true)||"",dir.themes[0],opts);if(dir.style)styles=parse_sty(getzipdata(zip,dir.style.replace(/^\//,"")),dir.style,themes,opts)}var wb=parse_wb(getzipdata(zip,dir.workbooks[0].replace(/^\//,"")),dir.workbooks[0],opts);var props={},propdata="";if(dir.coreprops.length!==0){propdata=getzipstr(zip,dir.coreprops[0].replace(/^\//,""),true);if(propdata)props=parse_core_props(propdata);if(dir.extprops.length!==0){propdata=getzipstr(zip,dir.extprops[0].replace(/^\//,""),true);if(propdata)parse_ext_props(propdata,props)}}var custprops={};if(!opts.bookSheets||opts.bookProps){if(dir.custprops.length!==0){propdata=getzipstr(zip,dir.custprops[0].replace(/^\//,""),true);if(propdata)custprops=parse_cust_props(propdata,opts)}}var out={};if(opts.bookSheets||opts.bookProps){if(wb.Sheets)sheets=wb.Sheets.map(function pluck(x){return x.name});else if(props.Worksheets&&props.SheetNames.length>0)sheets=props.SheetNames;if(opts.bookProps){out.Props=props;out.Custprops=custprops}if(opts.bookSheets&&typeof sheets!=="undefined")out.SheetNames=sheets;if(opts.bookSheets?out.SheetNames:opts.bookProps)return out}sheets={};var deps={};if(opts.bookDeps&&dir.calcchain)deps=parse_cc(getzipdata(zip,dir.calcchain.replace(/^\//,"")),dir.calcchain,opts);var i=0;var sheetRels={};var path,relsPath;{var wbsheets=wb.Sheets;props.Worksheets=wbsheets.length;props.SheetNames=[];for(var j=0;j!=wbsheets.length;++j){props.SheetNames[j]=wbsheets[j].name}}var wbext=xlsb?"bin":"xml";var wbrelsfile="xl/_rels/workbook."+wbext+".rels";var wbrels=parse_rels(getzipstr(zip,wbrelsfile,true),wbrelsfile);if(wbrels)wbrels=safe_parse_wbrels(wbrels,wb.Sheets);var nmode=getzipdata(zip,"xl/worksheets/sheet.xml",true)?1:0;for(i=0;i!=props.Worksheets;++i){var stype="sheet";if(wbrels&&wbrels[i]){path="xl/"+wbrels[i][1].replace(/[\/]?xl\//,"");stype=wbrels[i][2]}else{path="xl/worksheets/sheet"+(i+1-nmode)+"."+wbext;path=path.replace(/sheet0\./,"sheet.")}relsPath=path.replace(/^(.*)(\/)([^\/]*)$/,"$1/_rels/$3.rels");safe_parse_sheet(zip,path,relsPath,props.SheetNames[i],sheetRels,sheets,stype,opts,wb,themes,styles)}if(dir.comments)parse_comments(zip,dir.comments,sheets,sheetRels,opts);out={Directory:dir,Workbook:wb,Props:props,Custprops:custprops,Deps:deps,Sheets:sheets,SheetNames:props.SheetNames,Strings:strs,Styles:styles,Themes:themes,SSF:SSF.get_table()};if(opts.bookFiles){out.keys=entries;out.files=zip.files}if(opts.bookVBA){if(dir.vba.length>0)out.vbaraw=getzipdata(zip,dir.vba[0].replace(/^\//,""),true);else if(dir.defaults&&dir.defaults.bin==="application/vnd.ms-office.vbaProject")out.vbaraw=getzipdata(zip,"xl/vbaProject.bin",true)}return out}function parse_xlsxcfb(cfb,opts){var f="Version";var data=cfb.find(f);if(!data)throw new Error("ECMA-376 Encrypted file missing "+f);var version=parse_DataSpaceVersionInfo(data.content);f="DataSpaceMap";data=cfb.find(f);if(!data)throw new Error("ECMA-376 Encrypted file missing "+f);var dsm=parse_DataSpaceMap(data.content);if(dsm.length!=1||dsm[0].comps.length!=1||dsm[0].comps[0].t!=0||dsm[0].name!="StrongEncryptionDataSpace"||dsm[0].comps[0].v!="EncryptedPackage")throw new Error("ECMA-376 Encrypted file bad "+f);f="StrongEncryptionDataSpace";data=cfb.find(f);if(!data)throw new Error("ECMA-376 Encrypted file missing "+f);var seds=parse_DataSpaceDefinition(data.content);if(seds.length!=1||seds[0]!="StrongEncryptionTransform")throw new Error("ECMA-376 Encrypted file bad "+f);f="!Primary";data=cfb.find(f);if(!data)throw new Error("ECMA-376 Encrypted file missing "+f);var hdr=parse_Primary(data.content);f="EncryptionInfo";data=cfb.find(f);if(!data)throw new Error("ECMA-376 Encrypted file missing "+f);var einfo=parse_EncryptionInfo(data.content);throw new Error("File is password-protected")}function write_zip(wb,opts){_shapeid=1024;if(opts.bookType=="ods")return write_ods(wb,opts);if(wb&&!wb.SSF){wb.SSF=SSF.get_table()}if(wb&&wb.SSF){make_ssf(SSF);SSF.load_table(wb.SSF);opts.revssf=evert_num(wb.SSF);opts.revssf[wb.SSF[65535]]=0;opts.ssf=wb.SSF}opts.rels={};opts.wbrels={};opts.Strings=[];opts.Strings.Count=0;opts.Strings.Unique=0;var wbext=opts.bookType=="xlsb"?"bin":"xml";var vbafmt=opts.bookType=="xlsb"||opts.bookType=="xlsm";var ct={workbooks:[],sheets:[],charts:[],dialogs:[],macros:[],rels:[],strs:[],comments:[],coreprops:[],extprops:[],custprops:[],themes:[],styles:[],calcchains:[],vba:[],drawings:[],TODO:[],xmlns:""};fix_write_opts(opts=opts||{});var zip=new jszip;var f="",rId=0;opts.cellXfs=[];get_cell_style(opts.cellXfs,{},{revssf:{General:0}});if(!wb.Props)wb.Props={};f="docProps/core.xml";zip.file(f,write_core_props(wb.Props,opts));ct.coreprops.push(f);add_rels(opts.rels,2,f,RELS.CORE_PROPS);f="docProps/app.xml";if(wb.Props&&wb.Props.SheetNames){}else if(!wb.Workbook||!wb.Workbook.Sheets)wb.Props.SheetNames=wb.SheetNames;else wb.Props.SheetNames=wb.SheetNames.map(function(x,i){return[(wb.Workbook.Sheets[i]||{}).Hidden!=2,x]}).filter(function(x){return x[0]}).map(function(x){return x[1]});wb.Props.Worksheets=wb.Props.SheetNames.length;zip.file(f,write_ext_props(wb.Props,opts));ct.extprops.push(f);add_rels(opts.rels,3,f,RELS.EXT_PROPS);if(wb.Custprops!==wb.Props&&keys(wb.Custprops||{}).length>0){f="docProps/custom.xml";zip.file(f,write_cust_props(wb.Custprops,opts));ct.custprops.push(f);add_rels(opts.rels,4,f,RELS.CUST_PROPS)}f="xl/workbook."+wbext;zip.file(f,write_wb(wb,f,opts));ct.workbooks.push(f);add_rels(opts.rels,1,f,RELS.WB);for(rId=1;rId<=wb.SheetNames.length;++rId){var wsrels={"!id":{}};var ws=wb.Sheets[wb.SheetNames[rId-1]];var _type=(ws||{})["!type"]||"sheet";switch(_type){case"chart":;default:f="xl/worksheets/sheet"+rId+"."+wbext;zip.file(f,write_ws(rId-1,f,opts,wb,wsrels));ct.sheets.push(f);add_rels(opts.wbrels,-1,"worksheets/sheet"+rId+"."+wbext,RELS.WS[0]);}if(ws){var comments=ws["!comments"];if(comments&&comments.length>0){var cf="xl/comments"+rId+"."+wbext;zip.file(cf,write_cmnt(comments,cf,opts));ct.comments.push(cf);add_rels(wsrels,-1,"../comments"+rId+"."+wbext,RELS.CMNT)}if(ws["!legacy"]){zip.file("xl/drawings/vmlDrawing"+rId+".vml",write_comments_vml(rId,ws["!comments"]))}delete ws["!comments"];delete ws["!legacy"]}if(wsrels["!id"].rId1)zip.file(get_rels_path(f),write_rels(wsrels))}if(opts.Strings!=null&&opts.Strings.length>0){f="xl/sharedStrings."+wbext;zip.file(f,write_sst(opts.Strings,f,opts));ct.strs.push(f);add_rels(opts.wbrels,-1,"sharedStrings."+wbext,RELS.SST)}f="xl/theme/theme1.xml";zip.file(f,write_theme(wb.Themes,opts));ct.themes.push(f);add_rels(opts.wbrels,-1,"theme/theme1.xml",RELS.THEME);f="xl/styles."+wbext;zip.file(f,write_sty(wb,f,opts));ct.styles.push(f);add_rels(opts.wbrels,-1,"styles."+wbext,RELS.STY);if(wb.vbaraw&&vbafmt){f="xl/vbaProject.bin";zip.file(f,wb.vbaraw);ct.vba.push(f);add_rels(opts.wbrels,-1,"vbaProject.bin",RELS.VBA)}zip.file("[Content_Types].xml",write_ct(ct,opts));zip.file("_rels/.rels",write_rels(opts.rels));zip.file("xl/_rels/workbook."+wbext+".rels",write_rels(opts.wbrels));delete opts.revssf;delete opts.ssf;return zip}function firstbyte(f,o){var x="";switch((o||{}).type||"base64"){case"buffer":return[f[0],f[1],f[2],f[3]];case"base64":x=Base64.decode(f.substr(0,24));break;case"binary":x=f;break;case"array":return[f[0],f[1],f[2],f[3]];default:throw new Error("Unrecognized type "+(o?o.type:"undefined"));}return[x.charCodeAt(0),x.charCodeAt(1),x.charCodeAt(2),x.charCodeAt(3)]}function read_cfb(cfb,opts){if(cfb.find("EncryptedPackage"))return parse_xlsxcfb(cfb,opts);return parse_xlscfb(cfb,opts)}function read_zip(data,opts){var zip,d=data;var o=opts||{};if(!o.type)o.type=has_buf&&Buffer.isBuffer(data)?"buffer":"base64";switch(o.type){case"base64":zip=new jszip(d,{base64:true});break;case"binary":;case"array":zip=new jszip(d,{base64:false});break;case"buffer":zip=new jszip(d);break;default:throw new Error("Unrecognized type "+o.type);}return parse_zip(zip,o)}function read_utf16(data,o){var d=data;if(o.type=="base64")d=Base64.decode(d);d=cptable.utils.decode(1200,d.slice(2));o.type="binary";if(d.charCodeAt(0)==60)return parse_xlml(d,o);return PRN.to_workbook(d,o)}function readSync(data,opts){var zip,d=data,n=[0];var o=opts||{};_ssfopts={};if(o.dateNF)_ssfopts.dateNF=o.dateNF;if(!o.type)o.type=has_buf&&Buffer.isBuffer(data)?"buffer":"base64";if(o.type=="file"){o.type="buffer";d=_fs.readFileSync(data)}switch((n=firstbyte(d,o))[0]){case 208:return read_cfb(CFB.read(d,o),o);case 9:return parse_xlscfb(s2a(o.type==="base64"?Base64.decode(d):d),o);case 60:return parse_xlml(d,o);case 73:if(n[1]==68)return read_wb_ID(d,o);break;case 84:if(n[1]==65&&n[2]==66&&n[3]==76)return DIF.to_workbook(d,o);break;case 80:if(n[1]==75&&n[2]<32&&n[3]<32)return read_zip(d,o);break;case 239:return n[3]==60?parse_xlml(d,o):PRN.to_workbook(d,o);case 255:if(n[1]==254){return read_utf16(d,o)}break;case 0:if(n[1]==0&&n[2]>=2&&n[3]==0)return WK_.to_workbook(d,o);break;case 3:;case 131:;case 139:return DBF.to_workbook(d,o);}if(n[2]<=12&&n[3]<=31)return DBF.to_workbook(d,o);if(32>n[0]||n[0]>127)throw new Error("Unsupported file "+n.join("|"));return PRN.to_workbook(d,o)}function readFileSync(filename,opts){var o=opts||{};o.type="file";return readSync(filename,o)}function write_zip_type(wb,opts){var o=opts||{};var z=write_zip(wb,o);var oopts={};if(o.compression)oopts.compression="DEFLATE";switch(o.type){case"base64":oopts.type="base64";break;case"binary":oopts.type="string";break;case"buffer":;case"file":oopts.type="nodebuffer";break;default:throw new Error("Unrecognized type "+o.type);}if(o.type==="file")return _fs.writeFileSync(o.file,z.generate(oopts));return z.generate(oopts)}function write_bstr_type(out,opts){switch(opts.type){case"base64":return Base64.encode(out);case"binary":return out;case"file":return _fs.writeFileSync(opts.file,out,"binary");case"buffer":{if(has_buf)return new Buffer(out,"utf8");else return out.split("").map(function(c){return c.charCodeAt(0)})};}throw new Error("Unrecognized type "+opts.type)}function write_string_type(out,opts){switch(opts.type){case"base64":return Base64.encode(out);case"binary":return out;case"file":return _fs.writeFileSync(opts.file,out,"utf8");case"buffer":{if(has_buf)return new Buffer(out,"utf8");else return out.split("").map(function(c){return c.charCodeAt(0)})};}throw new Error("Unrecognized type "+opts.type)}function write_binary_type(out,opts){switch(opts.type){case"base64":;case"binary":var bstr="";for(var i=0;i<out.length;++i)bstr+=String.fromCharCode(out[i]);return opts.type=="base64"?Base64.encode(bstr):bstr;case"file":return _fs.writeFileSync(opts.file,out);case"buffer":return out;default:throw new Error("Unrecognized type "+opts.type);}}function writeSync(wb,opts){check_wb(wb);var o=opts||{};switch(o.bookType||"xlsb"){case"xml":;case"xlml":return write_string_type(write_xlml(wb,o),o);case"slk":;case"sylk":return write_string_type(write_slk_str(wb,o),o);case"html":return write_string_type(write_htm_str(wb,o),o);case"txt":return write_bstr_type(write_txt_str(wb,o),o);case"csv":return write_string_type(write_csv_str(wb,o),o);case"dif":return write_string_type(write_dif_str(wb,o),o);case"prn":return write_string_type(write_prn_str(wb,o),o);case"fods":return write_string_type(write_ods(wb,o),o);case"biff2":return write_binary_type(write_biff_buf(wb,o),o);case"xlsx":;case"xlsm":;case"xlsb":;case"ods":return write_zip_type(wb,o);default:throw new Error("Unrecognized bookType |"+o.bookType+"|");}}function resolve_book_type(o){if(!o.bookType)switch(o.file.slice(o.file.lastIndexOf(".")).toLowerCase()){case".xlsx":o.bookType="xlsx";break;case".xlsm":o.bookType="xlsm";break;case".xlsb":o.bookType="xlsb";break;case".fods":o.bookType="fods";break;case".xlml":o.bookType="xlml";break;case".sylk":o.bookType="sylk";break;case".html":o.bookType="html";break;case".xls":o.bookType="biff2";break;case".xml":o.bookType="xml";break;case".ods":o.bookType="ods";break;case".csv":o.bookType="csv";break;case".txt":o.bookType="txt";break;case".dif":o.bookType="dif";break;case".prn":o.bookType="prn";break;case".slk":o.bookType="sylk";break;case".htm":o.bookType="html";break;}}function writeFileSync(wb,filename,opts){var o=opts||{};o.type="file";o.file=filename;resolve_book_type(o);return writeSync(wb,o)}function writeFileAsync(filename,wb,opts,cb){var o=opts||{};o.type="file";o.file=filename;resolve_book_type(o);o.type="buffer";var _cb=cb;if(!(_cb instanceof Function))_cb=opts;return _fs.writeFile(filename,writeSync(wb,o),_cb)}function sheet_to_json(sheet,opts){if(sheet==null||sheet["!ref"]==null)return[];var val={t:"n",v:0},header=0,offset=1,hdr=[],isempty=true,v=0,vv="";var r={s:{r:0,c:0},e:{r:0,c:0}};var o=opts!=null?opts:{};var raw=o.raw;var defval=o.defval;var range=o.range!=null?o.range:sheet["!ref"];if(o.header===1)header=1;else if(o.header==="A")header=2;else if(Array.isArray(o.header))header=3;switch(typeof range){case"string":r=safe_decode_range(range);break;case"number":r=safe_decode_range(sheet["!ref"]);r.s.r=range;break;default:r=range;}if(header>0)offset=0;var rr=encode_row(r.s.r);var cols=new Array(r.e.c-r.s.c+1);var out=new Array(r.e.r-r.s.r-offset+1);var outi=0,counter=0;var dense=Array.isArray(sheet);var R=r.s.r,C=0,CC=0;if(dense&&!sheet[R])sheet[R]=[];for(C=r.s.c;C<=r.e.c;++C){cols[C]=encode_col(C);val=dense?sheet[R][C]:sheet[cols[C]+rr];switch(header){case 1:hdr[C]=C-r.s.c;break;case 2:hdr[C]=cols[C];break;case 3:hdr[C]=o.header[C-r.s.c];break;default:if(val==null)continue;vv=v=format_cell(val,null,o);counter=0;for(CC=0;CC<hdr.length;++CC)if(hdr[CC]==vv)vv=v+"_"+ ++counter;hdr[C]=vv;}}var row=header===1?[]:{};for(R=r.s.r+offset;R<=r.e.r;++R){rr=encode_row(R);isempty=true;if(header===1)row=[];else{row={};if(Object.defineProperty)try{Object.defineProperty(row,"__rowNum__",{value:R,enumerable:false})}catch(e){row.__rowNum__=R}else row.__rowNum__=R}if(!dense||sheet[R])for(C=r.s.c;C<=r.e.c;++C){val=dense?sheet[R][C]:sheet[cols[C]+rr];if(val===undefined||val.t===undefined){if(defval===undefined)continue;if(hdr[C]!=null){row[hdr[C]]=defval;isempty=false}continue}v=val.v;switch(val.t){case"z":if(v==null)break;continue;case"e":continue;case"s":;case"d":;case"b":;case"n":break;default:throw new Error("unrecognized type "+val.t);}if(hdr[C]!=null){if(v==null){if(defval!==undefined)row[hdr[C]]=defval;else if(raw&&v===null)row[hdr[C]]=null;else continue}else{row[hdr[C]]=raw?v:format_cell(val,v,o)}isempty=false}}if(isempty===false||(header===1?o.blankrows!==false:!!o.blankrows))out[outi++]=row}out.length=outi;return out}var qreg=/"/g;function make_csv_row(sheet,r,R,cols,fs,rs,FS,o){var isempty=true;var row="",txt="",rr=encode_row(R);for(var C=r.s.c;C<=r.e.c;++C){var val=o.dense?(sheet[R]||[])[C]:sheet[cols[C]+rr];if(val==null)txt="";else if(val.v!=null){isempty=false;txt=""+format_cell(val,null,o);for(var i=0,cc=0;i!==txt.length;++i)if((cc=txt.charCodeAt(i))===fs||cc===rs||cc===34){txt='"'+txt.replace(qreg,'""')+'"';break}if(txt=="ID")txt='"ID"'}else if(val.f!=null&&!val.F){isempty=false;txt="="+val.f;if(txt.indexOf(",")>=0)txt='"'+txt.replace(qreg,'""')+'"'}else txt="";row+=(C===r.s.c?"":FS)+txt}if(o.blankrows===false&&isempty)return null;return row}function sheet_to_csv(sheet,opts){var out=[];var o=opts==null?{}:opts;if(sheet==null||sheet["!ref"]==null)return"";var r=safe_decode_range(sheet["!ref"]);var FS=o.FS!==undefined?o.FS:",",fs=FS.charCodeAt(0);var RS=o.RS!==undefined?o.RS:"\n",rs=RS.charCodeAt(0);var endregex=new RegExp((FS=="|"?"\\|":FS)+"+$");var row="",cols=[];o.dense=Array.isArray(sheet);for(var C=r.s.c;C<=r.e.c;++C)cols[C]=encode_col(C);for(var R=r.s.r;R<=r.e.r;++R){row=make_csv_row(sheet,r,R,cols,fs,rs,FS,o);if(row==null){continue}if(o.strip)row=row.replace(endregex,"");out.push(row+RS)}delete o.dense;return out.join("")}function sheet_to_txt(sheet,opts){if(!opts)opts={};opts.FS="\t";opts.RS="\n";var s=sheet_to_csv(sheet,opts);if(typeof cptable=="undefined")return s;var o=cptable.utils.encode(1200,s);return"ÿþ"+o}function sheet_to_formulae(sheet){var y="",x,val="";if(sheet==null||sheet["!ref"]==null)return[];var r=safe_decode_range(sheet["!ref"]),rr="",cols=[],C;var cmds=[];var dense=Array.isArray(sheet);for(C=r.s.c;C<=r.e.c;++C)cols[C]=encode_col(C);for(var R=r.s.r;R<=r.e.r;++R){rr=encode_row(R);for(C=r.s.c;C<=r.e.c;++C){y=cols[C]+rr;x=dense?(sheet[R]||[])[C]:sheet[y];val="";if(x===undefined)continue;else if(x.F!=null){y=x.F;if(!x.f)continue;val=x.f;if(y.indexOf(":")==-1)y=y+":"+y}if(x.f!=null)val=x.f;else if(x.t=="z")continue;else if(x.t=="n"&&x.v!=null)val=""+x.v;else if(x.t=="b")val=x.v?"TRUE":"FALSE";else if(x.w!==undefined)val="'"+x.w;else if(x.v===undefined)continue;else if(x.t=="s")val="'"+x.v;else val=""+x.v;cmds[cmds.length]=y+"="+val}}return cmds}function json_to_sheet(js,opts){var o=opts||{};var ws={};var cell;var range={s:{c:0,r:0},e:{c:0,r:js.length}};var hdr=o.header||[],C=0;for(var R=0;R!=js.length;++R){Object.keys(js[R]).filter(function(x){return js[R].hasOwnProperty(x)}).forEach(function(k){if((C=hdr.indexOf(k))==-1)hdr[C=hdr.length]=k;var v=js[R][k];var t="z";var z="";if(typeof v=="number")t="n";else if(typeof v=="boolean")t="b";else if(typeof v=="string")t="s";else if(v instanceof Date){t="d";if(!o.cellDates){t="n";v=datenum(v)}z=o.dateNF||SSF._table[14]}ws[encode_cell({c:C,r:R+1})]=cell={t:t,v:v};if(z)cell.z=z})}range.e.c=hdr.length-1;for(C=0;C<hdr.length;++C)ws[encode_col(C)+"1"]={t:"s",v:hdr[C]};ws["!ref"]=encode_range(range);return ws}var utils={encode_col:encode_col,encode_row:encode_row,encode_cell:encode_cell,encode_range:encode_range,decode_col:decode_col,decode_row:decode_row,split_cell:split_cell,decode_cell:decode_cell,decode_range:decode_range,format_cell:format_cell,get_formulae:sheet_to_formulae,make_csv:sheet_to_csv,make_json:sheet_to_json,make_formulae:sheet_to_formulae,aoa_to_sheet:aoa_to_sheet,json_to_sheet:json_to_sheet,table_to_sheet:parse_dom_table,table_to_book:table_to_book,sheet_to_csv:sheet_to_csv,sheet_to_json:sheet_to_json,sheet_to_html:HTML_.from_sheet,sheet_to_formulae:sheet_to_formulae,sheet_to_row_object_array:sheet_to_json};(function(utils){utils.consts=utils.consts||{};function add_consts(R){R.forEach(function(a){utils.consts[a[0]]=a[1]})}function get_default(x,y,z){return x[y]!=null?x[y]:x[y]=z}function ws_get_cell_stub(ws,R,C){if(typeof R=="string")return ws[R]||(ws[R]={t:"z"});if(typeof R!="number")return ws_get_cell_stub(ws,encode_cell(R));return ws_get_cell_stub(ws,encode_cell({r:R,c:C||0}))}function wb_sheet_idx(wb,sh){if(typeof sh=="number"){if(sh>=0&&wb.SheetNames.length>sh)return sh;throw new Error("Cannot find sheet # "+sh)}else if(typeof sh=="string"){var idx=wb.SheetNames.indexOf(sh);if(idx>-1)return idx;throw new Error("Cannot find sheet name |"+sh+"|")}else throw new Error("Cannot find sheet |"+sh+"|")}utils.book_new=function(){return{SheetNames:[],Sheets:{}}};utils.book_append_sheet=function(wb,ws,name){if(!name)for(var i=1;i<=65535;++i)if(wb.SheetNames.indexOf(name="Sheet"+i)==-1)break;if(!name)throw new Error("Too many worksheets");check_ws_name(name);if(wb.SheetNames.indexOf(name)>=0)throw new Error("Worksheet with name |"+name+"| already exists!");wb.SheetNames.push(name);wb.Sheets[name]=ws};utils.book_set_sheet_visibility=function(wb,sh,vis){get_default(wb,"Workbook",{});get_default(wb.Workbook,"Sheets",[]);var idx=wb_sheet_idx(wb,sh);get_default(wb.Workbook.Sheets,idx,{});switch(vis){case 0:;case 1:;case 2:break;default:throw new Error("Bad sheet visibility setting "+vis);}wb.Workbook.Sheets[idx].Hidden=vis};add_consts([["SHEET_VISIBLE",0],["SHEET_HIDDEN",1],["SHEET_VERY_HIDDEN",2]]);utils.cell_set_number_format=function(cell,fmt){cell.z=fmt;return cell};utils.cell_set_hyperlink=function(cell,target,tooltip){if(!target){delete cell.l}else{cell.l={Target:target};if(tooltip)cell.l.Tooltip=tooltip}return cell};utils.cell_add_comment=function(cell,text,author){if(!cell.c)cell.c=[];cell.c.push({t:text,a:author||"SheetJS"})};utils.sheet_set_array_formula=function(ws,range,formula){var rng=typeof range!="string"?range:safe_decode_range(range);var rngstr=typeof range=="string"?range:encode_range(range);for(var R=rng.s.r;R<=rng.e.r;++R)for(var C=rng.s.c;C<=rng.e.c;++C){var cell=ws_get_cell_stub(ws,R,C);cell.t="n";cell.F=rngstr;delete cell.v;if(R==rng.s.r&&C==rng.s.c)cell.f=formula}return ws};return utils})(utils);if(has_buf&&typeof require!="undefined")(function(){var Readable=require("stream").Readable;var write_csv_stream=function(sheet,opts){var stream=Readable();var out="";var o=opts==null?{}:opts;if(sheet==null||sheet["!ref"]==null){stream.push(null);return stream}var r=safe_decode_range(sheet["!ref"]);var FS=o.FS!==undefined?o.FS:",",fs=FS.charCodeAt(0);var RS=o.RS!==undefined?o.RS:"\n",rs=RS.charCodeAt(0);var endregex=new RegExp((FS=="|"?"\\|":FS)+"+$");var row="",cols=[];o.dense=Array.isArray(sheet);for(var C=r.s.c;C<=r.e.c;++C)cols[C]=encode_col(C);var R=r.s.r;stream._read=function(){if(R>r.e.r)return stream.push(null);while(R<=r.e.r){row=make_csv_row(sheet,r,R,cols,fs,rs,FS,o);++R;if(row!=null){if(o.strip)row=row.replace(endregex,"");stream.push(row+RS);break}}};return stream};var write_html_stream=function(ws,opts){var stream=Readable();var o=opts||{};var header=o.header!=null?o.header:HTML_.BEGIN;var footer=o.footer!=null?o.footer:HTML_.END;stream.push(header);var r=decode_range(ws["!ref"]);o.dense=Array.isArray(ws);stream.push(HTML_._preamble(ws,r,o));var R=r.s.r;var end=false;stream._read=function(){if(R>r.e.r){if(!end){end=true;stream.push("</table>"+footer)}return stream.push(null)}while(R<=r.e.r){stream.push(HTML_._row(ws,r,R,o));++R;break}};return stream};XLSX.stream={to_html:write_html_stream,to_csv:write_csv_stream}})();XLSX.parse_xlscfb=parse_xlscfb;XLSX.parse_ods=parse_ods;XLSX.parse_fods=parse_fods;XLSX.write_ods=write_ods;XLSX.parse_zip=parse_zip;XLSX.read=readSync;XLSX.readFile=readFileSync;XLSX.readFileSync=readFileSync;XLSX.write=writeSync;XLSX.writeFile=writeFileSync;XLSX.writeFileSync=writeFileSync;XLSX.writeFileAsync=writeFileAsync;XLSX.utils=utils;XLSX.SSF=SSF})(typeof exports!=="undefined"?exports:XLSX);var XLS=XLSX;var ODS=XLSX;
 
 //dayWorkReportModel
-define('main/viewmodels/dayWorkReport',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'dayWorkReportModel', 'FileSaverRE', 'untilRE','xlsxRE'],
-    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, dayWorkReportModel, saveA, ut,xlsxRE) {
+define('main/viewmodels/dayWorkReport',[
+  "durandal/app",
+  "knockout",
+  "plugins/router",
+  "components/headerCpt",
+  "httpServiceRE",
+  "baseVM",
+  "components/cellMainCpt",
+  "dayWorkReportModel",
+  "FileSaverRE",
+  "untilRE",
+  "xlsxRE",
+], function (
+  app,
+  ko,
+  router,
+  headerCpt,
+  httpService,
+  baseVM,
+  cellMainCpt,
+  dayWorkReportModel,
+  saveA,
+  ut,
+  xlsxRE
+) {
+  var selfVM = new baseVM();
 
-        var selfVM = new baseVM();
+  selfVM.model.title = "考勤员查询";
+  selfVM.model.subTitle = "考勤日报";
+  selfVM.model.selectDateArr = ko.observable([]);
+  selfVM.model.selectDate = ko.observable();
+  selfVM.model.weekTitleArr = ko.observable([]);
 
-        selfVM.model.title = '考勤员查询';
-        selfVM.model.subTitle = '考勤日报';
-        selfVM.model.selectDateArr = ko.observable([]);
-        selfVM.model.selectDate = ko.observable();
-        selfVM.model.weekTitleArr = ko.observable([]);
+  selfVM.model.tableHeight = ko.observable(0);
+  selfVM.model.allData = null;
+  selfVM.model.isLocalLoading = false;
 
-        selfVM.model.tableHeight = ko.observable(0);
-        selfVM.model.allData = null;
-        selfVM.model.isLocalLoading = false;
+  selfVM.activate = function (e) {
+    // selfVM.model.tableHeight(window.innerHeight - 300);
+    selfVM.init();
 
-        selfVM.activate = function (e) {
+    // if (selfVM.model.data().length) return;
 
-            // selfVM.model.tableHeight(window.innerHeight - 300);
-            selfVM.init();
+    httpService.getDayOptions({}, function (data) {
+      var yearMonthArr = [];
+      data.data.forEach(function (item) {
+        var yearMonthM = item.C3_542128471153;
+        var yearMonthStr = yearMonthM.toString();
+        yearMonthArr.push(yearMonthStr);
+      });
+      selfVM.model.selectDateArr(yearMonthArr);
+      // selfVM.model.selectDate(yearMonthArr[0]);
 
-            // if (selfVM.model.data().length) return;
-
-            httpService.getDayOptions({}, function (data) {
-                var yearMonthArr = [];
-                data.data.forEach(function (item) {
-
-                    var yearMonthM = item.C3_542128471153;
-                    var yearMonthStr = yearMonthM.toString();
-                    yearMonthArr.push(yearMonthStr);
-
-                });
-                selfVM.model.selectDateArr(yearMonthArr);
-                // selfVM.model.selectDate(yearMonthArr[0]);
-
-                selfVM.getData(0);
-            });
-
-
-        }
-
-        selfVM.init = function () {
-            selfVM.model.isLoading = false;
-        }
-
-        selfVM.getData = function (type) {
-            var self = selfVM;
-
-            if (selfVM.model.isLoading) return;
-            selfVM.model.isLoading = true;
-
-            var cmswhere = '';
-            if (selfVM.model.selectDate() && selfVM.model.selectDate().length > 0) {
-                cmswhere = "考勤月份 ='" + selfVM.model.selectDate() + "'";
-            }
-            var param = {
-                'cmswhere': cmswhere,
-                'key': self.model.inputVal() ? self.model.inputVal() : ''
-            }
-
-            if (localDebug) param.pageSize = 20;
-            if (!type) {//刷新
-                param.pageIndex = 0;
-
-            } else {//加载
-                param.pageIndex = self.model.pageIndex;
-            }
-
-            selfVM.model.data([]); 
-            httpService.getDayWorkReportData(param, function (data) {
-                
-                if (data && data.data) {
-                    var dataArr = data.data;
-
-                    console.log("time ==> " + new Date());
-                    var modelArr = new dayWorkReportModel(dataArr);
-                    console.log("time ==> " + new Date());
-                    selfVM.model.allData = modelArr;
-                    getLocalFilterData(0)
-
-                }
-
-                if (dataArr.length < param.pageSize) self.model.noMore = true;
-                else self.model.noMore = false;
-
-
-
-
-                selfVM.model.isLoading = false;
-            }, function () {
-                
-                selfVM.model.isLoading = false;
-            });
-        }
-
-        selfVM.kvoInput = function () {
-            selfVM.model.pageIndex = 0;
-            selfVM.getData(0);
-        }
-
-        selfVM.model.selectDate.subscribe(function (newVal) {
-            selfVM.model.pageIndex = 0;
-            selfVM.getData(0);
-
-            getWeekArrFormMonth(newVal);
-        })
-
-        selfVM.pageUp = function () {
-            if (selfVM.model.isLocalLoading) { console.log("loading"); return; };//判断当前是否处于加载数据中 
-            if (selfVM.model.pageIndex <= 0) {selfVM.model.pageIndex = 0; return;}
-            else selfVM.model.pageIndex--;
-            getLocalFilterData(selfVM.model.pageIndex)
-        }
-
-        selfVM.pageDown = function () {
-            if (selfVM.model.isLocalLoading) { console.log("loading"); return; }//判断当前是否处于加载数据中 
-            if (selfVM.model.noMore) return;
-            selfVM.model.pageIndex++;
-
-            getLocalFilterData(selfVM.model.pageIndex)
-        }
-
-        selfVM.exportExcel = function () { if(localDebug) console.info(xlsxRE);
-            var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
-
-            var worksheet = XLSX.utils.table_to_book($("#dayWorkReport table")[0]);
-            var wbout = XLSX.write(worksheet, wopts);
-
-            function s2ab(s) {
-                var buf = new ArrayBuffer(s.length);
-                var view = new Uint8Array(buf);
-                for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-                return buf;
-            }
-
-            /* the saveAs call downloads a file on the local machine */
-            saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "考勤日报.xlsx");
-        }
-
-        function getLocalFilterData(index) {
-            if (selfVM.model.isLocalLoading) return;
-            selfVM.model.isLocalLoading = true;
-            var pageSize = 100;
-            var pageIndex = index;
-
-
-            var startIndex = pageSize * index;
-            var endIndex = pageSize * (index + 1);
-            var data = [];
-            if (Array.isArray(selfVM.model.allData) && selfVM.model.allData.length) {
-                data = selfVM.model.allData.slice(startIndex, endIndex);
-            }
-
-            if (data.length) pageIndex = pageIndex + 1;
-            var total = Math.ceil(selfVM.model.allData.length / pageSize);
-
-            if (!data.length) {
-                selfVM.model.pageIndex--;
-                selfVM.model.isLocalLoading = false;
-
-                if (index == 0) selfVM.setPageMarkWithNum(0, 0);
-                return;
-            }
-            selfVM.model.data(data);
-
-            selfVM.setPageMarkWithNum(pageIndex, total);
-            selfVM.model.isLocalLoading = false;
-        }
-
-        //监听浏览器窗口变化
-        // window.onresize = function(){
-        //     selfVM.model.tableHeight(window.innerHeight - 300);
-        // }
-
-        function getWeekArrFormMonth(dateStr) {
-            var curYear = dateStr.substring(0, 4);
-            var curMonth = parseInt(dateStr.substring(4, 6)) - 2;
-
-            var nextYear = curMonth >= 11 ? curYear + 1 : curYear;
-            var nextMonth = curMonth >= 11 ? 0 : curMonth + 1;
-
-            var curYearMonthDayCount = until.getMonthDayCount(curYear)[curMonth];
-            var nextYearMonthDayCount = until.getMonthDayCount(curYear)[nextMonth];
-
-            var dateWeekArr = []
-            for (var i = 16; i < 31 + 1; i++) {
-                if (i > curYearMonthDayCount) {
-                    dateWeekArr.push({
-                        "week": '',
-                        "num": '',
-                        "visible": false
-                    })
-                    continue;
-                }
-                var tmpDate = new Date(curYear, curMonth, i);
-                var tmpWeek = tranformNumToWeek(tmpDate.getDay());
-                dateWeekArr.push({
-                    "week": tmpWeek,
-                    "num": i,
-                    "visible": true
-                })
-            }
-
-            for (var i = 1; i < 15 + 1; i++) {
-                var tmpDate = new Date(nextYear, nextMonth, i);
-                var tmpWeek = tranformNumToWeek(tmpDate.getDay());
-                dateWeekArr.push({
-                    "week": tmpWeek,
-                    "num": i,
-                    "visible": true
-                })
-            }
-            console.info(dateWeekArr)
-            selfVM.model.weekTitleArr(dateWeekArr);
-        }
-
-        function tranformNumToWeek(num) {
-            var week = '';
-            switch (num) {
-                case 0: week = '日';
-                    break;
-                case 1: week = '一';
-                    break;
-                case 2: week = '二';
-                    break;
-                case 3: week = '三';
-                    break;
-                case 4: week = '四';
-                    break;
-                case 5: week = '五';
-                    break;
-                case 6: week = '六';
-                    break;
-            }
-            return week;
-        }
-        return selfVM;
-
+      selfVM.getData(0);
     });
+  };
+
+  selfVM.init = function () {
+    selfVM.model.isLoading = false;
+  };
+
+  selfVM.getData = function (type) {
+    var self = selfVM;
+
+    if (selfVM.model.isLoading) return;
+    selfVM.model.isLoading = true;
+
+    var cmswhere = "";
+    if (selfVM.model.selectDate() && selfVM.model.selectDate().length > 0) {
+      cmswhere = "考勤月份 ='" + selfVM.model.selectDate() + "'";
+    }
+    var param = {
+      cmswhere: cmswhere,
+      key: self.model.inputVal() ? self.model.inputVal() : "",
+    };
+
+    if (localDebug) param.pageSize = 20;
+    if (!type) {
+      //刷新
+      param.pageIndex = 0;
+    } else {
+      //加载
+      param.pageIndex = self.model.pageIndex;
+    }
+
+    selfVM.model.data([]);
+    httpService.getDayWorkReportData(
+      param,
+      function (data) {
+        var dataArr = [];
+        if (data && data.data) {
+          dataArr = data.data;
+
+          if (localDebug) console.log("time ==> " + new Date());
+          var modelArr = new dayWorkReportModel(dataArr);
+          if (localDebug) console.log("time ==> " + new Date());
+          modelArr.forEach((item) => {
+            item[0].selected = false;
+          });
+          selfVM.model.allData = modelArr;
+          getLocalFilterData(0);
+        }
+
+        if (dataArr.length < param.pageSize) self.model.noMore = true;
+        else self.model.noMore = false;
+
+        selfVM.model.isLoading = false;
+      },
+      function () {
+        selfVM.model.isLoading = false;
+      }
+    );
+  };
+
+  selfVM.kvoInput = function () {
+    selfVM.model.pageIndex = 0;
+    selfVM.getData(0);
+  };
+
+  selfVM.kvoCheck = function (data, e) {
+    // const checked = e.currentTarget.checked;
+    // if (checked) {
+    //   const employee = selfVM.model.data().find((item) => {
+    //     return item[0].selected && item[0].pnid !== data.pnid;
+    //   });
+    //   if (employee) {
+    //     console.log(employee);
+    //     employee[0].selected = false;
+    //   }
+    // } else {
+    // }
+  };
+
+  selfVM.model.selectDate.subscribe(function (newVal) {
+    selfVM.model.pageIndex = 0;
+    selfVM.getData(0);
+
+    getWeekArrFormMonth(newVal);
+  });
+
+  selfVM.pageUp = function () {
+    if (selfVM.model.isLocalLoading) {
+      console.log("loading");
+      return;
+    } //判断当前是否处于加载数据中
+    if (selfVM.model.pageIndex <= 0) {
+      selfVM.model.pageIndex = 0;
+      return;
+    } else selfVM.model.pageIndex--;
+    getLocalFilterData(selfVM.model.pageIndex);
+  };
+
+  selfVM.pageDown = function () {
+    if (selfVM.model.isLocalLoading) {
+      console.log("loading");
+      return;
+    } //判断当前是否处于加载数据中
+    if (selfVM.model.noMore) return;
+    selfVM.model.pageIndex++;
+
+    getLocalFilterData(selfVM.model.pageIndex);
+  };
+
+  selfVM.exportExcel = function () {
+    if (localDebug) console.info(xlsxRE);
+    var wopts = { bookType: "xlsx", bookSST: false, type: "binary" };
+
+    var worksheet = XLSX.utils.table_to_book($("#dayWorkReport table")[0]);
+    var wbout = XLSX.write(worksheet, wopts);
+
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+      return buf;
+    }
+
+    /* the saveAs call downloads a file on the local machine */
+    saveAs(
+      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+      "考勤日报.xlsx"
+    );
+  };
+  selfVM.syncRecords = function () {
+    const employee = selfVM.model.data().filter((data) => {
+      return data[0].selected;
+    });
+    if (!employee.length) {
+      return cmAlert("请选择一条记录");
+    }
+    if (employee.length > 1) {
+      return cmAlert("只能选择一条记录");
+    }
+    const param = {
+      cmswhere: `YEARMONTH = '${employee[0][0].考勤月份}' and PNID = ${employee[0][0].pnid}`,
+    };
+    if (selfVM.model.isLoading) {
+      return cmAlert("正在同步中");
+    }
+    selfVM.model.isLoading = true;
+    httpService.getEmployeeDayWorkReportData(
+      param,
+      function (data) {
+        var dataArr = [];
+        if (data && data.data) {
+          // dataArr = data.data;
+          dataArr = data.data.map((item) => {
+            return {
+              YEARMONTH: item.YEARMONTH,
+              DATES: item.DATES,
+              PNID: item.PNID,
+              C3_375380046640: item.C3_375380046640,
+              C3_375380006609: item.C3_375380006609,
+              C3_375377576828: item.C3_375377576828,
+              WORKSTARTTIME: item.WORKSTARTTIME,
+              WORKENDTIME: item.WORKENDTIME,
+              BREAKSTARTTIME: item.BREAKSTARTTIME,
+              BREAKENDTIME: item.BREAKENDTIME,
+              F_79: item.F_79,
+              DAYTYPE: item.DAYTYPE,
+            };
+          });
+          selfVM.model.isLoading = true;
+          httpService.syncDailyData(
+            {
+              data: dataArr,
+              uniquecolumns: "DATES,PNID",
+            },
+            function (data) {
+              selfVM.model.isLoading = false;
+              return cmAlert("同步完成");
+            },
+            function () {
+              selfVM.model.isLoading = false;
+            }
+          );
+        }
+      },
+      function () {
+        selfVM.model.isLoading = false;
+      }
+    );
+  };
+
+  function getLocalFilterData(index) {
+    if (selfVM.model.isLocalLoading) return;
+    selfVM.model.isLocalLoading = true;
+    var pageSize = appConfig.app.dayReportExportCount;
+    var pageIndex = index;
+
+    var startIndex = pageSize * index;
+    var endIndex = pageSize * (index + 1);
+    var data = [];
+    if (Array.isArray(selfVM.model.allData) && selfVM.model.allData.length) {
+      data = selfVM.model.allData.slice(startIndex, endIndex);
+    }
+
+    if (data.length) pageIndex = pageIndex + 1;
+    var total = Math.ceil(selfVM.model.allData.length / pageSize);
+
+    if (!data.length) {
+      selfVM.model.pageIndex--;
+      selfVM.model.isLocalLoading = false;
+
+      if (index == 0) selfVM.setPageMarkWithNum(0, 0);
+      return;
+    }
+    selfVM.model.data(data);
+
+    selfVM.setPageMarkWithNum(pageIndex, total);
+    selfVM.model.isLocalLoading = false;
+  }
+
+  //监听浏览器窗口变化
+  // window.onresize = function(){
+  //     selfVM.model.tableHeight(window.innerHeight - 300);
+  // }
+
+  function getWeekArrFormMonth(dateStr) {
+    var curYear = dateStr.substring(0, 4);
+    var curMonth = parseInt(dateStr.substring(4, 6)) - 2;
+
+    var nextYear = curMonth >= 11 ? curYear + 1 : curYear;
+    var nextMonth = curMonth >= 11 ? 0 : curMonth + 1;
+
+    var curYearMonthDayCount = until.getMonthDayCount(curYear)[curMonth];
+    var nextYearMonthDayCount = until.getMonthDayCount(curYear)[nextMonth];
+
+    var dateWeekArr = [];
+    for (var i = 16; i < 31 + 1; i++) {
+      if (i > curYearMonthDayCount) {
+        dateWeekArr.push({
+          week: "",
+          num: "",
+          visible: false,
+        });
+        continue;
+      }
+      var tmpDate = new Date(curYear, curMonth, i);
+      var tmpWeek = tranformNumToWeek(tmpDate.getDay());
+      dateWeekArr.push({
+        week: tmpWeek,
+        num: i,
+        visible: true,
+      });
+    }
+
+    for (var i = 1; i < 15 + 1; i++) {
+      var tmpDate = new Date(nextYear, nextMonth, i);
+      var tmpWeek = tranformNumToWeek(tmpDate.getDay());
+      dateWeekArr.push({
+        week: tmpWeek,
+        num: i,
+        visible: true,
+      });
+    }
+    console.info(dateWeekArr);
+    selfVM.model.weekTitleArr(dateWeekArr);
+  }
+
+  function tranformNumToWeek(num) {
+    var week = "";
+    switch (num) {
+      case 0:
+        week = "日";
+        break;
+      case 1:
+        week = "一";
+        break;
+      case 2:
+        week = "二";
+        break;
+      case 3:
+        week = "三";
+        break;
+      case 4:
+        week = "四";
+        break;
+      case 5:
+        week = "五";
+        break;
+      case 6:
+        week = "六";
+        break;
+    }
+    return week;
+  }
+  return selfVM;
+});
+
 define('main/viewmodels/fixSubmit',['durandal/app',
   'knockout',
   'plugins/router',
@@ -20984,7 +21182,7 @@ define('main/viewmodels/pendHistory',['durandal/app',
 
 
 
-        param.pageSize = 10;
+        param.pageSize = 200;
         if (!type) {//刷新
           param.pageIndex = 0;
 
@@ -21046,7 +21244,7 @@ define('main/viewmodels/pendRefuse',['durandal/app',
 
 
 
-        param.pageSize = 10;
+        param.pageSize = 200;
         if (!type) {//刷新
           param.pageIndex = 0;
 
@@ -21107,7 +21305,7 @@ define('main/viewmodels/pended',['durandal/app',
 
 
 
-      param.pageSize = 10;
+      param.pageSize = 200;
       if (!type) {//刷新
         param.pageIndex = 0;
 
@@ -21173,7 +21371,7 @@ define('main/viewmodels/pending',['durandal/app',
           'key': self.model.inputVal() ? self.model.inputVal() : ''
         }
 
-        param.pageSize = 10;
+        param.pageSize = 200;
         if (!type) {//刷新
           param.pageIndex = 0;
 
@@ -21306,22 +21504,46 @@ define('main/viewmodels/queryDayReport',['durandal/app', 'knockout', 'plugins/ro
         queryDayReportVM.selectDate = ko.observable("");
 
 
-
         //attached
         queryDayReportVM.attached = function () {
             httpService.getDayOptions({}, function (data) {
                 data = data.data;
                 var yearMonthArr = [];
+                var currentMonth;
                 data.forEach(function (item) {
                     var yearMonthM = item.C3_542128471153;
                     var yearMonthStr = yearMonthM.toString();
                     yearMonthArr.push(yearMonthStr);
 
+                    if(item.C3_547308103102 === "Y"){
+                        currentMonth = item.C3_542128471153
+                    }
+                   
                 });
-                queryDayReportVM.dayOptionT(yearMonthArr);
+                
+                queryDayReportVM.selectDate(currentMonth);
+                
+
             });
         }
 
+        queryDayReportVM.activate = function (e) {
+            var self = this;
+
+            httpService.getDayOptions({}, function (data) {
+                var yearMonthArr = [];
+                data.data.forEach(function (item) {
+                    
+                    var yearMonthM = item.C3_542128471153;
+                    var yearMonthStr = yearMonthM.toString();
+                    yearMonthArr.push(yearMonthStr);
+
+                });
+               // yearMonthArr.reverse();
+               // yearMonthArr.splice(0,1)
+                self.dayOptionT(yearMonthArr);
+            });
+        }
 
 
         function getWorkDay(defaultYM) {
@@ -21482,7 +21704,7 @@ define('main/viewmodels/queryMonthReport',['durandal/app', 'knockout', 'plugins/
 
         return monthReportVM;
     });
-define('main/viewmodels/queryMonthWork',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt',],
+define('main/viewmodels/queryMonthWork',['durandal/app', 'knockout', 'plugins/router', 'httpServiceRE','components/headerCpt'],
     function (app, ko, router, httpService,headerCpt,unt) {
         var monthDayCountArr, dateM;
         var entMonth, entYear;
@@ -21490,20 +21712,44 @@ define('main/viewmodels/queryMonthWork',['durandal/app', 'knockout', 'plugins/ro
 
         var queryMonthVM = {};
 
+        const nowTimeStamp = Date.now();
+        const now = new Date(nowTimeStamp);
         queryMonthVM.model = {
             title: '我的查询',
             subTitle: '当月排班',
             selectDate: ko.observable(''),//当前选择的日期
+            
             dayOption: ko.observable([]),//日期范围
             dateArr: ko.observable([])//排班和日历数据
+            
         }
+        queryMonthVM.attached = function () {
+            httpService.getDayOptions({}, function (data) {
+                data = data.data;
+                var yearMonthArr = [];
+                var currentMonth ;
+                data.forEach(function (item) {
+                    var yearMonthM = item.C3_542128471153;
+                    var yearMonthStr = yearMonthM.toString();
+                    yearMonthArr.push(yearMonthStr);
+                    if(item.C3_547308103102 === "Y"){
+                        currentMonth = item.C3_542128471153
+                    }
+                   
+                });
+                queryMonthVM.model.selectDate(currentMonth);
+                
 
+            });
+        }
 
         queryMonthVM.model.selectDate.subscribe(function (newVal) {
             var dateStr = newVal;
             if (dateStr != '' && dateStr != undefined) {
                 queryMonthVM.getCalendar(dateStr);
+                
             }
+            console.log("dateStr"+dateStr)
         })
 
         queryMonthVM.activate = function (e) {
@@ -21512,12 +21758,14 @@ define('main/viewmodels/queryMonthWork',['durandal/app', 'knockout', 'plugins/ro
             httpService.getDayOptions({}, function (data) {
                 var yearMonthArr = [];
                 data.data.forEach(function (item) {
-
+                    
                     var yearMonthM = item.C3_542128471153;
                     var yearMonthStr = yearMonthM.toString();
                     yearMonthArr.push(yearMonthStr);
 
                 });
+               // yearMonthArr.reverse();
+               // yearMonthArr.splice(0,1)
                 self.model.dayOption(yearMonthArr);
             });
         }
@@ -21552,29 +21800,31 @@ define('main/viewmodels/queryMonthWork',['durandal/app', 'knockout', 'plugins/ro
             httpService.getMonthWorkData(params, function (data) {
                 data = data.data;
 
-                if(localDebug){
-                    var  a = []
-                     for(var i = 0 ; i < 31 ;i ++){
-                        a.push({"C3_375377576828":"白班"});
-                    } 
-                    data = a;
-                }
+                // if(localDebug){
+                //     var  a = []
+                //      for(var i = 0 ; i < 31 ;i ++){
+                //         a.push({"C3_375377576828":"白班"});
+                //     } 
+                //     data = a;
+                // }
                 var textColorArr = [];//字体颜色数组
                 var monthDayCount = monthDayCountArr[dateM];//当月天数
                 // data.splice(10, 5);
                 var arrLength = data.length;
                 if (data.length != monthDayCount) {//返回数据有误处理
-                    for (var i = 0; i < arrLength; i++) {
-                        var str = data[i].DATES;
+                    var fixData = [];
+                    for (var i = 0; i < monthDayCount; i++) {
                         var curDay = new Date(entYear, entMonth - 1, i + 1).format('yyyyMMdd');
-                        if (parseInt(str) != curDay) {
-                            var dataM = new Object();
-                            dataM.C3_375377576828 = '';
-                            data.splice(i, 0, dataM);
+                        var filterArr = data.filter(item => item.DATES == curDay);
+                        var dataM = {
+                            "C3_375377576828":""
+                        };
+                        if(filterArr.length == 1){
+                            dataM = filterArr[0];
                         }
-
-
+                        fixData.push(dataM);
                     }
+                    data = fixData;
                 }
 
                 for (var i = 0; i < data.length; i++) {
@@ -21821,12 +22071,28 @@ define('main/viewmodels/staffPendEdit',['durandal/app', 'knockout', 'plugins/rou
                     'C3_541467363607': selfVM.model.jinli().C3_511297363801,//   经理 
                 }
     */;
-define('main/viewmodels/staffPend',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'main/viewmodels/staffPendEdit'],
-    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, staffPendEdit) {
+define('main/viewmodels/staffPend',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt', 'main/viewmodels/staffPendEdit', 'xlsxRE'],
+    function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt, staffPendEdit, xlsxRE) {
 
         var selfVM = new baseVM();
         selfVM.model.title = '员工审批'
-        selfVM.model.subTitle = '员工审批定义'
+        selfVM.model.subTitle = '员工审批定义';
+
+        var dataMap = {
+            'C3_549036828477': '主管工号',
+            'C3_549036811852': '组长工号',
+            'C3_549036840539': '经理工号',
+            'C3_542074129459': '产线编号',
+            'C3_541450807511': '员工编号',
+            'C3_542058915408': '1级企业编号',
+            'C3_541468317577': '产线',
+            'C3_542062213811': '员工工号',
+            'C3_542071636659': '系统员工姓名',
+            'C3_541450807755': '员工姓名',
+            'C3_541450797951': '组长',
+            'C3_541467332728': '主管',
+            'C3_541467363607': '经理'
+        }
 
         selfVM.getData = function (type) {
             var self = selfVM;
@@ -21887,13 +22153,90 @@ define('main/viewmodels/staffPend',['durandal/app', 'knockout', 'plugins/router'
             router.navigate("#staffPendEdit");
         }
 
+        var wb;//读取完成的数据
+        var rABS = false; //是否将文件读取为二进制字符串
+
+        selfVM.readExcel = function (t, event) {
+
+            if (!event.target.files) {
+                return;
+            }
+            var f = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                if (rABS) {
+                    wb = XLSX.read(btoa(fixdata(data)), {//手动转化
+                        type: 'base64'
+                    });
+                } else {
+                    wb = XLSX.read(data, {
+                        type: 'binary'
+                    });
+                }
+                var excelData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                excelData = checkExcelDataMap(excelData);
+
+                if (Array.isArray(excelData)) {
+                    if (excelData.length > appConfig.app.excelUploadCount) alert("数据量过大，100条以内");
+                    else {
+                        let params = {
+                            "data": excelData,
+                            "uniquecolumns": "C3_542058915408,C3_542062213811"
+                        }
+                        httpService.addMorePendPerson(params, function (data) {
+                            console.info('addMorePendPerson', data);
+                            if (data && (data.error == 0 || data.Error == 0)) {
+                                cmAlert("上传成功");
+                            } else cmAlert(data.message || "失败");
+                        }, function (error) {
+                            cmAlert("上传错误");
+                            // console.info('addMorePendPerson', error)
+                        })
+                    }
+                }
+                //wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
+                //wb.Sheets[Sheet名]获取第一个Sheet的数据
+                //document.getElementById("demo").innerHTML = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+            };
+            if (rABS) {
+                reader.readAsArrayBuffer(f);
+            } else {
+                reader.readAsBinaryString(f);
+            }
+        }
+
+        function fixdata(data) { //文件流转BinaryString
+            var o = "",
+                l = 0,
+                w = 10240;
+            for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+            o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+            return o;
+        }
+
+        function checkExcelDataMap(data) {
+            if (Array.isArray(data) && data.length > 0) {
+                let firstObj = data[0];
+                for (var key in firstObj) {
+                    if (dataMap[key] != firstObj[key]) {
+                        cmAlert(key + firstObj[key] + '不匹配');
+                        return
+                    }
+                }
+                data.splice(0, 1);
+                return data
+            } else {
+                cmAlert("数据解析错误")
+            }
+        }
 
         return selfVM;
 
     });
 define('main/viewmodels/wxApply',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt', 'httpServiceRE', 'baseVM', 'components/cellMainCpt','untilRE'],
     function (app, ko, router, headerCpt, httpService, baseVM, cellMainCpt,unt) {
-
+        var rowI=0;
         var selfVM = new baseVM();
         selfVM.model.title = '微信考勤申请'
         selfVM.model.subTitle = '微信考勤申请记录'
@@ -21917,8 +22260,12 @@ define('main/viewmodels/wxApply',['durandal/app', 'knockout', 'plugins/router', 
             selfVM.model.isLoading = true;
             httpService.getApplyDataForWX(param, function (data) {
 
+             
+
                 if (data && data.data) {
-                    var dataArr = data.data;    
+                    var dataArr = data.data;   
+                    
+                    
 
                     dataArr.forEach(function(item){
                         item.C3_546778248258 = new Date(item.C3_546778248258).format("yyyy-MM-dd hh:mm:ss");
@@ -21949,18 +22296,25 @@ define('main/viewmodels/wxApply',['durandal/app', 'knockout', 'plugins/router', 
         }
 
         selfVM.cancelClick = function (index) {
-            index = index();
-            var tmpData = selfVM.model.data()[index];
-            tmpData.C3_553774879841 = 'Y';
-            var params = {
-                'data':tmpData
-            }
-            httpService.cancelApplyDataForWX(params,function(data){
-                cmAlert("撤销成功");
-                selfVM.getData(1);
-            })
+            rowI=index();
+          
+
+            $('#myModalConfirm').modal({})
         }
-     
+     selfVM.EnsureClick=function(){
+           
+            var tmpData = selfVM.model.data()[rowI];
+         
+            tmpData.C3_553774879841 = 'Y';
+             var params = {
+                 'data':tmpData
+             }
+             httpService.cancelApplyDataForWX(params,function(data){
+                cmAlert("撤销成功");
+                 selfVM.getData(1);
+             })
+             $('#myModalConfirm').modal('hide');
+     }
 
 
         return selfVM;
@@ -23495,85 +23849,85 @@ define('text',['module'], function (module) {
     return text;
 });
 
-define('text!login.html',[],function () { return '<!--<div id="main-login" role="main"  style="background-image:url(\'../../img/img/photo1.jpg\');background-size: cover;">-->\r\n<div id="main-login" role="main" data-bind="style:{\'background-image\': data.radomPhotoNum }">\r\n\t<!-- MAIN CONTENT -->\r\n\t<!--<div id="content" class="container">-->\r\n\r\n\t<div class="row clear-margin-rl">\r\n\r\n\t\t<!--<div class="mg-top col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xs-offset-3 col-sm-offset-3 col-md-offset-4 col-lg-offset-4">-->\r\n\t\t<div class="mg-top login-from-container">\r\n\t\t\t<!--<div class="well no-padding">-->\r\n\t\t\t<form id="login-form" class="smart-form client-form">\r\n\t\t\t\t<!--<header>\r\n\t\t\t\t\t登录\r\n\t\t\t\t</header>-->\r\n\r\n\t\t\t\t<fieldset>\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<!--<label class="label">用户名</label>-->\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\r\n\t\t\t\t\t\t\t<input id="account" type="email" name="email">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入用户名</b>\r\n\t\t\t\t\t\t</label>\r\n\t\t\t\t\t</section>\r\n\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<!--<label class="label">密码</label>-->\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\r\n\t\t\t\t\t\t\t<input id="passWord" type="password" name="password">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入密码</b>\r\n\t\t\t\t\t\t </label>\r\n\r\n\t\t\t\t\t</section>\r\n\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<div class="btn f-r color-link-blue" data-bind="click:gotoForgetPage">忘记密码?</div>\r\n\t\t\t\t\t\t <div class="clear-f"></div> \r\n\t\t\t\t\t</section> \r\n\t\t\t\t</fieldset>\r\n\t\t\t\t<footer>\r\n\t\t\t\t\t<button id="loginBtn" type="submit" data-bind="click:login" data-toggle="button" data-loading-text="登录中..." class="btn btn-primary btn-block">\r\n\t\t\t\t\t\t\t\t\t\t登录\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</footer>\r\n\t\t\t</form>\r\n\r\n\t\t\t<!--</div>-->\r\n\t\t</div>\r\n\t\t<!--</div>-->\r\n\t</div>\r\n\r\n</div>';});
+define('text!login.html',[],function () { return '<!--<div id="main-login" role="main"  style="background-image:url(\'../../img/img/photo1.jpg\');background-size: cover;">-->\n<div id="main-login" role="main" data-bind="style:{\'background-image\': data.radomPhotoNum }">\n\t<!-- MAIN CONTENT -->\n\t<!--<div id="content" class="container">-->\n\n\t<div class="row clear-margin-rl">\n\n\t\t<!--<div class="mg-top col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xs-offset-3 col-sm-offset-3 col-md-offset-4 col-lg-offset-4">-->\n\t\t<div class="mg-top login-from-container">\n\t\t\t<!--<div class="well no-padding">-->\n\t\t\t<form id="login-form" class="smart-form client-form">\n\t\t\t\t<!--<header>\n\t\t\t\t\t登录\n\t\t\t\t</header>-->\n\n\t\t\t\t<fieldset>\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<!--<label class="label">用户名</label>-->\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\n\t\t\t\t\t\t\t<input id="account" data-bind="value:data.account" type="email" name="email">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入用户名</b>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</section>\n\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<!--<label class="label">密码</label>-->\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\n\t\t\t\t\t\t\t<input id="passWord" data-bind="value:data.passWord" type="password" name="password">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入密码</b>\n\t\t\t\t\t\t </label>\n\n\t\t\t\t\t</section>\n\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<div class="btn f-r color-link-blue" data-bind="click:gotoForgetPage">忘记密码?</div>\n\t\t\t\t\t\t <div class="clear-f"></div> \n\t\t\t\t\t</section> \n\t\t\t\t</fieldset>\n\t\t\t\t<footer>\n\t\t\t\t\t<button id="loginBtn" type="submit" data-bind="click:login" data-toggle="button" data-loading-text="登录中..." class="btn btn-primary btn-block">\n\t\t\t\t\t\t\t\t\t\t登录\n\t\t\t\t\t</button>\n\t\t\t\t</footer>\n\t\t\t</form>\n\n\t\t\t<!--</div>-->\n\t\t</div>\n\t\t<!--</div>-->\n\t</div>\n\n</div>';});
 
 
-define('text!main/views/addApply.html',[],function () { return '<form class="form-horizontal">\r\n    <div class="form-group">\r\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">申请类别</label>\r\n        <div class=" col-sm-10 col-md-10 col-lg-10 dropdown">\r\n            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.selectedCategory,event:{change:kvoSelectCategory}">\r\n            </select>\r\n        </div>\r\n    </div>\r\n\r\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\r\n\r\n    <!--/ko-->\r\n\r\n    <div class="form-group">\r\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">开始时间</label>\r\n        <div class=" col-sm-10 col-md-10 col-lg-10">\r\n            <input type="text" data-bind="value:model.data().C3_533143179815" readonly class="form-control appDate" />\r\n        </div>\r\n    </div>\r\n\r\n    <div class="form-group">\r\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">结束时间</label>\r\n        <div class=" col-sm-10 col-md-10 col-lg-10">\r\n            <input type="text" data-bind="value:model.data().C3_533143217561" class="form-control appDate" readonly/>\r\n        </div>\r\n    </div>\r\n\r\n    <!--审批人cellApprovePersonCpt-->\r\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->\r\n\r\n    <!--/ko-->\r\n\r\n    <!--时长-->\r\n    <div class="form-group" data-bind="visible:!model.isCard()">\r\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">时长</label>\r\n        <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">\r\n            <input type="text" class="form-control" data-bind="value:model.data().C3_541449935726" readonly aria-describedby="aria-time"\r\n            />\r\n            <span class="input-group-addon" data-bind="click:hourCalculate" id="aria-time">获取时长</span>\r\n        </div>\r\n    </div>\r\n\r\n    <!--事由 cellReasonEdit-->\r\n    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->\r\n\r\n    <!--/ko-->\r\n\r\n    <!-- 拍照 -->\r\n    <!-- ko foreach:model.imgShowArr -->\r\n    <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->\r\n\r\n    <!--/ko-->\r\n    <!-- /ko -->\r\n\r\n\r\n    <!--附件 cellAttachCpt-->\r\n    <!--ko component: { name: "cellAttachCpt",params:{srcs:model.attachUrlArray} }-->\r\n\r\n    <!--/ko-->\r\n\r\n\r\n    <!--保存提交cellSubmitBtnCpt-->\r\n    <!--ko component: "cellSubmitBtnCpt"-->\r\n\r\n    <!--/ko-->\r\n\r\n\r\n</form>';});
+define('text!main/views/addApply.html',[],function () { return '<form class="form-horizontal">\n    <div class="form-group">\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">申请类别</label>\n        <div class=" col-sm-10 col-md-10 col-lg-10 dropdown">\n            <select name="" id="" class="form-control" data-bind="options: model.vacationCategory, value: model.selectedCategory,event:{change:kvoSelectCategory}">\n            </select>\n        </div>\n    </div>\n\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\n\n    <!--/ko-->\n\n    <div class="form-group">\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">开始时间</label>\n        <div class=" col-sm-10 col-md-10 col-lg-10">\n            <input type="text" data-bind="value:model.data().C3_533143179815" readonly class="form-control appDate" />\n        </div>\n    </div>\n\n    <div class="form-group">\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">结束时间</label>\n        <div class=" col-sm-10 col-md-10 col-lg-10">\n            <input type="text" data-bind="value:model.data().C3_533143217561" class="form-control appDate" readonly/>\n        </div>\n    </div>\n\n    <!--审批人cellApprovePersonCpt-->\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->\n\n    <!--/ko-->\n\n    <!--时长-->\n    <div class="form-group" data-bind="visible:!model.isCard()">\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">时长</label>\n        <div class=" col-sm-10 col-md-10 col-lg-10 input-group padding-lf-12">\n            <input type="text" class="form-control" data-bind="value:model.data().C3_541449935726" readonly aria-describedby="aria-time"\n            />\n            <span class="input-group-addon" data-bind="click:hourCalculate" id="aria-time">获取时长</span>\n        </div>\n    </div>\n\n    <!--事由 cellReasonEdit-->\n    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->\n\n    <!--/ko-->\n\n    <!-- 拍照 -->\n    <!-- ko foreach:model.imgShowArr -->\n    <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->\n\n    <!--/ko-->\n    <!-- /ko -->\n\n\n    <!--附件 cellAttachCpt-->\n    <!--ko component: { name: "cellAttachCpt",params:{srcs:model.attachUrlArray} }-->\n\n    <!--/ko-->\n\n\n    <!--保存提交cellSubmitBtnCpt-->\n    <!--ko component: "cellSubmitBtnCpt"-->\n\n    <!--/ko-->\n\n\n</form>';});
 
 
-define('text!main/views/appled.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:"cellMainCategory"-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\r\n\t\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n</div>\r\n\r\n<!-- end row -->\r\n\r\n\r\n\r\n\r\n';});
+define('text!main/views/appled.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:"cellMainCategory"-->\n\t\t\t<!--/ko-->\n\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\n\t\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\t</article>\n\t<!-- WIDGET END -->\n\n</div>\n\n<!-- end row -->\n\n\n\n\n';});
 
 
-define('text!main/views/applyDetail.html',[],function () { return '<form class="form-horizontal">\r\n    <!--ko if:model.willRefuse-->\r\n        <!--ko component: { name: "cellStaffNameReadonly",params:{title:model.data().C3_533143303788} }-->                                                                            \r\n        <!--/ko-->\r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--结束时间cellEndTimeReadonlyCpt-->\r\n    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--审批人cellApprovePersonCpt-->\r\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.data().C3_541450392920} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--时长 cellTimeLenghtReadonlyCpt-->\r\n    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--事由-->\r\n    <div class="form-group">\r\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">事由</label>\r\n        <div class=" col-sm-10 col-md-10 col-lg-10">\r\n            <p class="form-control height-auto" data-bind="value:model.data().C3_533143291117"></p>\r\n        </div>\r\n    </div>\r\n\r\n    <!--附件 cellAttachCpt-->\r\n     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--退回 cellRefuseCpt  willRefuse-->\r\n    <div data-bind="component: { name: \'cellRefuseCpt\',params:{title:model.refuseArr,subTitle:model.data().C3_541451198969,reason:model.reasonInput} },visible:model.willRefuse">\r\n    </div>\r\n                                                                                       \r\n   \r\n\r\n    <!--审批流 cellPendPersonCpt-->\r\n    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->\r\n    <!--/ko-->\r\n\r\n    \r\n    <!--撤销 cellCancelBtnCpt-->\r\n    <div data-bind="component: \'cellCancelBtnCpt\',visible:model.willCancel"></div>\r\n     \r\n\r\n\r\n\r\n\r\n\r\n\r\n</form>\r\n\r\n';});
+define('text!main/views/applyDetail.html',[],function () { return '<form class="form-horizontal">\n    <!--ko if:model.willRefuse-->\n        <!--ko component: { name: "cellStaffNameReadonly",params:{title:model.data().C3_533143303788} }-->                                                                            \n        <!--/ko-->\n    <!--/ko-->\n\n    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--结束时间cellEndTimeReadonlyCpt-->\n    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--审批人cellApprovePersonCpt-->\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.data().C3_542556605600} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--时长 cellTimeLenghtReadonlyCpt-->\n    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--事由-->\n    <div class="form-group">\n        <label for="" class="col-sm-2 col-md-2 col-lg-2 control-label">事由</label>\n        <div class=" col-sm-10 col-md-10 col-lg-10">\n            <p class="form-control height-auto" data-bind="text:model.data().C3_533143291117"></p>\n        </div>\n    </div>\n\n    <!--附件 cellAttachCpt-->\n     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--退回 cellRefuseCpt  willRefuse-->\n    <div data-bind="component: { name: \'cellRefuseCpt\',params:{title:model.refuseArr,subTitle:model.data().C3_541451198969,reason:model.reasonInput} },visible:model.willRefuse">\n    </div>\n                                                                                       \n   \n\n    <!--审批流 cellPendPersonCpt-->\n    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->\n    <!--/ko-->\n\n    \n    <!--撤销 cellCancelBtnCpt-->\n    <div data-bind="component: \'cellCancelBtnCpt\',visible:model.willCancel"></div>\n     \n\n\n\n\n\n\n</form>\n\n';});
 
 
-define('text!main/views/applyHistory.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:"cellMainCategory"-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainHistoryState",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/applyHistory.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:"cellMainCategory"-->\n\t\t\t<!--/ko-->\n\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:{name:"cellMainHistoryState",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/applyRefuse.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:"cellMainCategory"-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:"cellMainFixSubmitBtn"-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/applyRefuse.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:"cellMainCategory"-->\n\t\t\t<!--/ko-->\n\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:"cellMainFixSubmitBtn"-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/applying.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:"cellMainCategory"-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:true}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainSubmitBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n</div>\r\n\r\n<!-- end row -->\r\n\r\n\r\n\r\n\r\n';});
+define('text!main/views/applying.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:"cellMainCategory"-->\n\t\t\t<!--/ko-->\n\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilter",params:{title:model.selectedCategory,subTitle:model.vacationCategory,isAdd:true}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:{name:"cellMainSubmitBtn",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\n\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\t</article>\n\t<!-- WIDGET END -->\n\n</div>\n\n<!-- end row -->\n\n\n\n\n';});
 
 
-define('text!main/views/changePassWord.html',[],function () { return '<div>\r\n\t<div class="row clear-margin-rl">\r\n        <div class="mg-top login-from-container">\r\n\t\t\t<!--<div class="well no-padding">-->\r\n\t\t\t<form class="smart-form client-form">\r\n\t\t\t\t<fieldset>\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<label class="label">旧密码</label>\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\r\n\t\t\t\t\t\t\t<input type="text" data-bind="value:model.oldPW">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入旧密码</b>\r\n\t\t\t\t\t\t</label>\r\n\t\t\t\t\t</section>\r\n\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<label class="label">新密码</label>\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\r\n\t\t\t\t\t\t\t<input type="password" data-bind="value:model.newPW">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入新密码</b>\r\n\t\t\t\t\t\t </label>\r\n                    </section>\r\n                        \r\n                    <section>\r\n\t\t\t\t\t\t<label class="label">确认新密码</label>\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\r\n\t\t\t\t\t\t\t<input type="passWord" data-bind="value:model.sureNewPW">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入确认新密码</b>\r\n\t\t\t\t\t\t </label>\r\n\t\t\t\t\t</section>\r\n\r\n\r\n\t\t\t\t</fieldset>\r\n\t\t\t\t<footer>\r\n\t\t\t\t\t<button type="submit" data-bind="click:changePassWordClick" class="btn btn-primary btn-block">\r\n\t\t\t\t\t\t\t\t\t\t提交\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</footer>\r\n\t\t\t</form>\r\n\r\n\t\t\t<!--</div>-->\r\n\t\t</div>\r\n\t\t<!--</div>-->\r\n\t</div>\r\n\r\n</div>';});
+define('text!main/views/changePassWord.html',[],function () { return '<div>\n\t<div class="row clear-margin-rl">\n        <div class="mg-top login-from-container">\n\t\t\t<!--<div class="well no-padding">-->\n\t\t\t<form class="smart-form client-form">\n\t\t\t\t<fieldset>\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<label class="label">旧密码</label>\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\n\t\t\t\t\t\t\t<input type="text" data-bind="value:model.oldPW">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入旧密码</b>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</section>\n\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<label class="label">新密码</label>\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\n\t\t\t\t\t\t\t<input type="password" data-bind="value:model.newPW">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入新密码</b>\n\t\t\t\t\t\t </label>\n                    </section>\n                        \n                    <section>\n\t\t\t\t\t\t<label class="label">确认新密码</label>\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-lock"></i>\n\t\t\t\t\t\t\t<input type="passWord" data-bind="value:model.sureNewPW">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入确认新密码</b>\n\t\t\t\t\t\t </label>\n\t\t\t\t\t</section>\n\n\n\t\t\t\t</fieldset>\n\t\t\t\t<footer>\n\t\t\t\t\t<button type="submit" data-bind="click:changePassWordClick" class="btn btn-primary btn-block">\n\t\t\t\t\t\t\t\t\t\t提交\n\t\t\t\t\t</button>\n\t\t\t\t</footer>\n\t\t\t</form>\n\n\t\t\t<!--</div>-->\n\t\t</div>\n\t\t<!--</div>-->\n\t</div>\n\n</div>';});
 
 
-define('text!main/views/dayWorkReport.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- row style="height: 700px;overflow: scroll"-->\r\n<div id="dayWorkReport" class="row" >\r\n\r\n    <!-- NEW WIDGET START -->\r\n\r\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\r\n        <div class="col-sm-1 col-md-1 col-lg-1">\r\n            <select name="" id="YMSelect" data-bind="options: model.selectDateArr,value:model.selectDate">\r\n             </select>\r\n        </div>\r\n        <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-6 col-md-offset-6 col-lg-offset-6">\r\n            <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\r\n        </div>\r\n        <div class="col-sm-1 col-md-1 col-lg-1">\r\n            <button class="btn btn-info " data-bind="click:exportExcel">EXCEL</button>\r\n        </div>\r\n    </div>\r\n\r\n    <article class="col-sm-12 col-md-12 col-lg-12"  style="overflow: scroll" > <!--data-bind="style:{height:model.tableHeight() + \'px\'}">-->\r\n       \r\n        <div style="width:4000px">\r\n        <table class="table table-hover table-bordered" style="width: 100%">\r\n            <thead>\r\n                <tr>\r\n                    <th>班组</th>\r\n                    <th>工号</th>\r\n                    <th>姓名</th>\r\n                    <th>类型</th>\r\n\r\n                    <!--ko foreach:model.weekTitleArr-->\r\n                        <th data-bind="text:week,visible:visible"></th>\r\n                    <!--/ko-->\r\n\r\n                    <th rowspan="2">月排班工时</th>\r\n                    <th rowspan="2">月标准工时</th>\r\n                    <th rowspan="2">月超出工时</th>\r\n                    <th rowspan="2">加班工时</th>\r\n\r\n                    <th colspan="6">假期汇总（小时）</th>\r\n\r\n                    <th colspan="4">补贴次数</th>\r\n\r\n                    <th rowspan="2">备注(总加班工时）</th>\r\n                    <th rowspan="2">在职状态</th>\r\n\r\n                </tr>\r\n\r\n                <tr>\r\n                    <th></th>\r\n                    <th></th>\r\n                    <th></th>\r\n                    <th></th>\r\n\r\n                    <!--ko foreach:model.weekTitleArr-->\r\n                        <th data-bind="text:num,visible:visible"></th>\r\n                    <!--/ko-->\r\n\r\n                    <th>年假</th>\r\n                    <th>事假</th>\r\n                    <th>病假</th>\r\n                    <th>调休</th>\r\n                    <th>欠班</th>\r\n                    <th>其它</th>\r\n\r\n                    <th>中班次数</th>\r\n                    <th>小夜班次数</th>\r\n                    <th>大夜班次数</th>\r\n                    <th>休息日加班次数</th>\r\n\r\n\r\n                </tr>\r\n            </thead>\r\n            <!--ko foreach:model.data-->\r\n            \r\n            <tbody data-bind="foreach:$data">\r\n                <tr>\r\n                    <!--ko if:$index() == 0-->\r\n                    <td rowspan="8" data-bind="text:班组名称"></td>\r\n                    <td rowspan="8" data-bind="text:员工工号"></td>\r\n                    <td rowspan="8" data-bind="text:员工姓名"></td>\r\n                    <!--/ko-->\r\n\r\n                    <td data-bind="text:考勤项目"></td>\r\n                    <td data-bind="text:A16"></td>\r\n                    <td data-bind="text:A17"></td>\r\n                    <td data-bind="text:A18"></td>\r\n                    <td data-bind="text:A19"></td>\r\n                    <td data-bind="text:A20"></td>\r\n                    <td data-bind="text:A21"></td>\r\n                    <td data-bind="text:A22"></td>\r\n                    <td data-bind="text:A23"></td>\r\n                    <td data-bind="text:A24"></td>\r\n                    <td data-bind="text:A25"></td>\r\n                    <td data-bind="text:A26"></td>\r\n                    <td data-bind="text:A27"></td>\r\n                    <td data-bind="text:A28,visible:$root.model.weekTitleArr()[12].visible"></td>\r\n                    <td data-bind="text:A29,visible:$root.model.weekTitleArr()[13].visible"></td>\r\n                    <td data-bind="text:A30,visible:$root.model.weekTitleArr()[14].visible"></td>\r\n                    <td data-bind="text:A31,visible:$root.model.weekTitleArr()[15].visible"></td>\r\n                    <td data-bind="text:B01"></td>\r\n                    <td data-bind="text:B02"></td>\r\n                    <td data-bind="text:B03"></td>\r\n                    <td data-bind="text:B04"></td>\r\n                    <td data-bind="text:B05"></td>\r\n                    <td data-bind="text:B06"></td>\r\n                    <td data-bind="text:B07"></td>\r\n                    <td data-bind="text:B08"></td>\r\n                    <td data-bind="text:B09"></td>\r\n                    <td data-bind="text:B10"></td>\r\n                    <td data-bind="text:B11"></td>\r\n                    <td data-bind="text:B12"></td>\r\n                    <td data-bind="text:B13"></td>\r\n                    <td data-bind="text:B14"></td>\r\n                    <td data-bind="text:B15"></td>\r\n\r\n                    <!--ko if:$index() == 0-->\r\n                    <td rowspan="8" data-bind="text:workTime,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:workDefaultTime,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:workExtraTime,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:workOverTime,visible:$index() == 0"></td>\r\n\r\n                    <td rowspan="8" data-bind="text:yearVacation,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:thingVacation,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:sickVacation,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:dateChangeVacation,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:noWorkVacation,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:otherVacation,visible:$index() == 0"></td>\r\n\r\n                    <td rowspan="8" data-bind="text:middleWorkTypeCount,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:littleNightWorkTypeCount,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:bigNightWorkTypeCount,visible:$index() == 0"></td>\r\n                    <td rowspan="8" data-bind="text:workOnVacationCount,visible:$index() == 0"></td>\r\n\r\n                    <td rowspan="8" data-bind="text:allWorkTime,visible:$index() == 0"></td>\r\n                    <!--/ko-->\r\n                </tr>\r\n            </tbody>\r\n            <!--/ko-->\r\n        </table>\r\n        </div>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n<!-- end row -->\r\n\r\n';});
+define('text!main/views/dayWorkReport.html',[],function () { return '<div\n  data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'\n></div>\n\n<!-- row style="height: 700px;overflow: scroll"-->\n<div id="dayWorkReport" class="row">\n  <!-- NEW WIDGET START -->\n\n  <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\n    <div class="col-sm-1 col-md-1 col-lg-1">\n      <select\n        name=""\n        id="YMSelect"\n        data-bind="options: model.selectDateArr,value:model.selectDate"\n      >\n      </select>\n    </div>\n    <div\n      class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5"\n    >\n      <input\n        type="text"\n        class="form-control"\n        data-bind="textInput:model.inputVal,event:{change:kvoInput}"\n      />\n    </div>\n    <div class="col-sm-1 col-md-1 col-lg-1">\n      <button class="btn btn-info" data-bind="click:exportExcel">EXCEL</button>\n    </div>\n    <div class="col-sm-1 col-md-1 col-lg-1">\n      <button class="btn btn-info" data-bind="click:syncRecords">同步</button>\n    </div>\n  </div>\n\n  <article class="col-sm-12 col-md-12 col-lg-12" style="overflow: scroll;">\n    <!--data-bind="style:{height:model.tableHeight() + \'px\'}">-->\n\n    <div style="width: 4000px;">\n      <table class="table table-hover table-bordered" style="width: 100%;">\n        <thead>\n          <tr>\n            <th rowspan="2"></th>\n            <th>班组</th>\n            <th>工号</th>\n            <th>姓名</th>\n            <th>类型</th>\n\n            <!--ko foreach:model.weekTitleArr-->\n            <th data-bind="text:week,visible:visible"></th>\n            <!--/ko-->\n\n            <th rowspan="2">月排班工时</th>\n            <th rowspan="2">月标准工时</th>\n            <th rowspan="2">月超出工时</th>\n            <th rowspan="2">加班工时</th>\n\n            <th colspan="6">假期汇总（小时）</th>\n\n            <th colspan="4">补贴次数</th>\n\n            <th rowspan="2">备注(总加班工时）</th>\n            <th rowspan="2">在职状态</th>\n          </tr>\n\n          <tr>\n            <th></th>\n            <th></th>\n            <th></th>\n            <th></th>\n\n            <!--ko foreach:model.weekTitleArr-->\n            <th data-bind="text:num,visible:visible"></th>\n            <!--/ko-->\n\n            <th>年假</th>\n            <th>事假</th>\n            <th>病假</th>\n            <th>调休</th>\n            <th>欠班</th>\n            <th>其它</th>\n\n            <th>中班次数</th>\n            <th>小夜班次数</th>\n            <th>大夜班次数</th>\n            <th>休息日加班次数</th>\n          </tr>\n        </thead>\n        <!--ko foreach:model.data-->\n\n        <tbody data-bind="foreach:$data">\n          <tr>\n            <!--ko if:$index() == 0-->\n            <td class="width-min-50" rowspan="8">\n              <input\n                class="form-control"\n                type="checkbox"\n                data-bind="checked:selected,event:{change:function(a,e){$root.kvoCheck($data,e)}}"\n              />\n            </td>\n            <td rowspan="8" data-bind="text:班组名称"></td>\n            <td rowspan="8" data-bind="text:员工工号"></td>\n            <td rowspan="8" data-bind="text:员工姓名"></td>\n            <!--/ko-->\n\n            <td data-bind="text:考勤项目"></td>\n            <td data-bind="text:A16"></td>\n            <td data-bind="text:A17"></td>\n            <td data-bind="text:A18"></td>\n            <td data-bind="text:A19"></td>\n            <td data-bind="text:A20"></td>\n            <td data-bind="text:A21"></td>\n            <td data-bind="text:A22"></td>\n            <td data-bind="text:A23"></td>\n            <td data-bind="text:A24"></td>\n            <td data-bind="text:A25"></td>\n            <td data-bind="text:A26"></td>\n            <td data-bind="text:A27"></td>\n            <td\n              data-bind="text:A28,visible:$root.model.weekTitleArr()[12].visible"\n            ></td>\n            <td\n              data-bind="text:A29,visible:$root.model.weekTitleArr()[13].visible"\n            ></td>\n            <td\n              data-bind="text:A30,visible:$root.model.weekTitleArr()[14].visible"\n            ></td>\n            <td\n              data-bind="text:A31,visible:$root.model.weekTitleArr()[15].visible"\n            ></td>\n            <td data-bind="text:B01"></td>\n            <td data-bind="text:B02"></td>\n            <td data-bind="text:B03"></td>\n            <td data-bind="text:B04"></td>\n            <td data-bind="text:B05"></td>\n            <td data-bind="text:B06"></td>\n            <td data-bind="text:B07"></td>\n            <td data-bind="text:B08"></td>\n            <td data-bind="text:B09"></td>\n            <td data-bind="text:B10"></td>\n            <td data-bind="text:B11"></td>\n            <td data-bind="text:B12"></td>\n            <td data-bind="text:B13"></td>\n            <td data-bind="text:B14"></td>\n            <td data-bind="text:B15"></td>\n\n            <!--ko if:$index() == 0-->\n            <td\n              rowspan="8"\n              data-bind="text:workTime,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:workDefaultTime,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:workExtraTime,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:workOverTime,visible:$index() == 0"\n            ></td>\n\n            <td\n              rowspan="8"\n              data-bind="text:yearVacation,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:thingVacation,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:sickVacation,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:dateChangeVacation,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:noWorkVacation,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:otherVacation,visible:$index() == 0"\n            ></td>\n\n            <td\n              rowspan="8"\n              data-bind="text:middleWorkTypeCount,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:littleNightWorkTypeCount,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:bigNightWorkTypeCount,visible:$index() == 0"\n            ></td>\n            <td\n              rowspan="8"\n              data-bind="text:workOnVacationCount,visible:$index() == 0"\n            ></td>\n\n            <td\n              rowspan="8"\n              data-bind="text:allWorkTime,visible:$index() == 0"\n            ></td>\n            <!--/ko-->\n          </tr>\n        </tbody>\n        <!--/ko-->\n      </table>\n    </div>\n  </article>\n  <!-- WIDGET END -->\n\n  <!-- 分页pageSelectCpt-->\n  <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n  <!--/ko-->\n</div>\n<!-- end row -->\n';});
 
 
-define('text!main/views/fixSubmit.html',[],function () { return '<form class="form-horizontal">\r\n\r\n    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--结束时间cellEndTimeReadonlyCpt-->\r\n    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--审批人cellApprovePersonCpt-->\r\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--时长 cellTimeLenghtReadonlyCpt-->\r\n    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--事由 cellReasonEdit-->\r\n    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--退回理由-->\r\n    <div class=\'form-group\'>\r\n        <label for=\'\' class=\'col-sm-2 col-md-2 col-lg-2 control-label\'>退回理由</label>\r\n        <div class=\' col-sm-10 col-md-10 col-lg-10\'>\r\n            <p class=\'form-control height-auto\' data-bind="text:model.data().C3_541451198969 == \'其他\' ? model.data().C3_547719838514 : model.data().C3_541451198969"></p>\r\n        </div>\r\n    </div>\r\n\r\n    <!-- 拍照 -->\r\n    <!-- ko foreach:model.imgShowArr -->\r\n         <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->\r\n                                                                                       \r\n         <!--/ko-->\r\n    <!-- /ko -->\r\n\r\n    <!--附件 cellAttachCpt-->\r\n     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n     <!--审批流 cellPendPersonCpt-->\r\n    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->\r\n    <!--/ko-->\r\n    \r\n    <!--保存提交cellSubmitBtnCpt-->\r\n     <!--ko component: "cellSubmitBtnCpt"-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n    <!--撤销 cellCancelBtnCpt-->\r\n     <!--ko component: "cellCancelBtnCpt"-->\r\n                                                                                       \r\n    <!--/ko-->\r\n\r\n\r\n\r\n\r\n</form>\r\n\r\n\r\n\r\n\r\n';});
+define('text!main/views/fixSubmit.html',[],function () { return '<form class="form-horizontal">\n\n    <!--ko component: { name: "cellCategoryReadonly",params:{title:model.data().C3_533398158705} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--ko component: { name: "cellNoticeCpt",params:{title:model.noticeStr} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--ko component: { name: "cellStartTimeReadonlyCpt",params:{title:model.data().C3_533143179815} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--结束时间cellEndTimeReadonlyCpt-->\n    <!--ko component: { name: "cellEndTimeReadonlyCpt",params:{title:model.data().C3_533143217561} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--审批人cellApprovePersonCpt-->\n    <!--ko component: { name: "cellApprovePersonCpt",params:{title:model.approver} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--时长 cellTimeLenghtReadonlyCpt-->\n    <!--ko component: { name: "cellTimeLenghtReadonlyCpt",params:{title:model.data().C3_541449935726,isShow:!model.isCard()} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--事由 cellReasonEdit-->\n    <!--ko component: { name: "cellReasonEdit",params:{title:model.data().C3_533143291117} }-->\n                                                                                       \n    <!--/ko-->\n\n    <!--退回理由-->\n    <div class=\'form-group\'>\n        <label for=\'\' class=\'col-sm-2 col-md-2 col-lg-2 control-label\'>退回理由</label>\n        <div class=\' col-sm-10 col-md-10 col-lg-10\'>\n            <p class=\'form-control height-auto\' data-bind="text:model.data().C3_541451198969 == \'其他\' ? model.data().C3_547719838514 : model.data().C3_541451198969"></p>\n        </div>\n    </div>\n\n    <!-- 拍照 -->\n    <!-- ko foreach:model.imgShowArr -->\n         <!--ko component: { name: "cellCameraCpt",params:{item:$data} }-->\n                                                                                       \n         <!--/ko-->\n    <!-- /ko -->\n\n    <!--附件 cellAttachCpt-->\n     <!--ko component: { name: "cellAttachCpt",params:{srcs:[model.data().C3_541450276993,model.data().C3_545771156108,model.data().C3_545771157350,model.data().C3_545771158420]} }-->\n                                                                                       \n    <!--/ko-->\n\n     <!--审批流 cellPendPersonCpt-->\n    <!--ko component: { name: "cellPendPersonCpt",params:{item:model.pendedProcessData} }-->\n    <!--/ko-->\n    \n    <!--保存提交cellSubmitBtnCpt-->\n     <!--ko component: "cellSubmitBtnCpt"-->\n                                                                                       \n    <!--/ko-->\n\n    <!--撤销 cellCancelBtnCpt-->\n     <!--ko component: "cellCancelBtnCpt"-->\n                                                                                       \n    <!--/ko-->\n\n\n\n\n</form>\n\n\n\n\n';});
 
 
-define('text!main/views/forgetPassWord.html',[],function () { return '<div>\r\n\t<div class="row clear-margin-rl">\r\n        <div class="mg-top login-from-container">\r\n\t\t\t<!--<div class="well no-padding">-->\r\n\t\t\t<form class="smart-form client-form">\r\n\t\t\t\t<fieldset>\r\n\t\t\t\t\t<section>\r\n\t\t\t\t\t\t<label class="label">工号</label>\r\n\t\t\t\t\t\t<label class="input"> \r\n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\r\n\t\t\t\t\t\t\t<input type="text" data-bind="value:model.personNum">\r\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入工号</b>\r\n\t\t\t\t\t\t</label>\r\n\t\t\t\t\t</section>\r\n\r\n\t\t\t\t</fieldset>\r\n\t\t\t\t<footer>\r\n\t\t\t\t\t<button type="submit" data-bind="click:forgetPassWordClick" class="btn btn-primary btn-block">\r\n\t\t\t\t\t\t\t\t\t\t提交\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</footer>\r\n\t\t\t</form>\r\n\r\n\t\t\t<!--</div>-->\r\n\t\t</div>\r\n\t\t<!--</div>-->\r\n\t</div>\r\n\r\n</div>';});
+define('text!main/views/forgetPassWord.html',[],function () { return '<div>\n\t<div class="row clear-margin-rl">\n        <div class="mg-top login-from-container">\n\t\t\t<!--<div class="well no-padding">-->\n\t\t\t<form class="smart-form client-form">\n\t\t\t\t<fieldset>\n\t\t\t\t\t<section>\n\t\t\t\t\t\t<label class="label">工号</label>\n\t\t\t\t\t\t<label class="input"> \n\t\t\t\t\t\t\t<i class="icon-append fa fa-user"></i>\n\t\t\t\t\t\t\t<input type="text" data-bind="value:model.personNum">\n\t\t\t\t\t\t\t<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入工号</b>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</section>\n\n\t\t\t\t</fieldset>\n\t\t\t\t<footer>\n\t\t\t\t\t<button type="submit" data-bind="click:forgetPassWordClick" class="btn btn-primary btn-block">\n\t\t\t\t\t\t\t\t\t\t提交\n\t\t\t\t\t</button>\n\t\t\t\t</footer>\n\t\t\t</form>\n\n\t\t\t<!--</div>-->\n\t\t</div>\n\t\t<!--</div>-->\n\t</div>\n\n</div>';});
 
 
-define('text!main/views/notificationEditor.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n</div>\r\n\r\n<!--<div class=\'form-group\'>\r\n    <label for=\'\' class=\'col-sm-2 col-md-2 col-lg-2 control-label\'>标题</label>\r\n    <div class=\' col-sm-10 col-md-10 col-lg-10\'>\r\n        <input class=\'form-control\' data-bind=\'value:model.readBookTitle\'>\r\n    </div>\r\n</div>-->\r\n\r\n<div id="editorTool"></div>\r\n<div id="editor" class="form-group" data-bind="html:model.editorContent" style="height:700px;min-height:700px">\r\n    <!--<p>欢迎使用 wangEditor 富文本编辑器</p>-->\r\n</div>\r\n\r\n<div class="form-group margin-top-ten">\r\n    <button class="btn btn-primary btn-block" data-bind="click:saveClick">保存</button>\r\n</div>';});
+define('text!main/views/notificationEditor.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n</div>\n\n<!--<div class=\'form-group\'>\n    <label for=\'\' class=\'col-sm-2 col-md-2 col-lg-2 control-label\'>标题</label>\n    <div class=\' col-sm-10 col-md-10 col-lg-10\'>\n        <input class=\'form-control\' data-bind=\'value:model.readBookTitle\'>\n    </div>\n</div>-->\n\n<div id="editorTool"></div>\n<div id="editor" class="form-group" data-bind="html:model.editorContent" style="height:700px;min-height:700px">\n    <!--<p>欢迎使用 wangEditor 富文本编辑器</p>-->\n</div>\n\n<div class="form-group margin-top-ten">\n    <button class="btn btn-primary btn-block" data-bind="click:saveClick">保存</button>\n</div>';});
 
 
-define('text!main/views/notificationMain.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <table class="table table-hover table-bordered" >\r\n            <thead>\r\n                <th>公告名称</th>\r\n                <th>发布日期</th>\r\n                <th>政策公告</th>\r\n                <th colspan="2">操作</th>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td><input data-bind="value:C3_548337699631,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}" ></td>\r\n                    <td><input data-bind="value:C3_548337775429,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}" ></td>\r\n                    <td><input data-bind="value:C3_555413311927,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}"></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$root.editClick($index)}">编辑</button></td>\r\n                    <td><button class="btn btn-primary" data-bind="text:isEdit() ?  \'保存\' : \'设置\',click:function(){$root.settingClick($index)}"></button></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/notificationMain.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <table class="table table-hover table-bordered" >\n            <thead>\n                <th>公告名称</th>\n                <th>发布日期</th>\n                <th>政策公告</th>\n                <th colspan="2">操作</th>\n            </thead>\n            <tbody data-bind="foreach:model.data">\n                <tr>\n                    <td><input data-bind="value:C3_548337699631,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}" ></td>\n                    <td><input data-bind="value:C3_548337775429,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}" ></td>\n                    <td><input data-bind="value:C3_555413311927,disable:!isEdit(),css:{\'no-border-bg\' : !isEdit()}"></td>\n                    <td><button class="btn btn-primary" data-bind="click:function(){$root.editClick($index)}">编辑</button></td>\n                    <td><button class="btn btn-primary" data-bind="text:isEdit() ?  \'保存\' : \'设置\',click:function(){$root.settingClick($index)}"></button></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n\n</div>\n<!-- end row -->';});
 
 
-define('text!main/views/pendHistory.html',[],function () { return '\r\n\r\n<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,isPend:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainHistoryState",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/pendHistory.html',[],function () { return '\n\n<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle,}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\n\t\t\t<!--/ko-->\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,isPend:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:{name:"cellMainHistoryState",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/pendRefuse.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,isPend:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n                   <!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/pendRefuse.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,isPend:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\n\t\t\t\t\t<!--/ko-->\n                   <!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/pended.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\r\n\t\t\t<!--/ko-->\r\n\t\t\t\r\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,\r\n\t\t\t\t\tisPend:false}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t\t<!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/pended.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true}}-->\n\t\t\t<!--/ko-->\n\t\t\t\n\t\t\t<!--ko component:{name:"cellMainFilterSearch",params:{title:model.selectedCategory,subTitle:model.vacationCategory,inputVal:model.inputVal,\n\t\t\t\t\tisPend:false}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<!--ko component:{name:"cellMainAttachBtn",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n\t<!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/pending.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\t\t\t<!--ko component:{name:"cellMainCategory",params:{isPend:true,colspan:3}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t\r\n\t\t\t<!--ko component:{\r\n\t\t\t\tname:"cellMainFilterSearch",\r\n\t\t\t\tparams:{\r\n\t\t\t\t\tcolspan:8,\r\n\t\t\t\t\ttitle:model.selectedCategory,\r\n\t\t\t\t\tsubTitle:model.vacationCategory,\r\n\t\t\t\t\tinputVal:model.inputVal,\r\n\t\t\t\t\tallSelected:model.allSelected,\r\n\t\t\t\t\tisPend:true}}-->\r\n\t\t\t<!--/ko-->\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n                    <!--ko component:{name:"cellMainRefuseBtn",params:{item:$data}}-->\r\n\t\t\t\t\t<!--/ko-->\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n\t<!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\t\t\t\r\n</div>\r\n\r\n<!-- end row -->';});
+define('text!main/views/pending.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>类型</th>\n                    <th>员工工号</th>\n                    <th>员工姓名</th>\n\t\t\t\t\t<th>开始时间</th>\n\t\t\t\t\t<th>结束时间</th>\n\t\t\t\t\t<th>时长</th>\n\t\t\t\t\t<th>审批人</th>\n\t\t\t\t\t<th>审批状态</th>\n\t\t\t\t\t<th>累计小时</th>\n\t\t\t\t\t<th data-bind=\'attr:{colspan:3}\' >操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\n\t\t\t<!--ko component:{\n\t\t\t\tname:"cellMainFilterSearch",\n\t\t\t\tparams:{\n\t\t\t\t\tthCount:7,\n\t\t\t\t\ttitle:model.selectedCategory,\n\t\t\t\t\tsubTitle:model.vacationCategory,\n\t\t\t\t\tinputVal:model.inputVal,\n\t\t\t\t\tallSelected:model.allSelected,\n\t\t\t\t\tisPend:true}}-->\n\t\t\t<!--/ko-->\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<!--ko component:{name:"cellMainData",params:{item:$data,isPend:true}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t\t<td data-bind="text:C3_561214800197"></td>\n\t\t\t\t\t<!--ko component:{name:"cellMainRefuseBtn",params:{item:$data}}-->\n\t\t\t\t\t<!--/ko-->\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n\t<!-- 分页pageSelectCpt-->\n\t<!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n\t<!--/ko-->\n\n</div>\n\n<!-- end row -->';});
 
 
-define('text!main/views/queryDayReport.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n<div id="mysearch2">\r\n\r\n    <!--<div id="msPageOne">\r\n        <div>\r\n            <select name="" id="" data-bind="options:dayOptionT,value:selectDate">\r\n        </select>\r\n\r\n            <span data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>\r\n            <span>异常</span>\r\n        </div>\r\n    </div>-->\r\n        <!-- row -->\r\n        <div class="row">\r\n\r\n            <!-- NEW WIDGET START -->\r\n            <article class="col-sm-12 col-md-12 col-lg-12">\r\n                <table class="table table-hover table-bordered">\r\n                    <thead>\r\n                        <tr>\r\n                            <th>日期</th>\r\n                            <th>班次</th>\r\n                            <th>开始时间</th>\r\n                            <th>结束时间</th>\r\n                            <th>时长</th>\r\n                            <th>操作</th>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>\r\n                                <select name="" id="" data-bind="options:dayOptionT,value:selectDate">\r\n                                </select>\r\n                            </th>\r\n                            <th></th>\r\n                            <th></th>\r\n                            <th></th>\r\n                            <th></th>\r\n                            <th>\r\n                               <span class="my-switch" data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>\r\n                               <span class="my-switch-title">异常</span>\r\n                            </th>\r\n                        </tr>\r\n                    </thead>\r\n                    <tbody data-bind="foreach:dataArr">\r\n                        <tr>\r\n                            <td data-bind="text:DATES"></td>\r\n                            <td data-bind="text:C3_375377576828"></td>\r\n\r\n                            <td data-bind="text:STARTTIMES == \'00:00\' ? \'\' : STARTTIMES"></td>\r\n                            <td data-bind="text:ENDTIMES == \'00:00\' ? \'\' : ENDTIMES"></td>\r\n\r\n                            <td data-bind="text:F_5"></td>\r\n                            <td><button class="btn btn-primary" data-bind="click:function(){$parent.gotoDetailClick($index)}">详情</button></td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </article>\r\n            <!-- WIDGET END -->\r\n\r\n        </div>\r\n        <!-- end row -->\r\n';});
+define('text!main/views/queryDayReport.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n<div id="mysearch2">\n\n    <!--<div id="msPageOne">\n        <div>\n            <select name="" id="" data-bind="options:dayOptionT,value:selectDate">\n        </select>\n\n            <span data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>\n            <span>异常</span>\n        </div>\n    </div>-->\n        <!-- row -->\n        <div class="row">\n\n            <!-- NEW WIDGET START -->\n            <article class="col-sm-12 col-md-12 col-lg-12">\n                <table class="table table-hover table-bordered">\n                    <thead>\n                        <tr>\n                            <th>日期</th>\n                            <th>班次</th>\n                            <th>开始时间</th>\n                            <th>结束时间</th>\n                            <th>时长</th>\n                            <th>操作</th>\n                        </tr>\n                        <tr>\n                            <th>\n                                <select name="" id="" data-bind="options:dayOptionT,value:selectDate">\n                                </select>\n                            </th>\n                            <th></th>\n                            <th></th>\n                            <th></th>\n                            <th></th>\n                            <th>\n                               <span class="my-switch" data-bind="click:errorData,css:{mysearchErrorOff:switchBool(),mysearchErrorOn:!switchBool()}"></span>\n                               <span class="my-switch-title">异常</span>\n                            </th>\n                        </tr>\n                    </thead>\n                    <tbody data-bind="foreach:dataArr">\n                        <tr>\n                            <td data-bind="text:DATES"></td>\n                            <td data-bind="text:C3_375377576828"></td>\n\n                            <td data-bind="text:STARTTIMES == \'00:00\' ? \'\' : STARTTIMES"></td>\n                            <td data-bind="text:ENDTIMES == \'00:00\' ? \'\' : ENDTIMES"></td>\n\n                            <td data-bind="text:F_5"></td>\n                            <td><button class="btn btn-primary" data-bind="click:function(){$parent.gotoDetailClick($index)}">详情</button></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </article>\n            <!-- WIDGET END -->\n\n        </div>\n        <!-- end row -->\n';});
 
 
-define('text!main/views/queryDayReportDetail.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <label class="label-title" data-bind="text:data().DATES"></label>\r\n        <table class="table table-hover table-bordered">\r\n\r\n\r\n\r\n            <tbody>\r\n                <tr>\r\n                    <td></td>\r\n                    <td data-bind="text:data().C3_375377576828"></td>\r\n                    <td></td>\r\n                    <td></td>\r\n                </tr>\r\n                <tr>\r\n                    <td>上班</td>\r\n                    <td data-bind="text:data().STARTTIMES == \'00:00\' ? \'\' : data().STARTTIMES"></td>\r\n                    <td></td>\r\n                    <td></td>\r\n                </tr>\r\n                <tr>\r\n                    <td>下班</td>\r\n                    <td data-bind="text:data().ENDTIMES == \'00:00\' ? \'\' : data().ENDTIMES"></td>\r\n                    <td></td>\r\n                    <td></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <label class="label-title">缺勤</label>\r\n        <table class="table table-hover table-bordered">\r\n\r\n            <tbody>\r\n                <tr>\r\n                    <td>迟到</td>\r\n                    <td>早退</td>\r\n                    <td>未刷卡</td>\r\n                    <td>漏刷卡</td>\r\n                </tr>\r\n\r\n                <tr>\r\n                    <td data-bind="text:data().F_1"></td>\r\n                    <td data-bind="text:data().F_2"></td>\r\n                    <td data-bind="text:data().F_3"></td>\r\n                    <td data-bind="text:data().F_40"></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <label class="label-title">请假</label>\r\n        <table class="table table-hover table-bordered">\r\n\r\n            <tbody>\r\n                <tr>\r\n                    <td>病假</td>\r\n                    <td>事假</td>\r\n                    <td>年假</td>\r\n                    <td>婚假</td>\r\n                </tr>\r\n\r\n                <tr>\r\n                    <td data-bind="text:data().F_14">/td>\r\n                        <td data-bind="text:data().F_15">/td>\r\n                            <td data-bind="text:data().F_23">/td>\r\n                                <td data-bind="text:data().F_18">/td>\r\n                </tr>\r\n                <tr>\r\n                    <td>产前假</td>\r\n                    <td>护理假</td>\r\n                    <td>路程假</td>\r\n                    <td>丧假</td>\r\n                </tr>\r\n                <tr>\r\n                    <td data-bind="text:data().F_36">/td>\r\n                        <td data-bind="text:data().F_69">/td>\r\n                            <td data-bind="text:data().F_54">/td>\r\n                                <td data-bind="text:data().F_19">/td>\r\n                </tr>\r\n                <tr>\r\n                    <td>工伤假</td>\r\n                    <td>产假</td>\r\n                    <td>产检假</td>\r\n                    <td>哺乳假</td>\r\n                </tr>\r\n                <tr>\r\n                    <td data-bind="text:data().F_27">/td>\r\n                        <td data-bind="text:data().F_16">/td>\r\n                            <td data-bind="text:data().F_35">/td>\r\n                                <td data-bind="text:data().F_37">/td>\r\n                </tr>\r\n                <tr>\r\n                    <td>计划生育假</td>\r\n                    <td>调休</td>\r\n                    <td>欠班</td>\r\n                    <td></td>\r\n                </tr>\r\n                <tr>\r\n                    <td data-bind="text:data().F_52">/td>\r\n                        <td data-bind="text:data().F_28">/td>\r\n                            <td data-bind="text:data().F_70">/td>\r\n                                <td></td>\r\n                </tr>\r\n                \r\n            </tbody>\r\n        </table>\r\n        <label class="label-title">累计出勤\r\n                    <span class="color-red" data-bind="text:data().F_79 ? data().F_79 + \'h\' : \'-\' + \'h\'"> </span></td>\r\n                </label>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/queryDayReportDetail.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <label class="label-title" data-bind="text:data().DATES"></label>\n        <table class="table table-hover table-bordered">\n\n\n\n            <tbody>\n                <tr>\n                    <td></td>\n                    <td data-bind="text:data().C3_375377576828"></td>\n                    <td></td>\n                    <td></td>\n                </tr>\n                <tr>\n                    <td>上班</td>\n                    <td data-bind="text:data().STARTTIMES == \'00:00\' ? \'\' : data().STARTTIMES"></td>\n                    <td></td>\n                    <td></td>\n                </tr>\n                <tr>\n                    <td>下班</td>\n                    <td data-bind="text:data().ENDTIMES == \'00:00\' ? \'\' : data().ENDTIMES"></td>\n                    <td></td>\n                    <td></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <label class="label-title">缺勤</label>\n        <table class="table table-hover table-bordered">\n\n            <tbody>\n                <tr>\n                    <td>迟到</td>\n                    <td>早退</td>\n                    <td>未刷卡</td>\n                    <td>漏刷卡</td>\n                </tr>\n\n                <tr>\n                    <td data-bind="text:data().F_1"></td>\n                    <td data-bind="text:data().F_2"></td>\n                    <td data-bind="text:data().F_3"></td>\n                    <td data-bind="text:data().F_40"></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <label class="label-title">请假</label>\n        <table class="table table-hover table-bordered">\n\n            <tbody>\n                <tr>\n                    <td>病假</td>\n                    <td>事假</td>\n                    <td>年假</td>\n                    <td>婚假</td>\n                </tr>\n\n                <tr>\n                    <td data-bind="text:data().F_14">/td>\n                        <td data-bind="text:data().F_15">/td>\n                            <td data-bind="text:data().F_23">/td>\n                                <td data-bind="text:data().F_18">/td>\n                </tr>\n                <tr>\n                    <td>产前假</td>\n                    <td>护理假</td>\n                    <td>路程假</td>\n                    <td>丧假</td>\n                </tr>\n                <tr>\n                    <td data-bind="text:data().F_36">/td>\n                        <td data-bind="text:data().F_69">/td>\n                            <td data-bind="text:data().F_54">/td>\n                                <td data-bind="text:data().F_19">/td>\n                </tr>\n                <tr>\n                    <td>工伤假</td>\n                    <td>产假</td>\n                    <td>产检假</td>\n                    <td>哺乳假</td>\n                </tr>\n                <tr>\n                    <td data-bind="text:data().F_27">/td>\n                        <td data-bind="text:data().F_16">/td>\n                            <td data-bind="text:data().F_35">/td>\n                                <td data-bind="text:data().F_37">/td>\n                </tr>\n                <tr>\n                    <td>计划生育假</td>\n                    <td>调休</td>\n                    <td>欠班</td>\n                    <td></td>\n                </tr>\n                <tr>\n                    <td data-bind="text:data().F_52">/td>\n                        <td data-bind="text:data().F_28">/td>\n                            <td data-bind="text:data().F_70">/td>\n                                <td></td>\n                </tr>\n                \n            </tbody>\n        </table>\n        <label class="label-title">累计出勤\n                    <span class="color-red" data-bind="text:data().F_79 ? data().F_79 + \'h\' : \'-\' + \'h\'"> </span></td>\n                </label>\n    </article>\n    <!-- WIDGET END -->\n\n</div>\n<!-- end row -->';});
 
 
-define('text!main/views/queryMonthReport.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n\t<!-- NEW WIDGET START -->\r\n\t<article class="col-sm-12 col-md-12 col-lg-12">\r\n\t\t<table class="table table-hover table-bordered">\r\n\r\n\t\t\t<tbody data-bind="foreach:model.data">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<td class="wd-fourty-pe" data-bind="text:$data.title"></td>\r\n                    <td data-bind="text:$data.subTitle"></td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t</article>\r\n\t<!-- WIDGET END -->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/queryMonthReport.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n\t<!-- NEW WIDGET START -->\n\t<article class="col-sm-12 col-md-12 col-lg-12">\n\t\t<table class="table table-hover table-bordered">\n\n\t\t\t<tbody data-bind="foreach:model.data">\n\t\t\t\t<tr>\n\t\t\t\t\t<td class="wd-fourty-pe" data-bind="text:$data.title"></td>\n                    <td data-bind="text:$data.subTitle"></td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</article>\n\t<!-- WIDGET END -->\n\n</div>\n<!-- end row -->';});
 
 
-define('text!main/views/queryMonthWork.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n<div id="nextWorkDay">\r\n    <div id="selDay">\r\n        <select name="" id="YMSelect" data-bind="options: model.dayOption,value:model.selectDate">\r\n        </select>\r\n    </div>\r\n\r\n    <div id="calendar">\r\n        <ul id="week">\r\n            <li>日</li>\r\n            <li>一</li>\r\n            <li>二</li>\r\n            <li>三</li>\r\n            <li>四</li>\r\n            <li>五</li>\r\n            <li>六</li>\r\n        </ul>\r\n\r\n        <div id="day" data-bind="foreach:model.dateArr">\r\n            <ul>\r\n                <li>\r\n                    <span data-bind="text:sun[0]"></span>\r\n                    <span data-bind="text:sun[1],style:{color:sun[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:mon[0]"></span>\r\n                    <span data-bind="text:mon[1],style:{color:mon[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:tus[0]"></span>\r\n                    <span data-bind="text:tus[1],style:{color:tus[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:wen[0]"></span>\r\n                    <span data-bind="text:wen[1],style:{color:wen[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:thur[0]"></span>\r\n                    <span data-bind="text:thur[1],style:{color:thur[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:fri[0]"></span>\r\n                    <span data-bind="text:fri[1],style:{color:fri[2]}"></span>\r\n                </li>\r\n                <li>\r\n                    <span data-bind="text:sat[0]"></span>\r\n                    <span data-bind="text:sat[1],style:{color:sat[2]}"></span>\r\n                </li>\r\n                <div class="line-ab"></div>\r\n            </ul>\r\n            \r\n        </div>\r\n    </div>\r\n\r\n</div>';});
+define('text!main/views/queryMonthWork.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n<div id="nextWorkDay">\n    <div id="selDay">\n        <select name="" id="YMSelect" data-bind="options: model.dayOption,value:model.selectDate">\n        </select>\n    </div>\n\n    <div id="calendar">\n        <ul id="week">\n            <li>日</li>\n            <li>一</li>\n            <li>二</li>\n            <li>三</li>\n            <li>四</li>\n            <li>五</li>\n            <li>六</li>\n        </ul>\n\n        <div id="day" data-bind="foreach:model.dateArr">\n            <ul>\n                <li>\n                    <span data-bind="text:sun[0]"></span>\n                    <span data-bind="text:sun[1],style:{color:sun[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:mon[0]"></span>\n                    <span data-bind="text:mon[1],style:{color:mon[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:tus[0]"></span>\n                    <span data-bind="text:tus[1],style:{color:tus[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:wen[0]"></span>\n                    <span data-bind="text:wen[1],style:{color:wen[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:thur[0]"></span>\n                    <span data-bind="text:thur[1],style:{color:thur[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:fri[0]"></span>\n                    <span data-bind="text:fri[1],style:{color:fri[2]}"></span>\n                </li>\n                <li>\n                    <span data-bind="text:sat[0]"></span>\n                    <span data-bind="text:sat[1],style:{color:sat[2]}"></span>\n                </li>\n                <div class="line-ab"></div>\n            </ul>\n            \n        </div>\n    </div>\n\n</div>';});
 
 
-define('text!main/views/staffPend.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n\r\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\r\n            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-7 col-md-offset-7 col-lg-offset-7">\r\n                 <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\r\n            </div>\r\n             <div class="col-sm-1 col-md-1 col-lg-1">\r\n                 <button class="btn btn-primary" data-bind="click:addClick">新增</button>\r\n            </div>\r\n        </div>\r\n\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        \r\n       \r\n\r\n        <table class="table table-hover table-bordered">\r\n            <thead>\r\n                <th>产线</th>\r\n                <th>员工工号</th>\r\n                <th>员工姓名</th>\r\n                <th>组长</th>\r\n                <th>主管</th>\r\n                <th>经理</th>\r\n                <th>错误提示</th>\r\n                <th>待审批</th>\r\n                <th>已审核</th>\r\n                <th>申请被退回</th>\r\n                <th>操作</th>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:C3_541468317577"></td>\r\n                    <td data-bind="text:C3_542062213811"></td>\r\n                    <td data-bind="text:C3_541450807755"></td>\r\n                    <td data-bind="text:C3_541450797951"></td>\r\n                    <td data-bind="text:C3_541467332728"></td>\r\n                    <td data-bind="text:C3_541467363607"></td>\r\n                    <td data-bind="text:C3_542065304623"></td>\r\n                    <td data-bind="text:C3_542385852578"></td>\r\n                    <td data-bind="text:C3_542385880907"></td>\r\n                    <td data-bind="text:C3_542385904547"></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.editClick($index)}">编辑</button></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/staffPend.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12" >\n        <div style="margin-left: 0px" class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">\n            <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\n        </div>\n        <div class="col-sm-2 col-md-2 col-lg-2">\n            <a href="javascript:void(0)" class="btn btn-primary">\n                上传EXCEL表格\n            </a>\n            <input id="uploaderInput" style="cursor:pointer" class="weui-uploader__input" data-bind="event:{change:function(data,event){readExcel(data,event)}}"\n                type="file" />\n        </div>\n        <div class="col-sm-1 col-md-1 col-lg-1" >\n            <a href="http://finisar.realsun.me/mobileTimeManage/download/菜单订购统计.xls" class="btn btn-primary">\n                下载模板\n            </a>\n        </div>\n        <div class="col-sm-1 col-md-1 col-lg-1">\n            <button class="btn btn-primary" data-bind="click:addClick">新增</button>\n        </div>\n    </div>\n\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <table class="table table-hover table-bordered">\n            <thead>\n                <th>产线</th>\n                <th>员工工号</th>\n                <th>员工姓名</th>\n                <th>组长</th>\n                <th>主管</th>\n                <th>经理</th>\n                <th>错误提示</th>\n                <th>待审批</th>\n                <th>已审核</th>\n                <th>申请被退回</th>\n                <th>操作</th>\n            </thead>\n            <tbody data-bind="foreach:model.data">\n                <tr>\n                    <td data-bind="text:C3_541468317577"></td>\n                    <td data-bind="text:C3_542062213811"></td>\n                    <td data-bind="text:C3_541450807755"></td>\n                    <td data-bind="text:C3_541450797951"></td>\n                    <td data-bind="text:C3_541467332728"></td>\n                    <td data-bind="text:C3_541467363607"></td>\n                    <td data-bind="text:C3_542065304623"></td>\n                    <td data-bind="text:C3_542385852578"></td>\n                    <td data-bind="text:C3_542385880907"></td>\n                    <td data-bind="text:C3_542385904547"></td>\n                    <td>\n                        <button class="btn btn-primary" data-bind="click:function(){$parent.editClick($index)}">编辑</button>\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n    <!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n<!-- end row -->';});
 
 
-define('text!main/views/staffPendEdit.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <form class="form-horizontal page-padd">\r\n            <div class="form-group">\r\n                <p class="col-xs-4 control-label text-right">工号</p>\r\n                <div class="col-xs-8">\r\n                    <input class="form-control" type="text" data-bind="value:model.data().C3_542062213811">\r\n                </div>\r\n            </div>\r\n\r\n            <div class="form-group">\r\n                <p class="col-xs-4 control-label text-right">姓名</p>\r\n                <div class="col-xs-8">\r\n                    <input class="form-control" type="text" data-bind="value:model.data().C3_541450807755">\r\n                </div>\r\n            </div>\r\n\r\n            <div class="form-group">\r\n                <p class="col-xs-4 control-label text-right">组长</p>\r\n                <div class="col-xs-8">\r\n                    <input class="form-control" data-bind="value:model.data().C3_541450797951,click:function(){gotoChoosePageClick(\'zuzhang\')}"\r\n                        readonly>\r\n\r\n                </div>\r\n            </div>\r\n\r\n            <div class="form-group">\r\n                <p class="col-xs-4 control-label text-right">主管</p>\r\n                <div class="col-xs-8">\r\n                    <input class="form-control" data-bind="value:model.data().C3_541467332728,click:function(){gotoChoosePageClick(\'zhuguan\')}"\r\n                        readonly>\r\n                </div>\r\n            </div>\r\n\r\n            <div class="form-group">\r\n                <p class="col-xs-4 control-label text-right">经理</p>\r\n                <div class="col-xs-8">\r\n                    <input class="form-control" data-bind="value:model.data().C3_541467363607,click:function(){gotoChoosePageClick(\'jinli\')}"\r\n                        readonly>\r\n                </div>\r\n            </div>\r\n\r\n\r\n        </form>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!--cellSaveBtnCpt-->\r\n\r\n    <div data-bind=\'component: {\r\n         name: "cellSaveBtnCpt",params:{propClick:saveClick}\r\n         }\'>\r\n    </div>\r\n</div>\r\n<!-- end row <-->';});
+define('text!main/views/staffPendEdit.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <form class="form-horizontal page-padd">\n                <div class="form-group">\n                        <p class="col-xs-4 control-label text-right">产线</p>\n                        <div class="col-xs-8">\n                            <input class="form-control" type="text" data-bind="value:model.data().c3＿541468317577">\n                        </div>\n                    </div>\n            <div class="form-group">\n                <p class="col-xs-4 control-label text-right">工号</p>\n                <div class="col-xs-8">\n                    <input class="form-control" type="text" data-bind="value:model.data().C3_542062213811">\n                </div>\n            </div>\n\n            <div class="form-group">\n                <p class="col-xs-4 control-label text-right">姓名</p>\n                <div class="col-xs-8">\n                    <input class="form-control" type="text" data-bind="value:model.data().C3_541450807755">\n                </div>\n            </div>\n\n            <div class="form-group">\n                <p class="col-xs-4 control-label text-right">组长</p>\n                <div class="col-xs-8">\n                    <input class="form-control" data-bind="value:model.data().C3_541450797951,click:function(){gotoChoosePageClick(\'zuzhang\')}"\n                        readonly>\n\n                </div>\n            </div>\n\n            <div class="form-group">\n                <p class="col-xs-4 control-label text-right">主管</p>\n                <div class="col-xs-8">\n                    <input class="form-control" data-bind="value:model.data().C3_541467332728,click:function(){gotoChoosePageClick(\'zhuguan\')}"\n                        readonly>\n                </div>\n            </div>\n\n            <div class="form-group">\n                <p class="col-xs-4 control-label text-right">经理</p>\n                <div class="col-xs-8">\n                    <input class="form-control" data-bind="value:model.data().C3_541467363607,click:function(){gotoChoosePageClick(\'jinli\')}"\n                        readonly>\n                </div>\n            </div>\n\n\n        </form>\n    </article>\n    <!-- WIDGET END -->\n\n    <!--cellSaveBtnCpt-->\n\n    <div data-bind=\'component: {\n         name: "cellSaveBtnCpt",params:{propClick:saveClick}\n         }\'>\n    </div>\n</div>\n<!-- end row <-->';});
 
 
-define('text!main/views/staffPendEditOption.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\r\n        <table class="table table-hover table-bordered">\r\n            <thead>\r\n                <th>员工工号</th>\r\n                <th>员工姓名</th>\r\n                <th>员工编号</th>\r\n                <th>英文名</th>\r\n                <th>操作</th>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:C3_511299354239"></td>\r\n                    <td data-bind="text:C3_511297363801"></td>\r\n                    <td data-bind="text:C3_511297180036"></td>\r\n                    <td data-bind="text:C3_545758007348"></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.chooseClick($index)}">选择</button></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/staffPendEditOption.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\n        <table class="table table-hover table-bordered">\n            <thead>\n                <th>员工工号</th>\n                <th>员工姓名</th>\n                <th>员工编号</th>\n                <th>英文名</th>\n                <th>操作</th>\n            </thead>\n            <tbody data-bind="foreach:model.data">\n                <tr>\n                    <td data-bind="text:C3_511299354239"></td>\n                    <td data-bind="text:C3_511297363801"></td>\n                    <td data-bind="text:C3_511297180036"></td>\n                    <td data-bind="text:C3_545758007348"></td>\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.chooseClick($index)}">选择</button></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n    <!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n<!-- end row -->';});
 
 
-define('text!main/views/wxApply.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n</div>\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n\r\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\r\n            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-8 col-md-offset-8 col-lg-offset-8">\r\n                 <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\r\n            </div>\r\n             \r\n        </div>\r\n\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <table class="table table-hover table-bordered">\r\n            <thead>\r\n                <th>员工工号</th>\r\n                <th>员工姓名</th>\r\n                <th>申请类别</th>\r\n                <th>开始时间</th>\r\n                <th>结束时间</th>\r\n                <th>时间长度</th>\r\n                <th>申请原因</th>\r\n                <th>已审核</th>\r\n                <th>已添加</th>\r\n                <th>已撤销</th>\r\n                <th colspan="2">操作</th>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:C3_546778223547"></td>\r\n                    <td data-bind="text:C3_546785920929"></td>\r\n                    <td data-bind="text:C3_546778295354"></td>\r\n                    <td data-bind="text:C3_546778248258"></td>\r\n                    <td data-bind="text:C3_546778254638"></td>\r\n                    <td data-bind="text:C3_546778281611"></td>\r\n                    <td data-bind="text:C3_546778314589"></td>\r\n                    <td data-bind="text:C3_546778341515"></td>\r\n                    <td data-bind="text:C3_546786924740"></td>\r\n                    <td data-bind="text:C3_553774879841"></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.detailClick($index)}">详情</button></td>\r\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.cancelClick($index)}">撤销</button></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n    <!-- 分页pageSelectCpt-->\r\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\r\n    <!--/ko-->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/wxApply.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n</div>\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n\n    <div class="padding-bt-10 col-sm-12 col-md-12 col-lg-12">\n            <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-8 col-md-offset-8 col-lg-offset-8">\n                 <input type="text" class="form-control" data-bind="textInput:model.inputVal,event:{change:kvoInput}">\n            </div>\n             \n        </div>\n\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <table class="table table-hover table-bordered">\n            <thead>\n                <th>员工工号</th>\n                <th>员工姓名</th>\n                <th>申请类别</th>\n                <th>开始时间</th>\n                <th>结束时间</th>\n                <th>时间长度</th>\n                <th>申请原因</th>\n                <th>已审核</th>\n                <th>已添加</th>\n                <th>已撤销</th>\n                <th colspan="2">操作</th>\n            </thead>\n            <tbody data-bind="foreach:model.data">\n                <tr>\n                    <td data-bind="text:C3_546778223547"></td>\n                    <td data-bind="text:C3_546785920929"></td>\n                    <td data-bind="text:C3_546778295354"></td>\n                    <td data-bind="text:C3_546778248258"></td>\n                    <td data-bind="text:C3_546778254638"></td>\n                    <td data-bind="text:C3_546778281611"></td>\n                    <td data-bind="text:C3_546778314589"></td>\n                    <td data-bind="text:C3_546778341515"></td>\n                    <td data-bind="text:C3_546786924740"></td>\n                    <td data-bind="text:C3_553774879841"></td>\n                    <td><button class="btn btn-primary" data-bind="click:function(){$parent.detailClick($index)}">详情</button></td>\n                    <td><button class="btn btn-primary"  data-bind="click:function(){$parent.cancelClick($index)}">撤销</button></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n    <!-- 分页pageSelectCpt-->\n    <!--ko component:{name:"pageSelectCpt",params:{pageMark:model.pageMark,pageFirstClick:pageFirst}}-->\n    <!--/ko-->\n\n</div>\n<!-- end row -->\n<div class="modal fade" id="myModalConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\n\t<div class="modal-dialog" role="document">\n\t  <div class="modal-content">\n\t\t<div class="modal-header">\n\t\t  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n\t\t  <h4 class="modal-title" id="myModalLabel">撤销</h4>\n\t\t</div>\n\t\t <div class="modal-body">\n\t\t  是否撤销？\n\t\t</div> \n\t\t<div class="modal-footer">\n\t\t  <button type="button" class="btn btn-default" data-dismiss="modal" >否</button>\n\t\t  <button type="button" class="btn btn-primary" data-bind="click:function(){EnsureClick()}">是</button>\n\t\t</div>\n\t  </div>\n\t</div>\n  </div>';});
 
 
-define('text!main/views/wxApplyPendDetail.html',[],function () { return '<div data-bind=\'component: {\r\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\r\n}\'>\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- row -->\r\n<div class="row">\r\n\r\n    <!-- NEW WIDGET START -->\r\n    <article class="col-sm-12 col-md-12 col-lg-12">\r\n        <table class="table table-hover table-bordered">\r\n            <thead>\r\n                <th>审批节点</th>\r\n                <th>审批人</th>\r\n                <th>审批结果</th>\r\n                <th>审批时间</th>\r\n            </thead>\r\n            <tbody data-bind="foreach:model.data">\r\n                <tr>\r\n                    <td data-bind="text:C3_541450356168"></td>\r\n                    <td data-bind="text:C3_541450392920"></td>\r\n                    <td data-bind="text:C3_541450438440"></td>\r\n                    <td data-bind="text:C3_541450449702"></td>\r\n                </tr>\r\n            </tbody>\r\n        </table>\r\n    </article>\r\n    <!-- WIDGET END -->\r\n\r\n</div>\r\n<!-- end row -->';});
+define('text!main/views/wxApplyPendDetail.html',[],function () { return '<div data-bind=\'component: {\n     name: "headerCpt",params:{title:model.title,subTitle:model.subTitle}\n}\'>\n\n</div>\n\n\n\n<!-- row -->\n<div class="row">\n\n    <!-- NEW WIDGET START -->\n    <article class="col-sm-12 col-md-12 col-lg-12">\n        <table class="table table-hover table-bordered">\n            <thead>\n                <th>审批节点</th>\n                <th>审批人</th>\n                <th>审批结果</th>\n                <th>审批时间</th>\n            </thead>\n            <tbody data-bind="foreach:model.data">\n                <tr>\n                    <td data-bind="text:C3_541450356168"></td>\n                    <td data-bind="text:C3_541450392920"></td>\n                    <td data-bind="text:C3_541450438440"></td>\n                    <td data-bind="text:C3_541450449702"></td>\n                </tr>\n            </tbody>\n        </table>\n    </article>\n    <!-- WIDGET END -->\n\n</div>\n<!-- end row -->';});
 
 
-define('text!shell.html',[],function () { return '<!-- #HEADER -->\r\n<header id="header">\r\n\t<div id="logo-group">\r\n\r\n\t\t<!-- PLACE YOUR LOGO HERE -->\r\n\t\t<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>\r\n\t\t<!-- END LOGO PLACEHOLDER -->\r\n\r\n\t</div>\r\n\r\n\t\r\n\r\n\t<!-- #TOGGLE LAYOUT BUTTONS -->\r\n\t<!-- pulled right: nav area -->\r\n\t<div class="pull-right">\r\n\r\n\t\t<!-- collapse menu button -->\r\n\t\t<div id="hide-menu" class="btn-header pull-right">\r\n\t\t\t<span> <a href="javascript:void(0);" data-bind="click:toggleMenu" data-action="toggleMenu" title="菜单"><i class="fa fa-reorder"></i></a> </span>\r\n\t\t</div>\r\n\t\t<!-- end collapse menu -->\r\n\r\n\t\t<!-- #MOBILE -->\r\n\t\t<!-- Top menu profile link : this shows only when top menu is active -->\r\n\t\t<ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">\r\n\t\t\t<li class="">\r\n\t\t\t\t<a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">\r\n\t\t\t\t\t<img src="img/avatars/sunny.png" alt="John Doe" class="online" />\r\n\t\t\t\t</a>\r\n\t\t\t\t<ul class="dropdown-menu pull-right">\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i> Setting</a>\r\n\t\t\t\t\t</li>\r\n\t\t\t\t\t<li class="divider"></li>\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a href="#ajax/profile.html" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i>\r\n\t\t\t\t\t\t\t<u>P</u>rofile</a>\r\n\t\t\t\t\t</li>\r\n\t\t\t\t\t<li class="divider"></li>\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>\r\n\t\t\t\t\t</li>\r\n\t\t\t\t\t<li class="divider"></li>\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a>\r\n\t\t\t\t\t</li>\r\n\t\t\t\t\t<li class="divider"></li>\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>\r\n\t\t\t\t\t</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</li>\r\n\t\t</ul>\r\n\r\n\r\n\t\t<!-- logout button -->\r\n\t\t<div id="logout" class="btn-header transparent pull-right" data-bind="click:logoutClick">\r\n\t\t\t<span> <a href="#login" title="登出" ><i class="fa fa-sign-out"></i></a> </span>\r\n\t\t</div>\r\n\t\t<!-- end logout button -->\r\n\r\n\t\t<!-- change password button -->\r\n\t\t<div id="logout" class="btn-header transparent pull-right" data-bind="click:changePassWord">\r\n\t\t\t<span> <a href="#" title="修改密码" ><i class="fa fa-key"></i></a> </span>\r\n\t\t</div>\r\n\t\t<!-- end change password button -->\r\n\r\n\t\t<!-- search mobile button (this is hidden till mobile view port) -->\r\n\t\t<div id="search-mobile" style="display: none" class="btn-header transparent pull-right">\r\n\t\t\t<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>\r\n\t\t</div>\r\n\t\t<!-- end search mobile button -->\r\n\r\n\r\n\t\t<!-- fullscreen button -->\r\n\t\t<div id="fullscreen" class="btn-header transparent pull-right">\r\n\t\t\t<span> <a href="javascript:void(0);" data-action="launchFullscreen" title="全屏"><i class="fa fa-arrows-alt"></i></a> </span>\r\n\t\t</div>\r\n\t\t<!-- end fullscreen button -->\r\n\r\n\r\n\r\n\t</div>\r\n\t<!-- end pulled right: nav area -->\r\n\r\n</header>\r\n<!-- END HEADER -->\r\n\r\n<!-- #NAVIGATION -->\r\n<!-- Left panel : Navigation area -->\r\n<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->\r\n<aside id="left-panel">\r\n\r\n\t<!-- User info -->\r\n\t<div class="login-info">\r\n\t\t<span> <!-- User image size is adjusted inside CSS, it should stay as is --> \r\n\t\t\t\t\t\r\n\t\t\t\t\t<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">\r\n\t\t\t\t\t\t<!--<img src="img/avatars/sunny.png" alt="me" class="online" /> -->\r\n\t\t\t\t\t\t<span id="userName" data-bind="text:data.userName">\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t</span>\r\n\t\t<!--<i class="fa fa-angle-down"></i>-->\r\n\t\t</a>\r\n\r\n\t\t</span>\r\n\t</div>\r\n\t<!-- end user info -->\r\n\r\n\t<!-- NAVIGATION : This navigation is also responsive\r\n\r\n\t\t\tTo make this navigation dynamic please make sure to link the node\r\n\t\t\t(the reference to the nav > ul) after page load. Or the navigation\r\n\t\t\twill not initialize.\r\n\t\t\t-->\r\n\t<nav>\r\n\t\t<!-- \r\n\t\t\t\tNOTE: Notice the gaps after each icon usage <i></i>..\r\n\t\t\t\tPlease note that these links work a bit different than\r\n\t\t\t\ttraditional href="" links. See documentation for details.\r\n\t\t\t\t-->\r\n\r\n\t\t<ul>\r\n\t\t\t<!--<li class="">\r\n\t\t\t\t<a href="#" title="blank_"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Blank</span></a>\r\n\t\t\t</li>-->\r\n\t\t\t<!--ko foreach: routersModel -->\r\n\t\t\t<li>\r\n\t\t\t\t<!--<a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent" data-bind="text:$data[0].type">Outlook</span> <span class="badge pull-right inbox-badge margin-right-13">14</span></a>-->\r\n\t\t\t\t<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent" data-bind="text:$data[0].type">Tables</span></a>\r\n\t\t\t\t<ul data-bind="foreach: $data">\r\n\t\t\t\t\t<li>\r\n\t\t\t\t\t\t<a data-bind="attr: { href: $data.hash },text: $data.title">Inbox </a>\r\n\t\t\t\t\t</li>\r\n\r\n\t\t\t\t</ul>\r\n\t\t\t</li>\r\n\t\t\t<!-- /ko -->\r\n\r\n\t\t</ul>\r\n\t</nav>\r\n\r\n\t<span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>\r\n\r\n</aside>\r\n<!-- END NAVIGATION -->\r\n\r\n<!-- #MAIN PANEL -->\r\n<div id="main" role="main">\r\n\r\n\t<!-- RIBBON -->\r\n\t<div id="ribbon">\r\n\r\n\t\t<!-- breadcrumb -->\r\n\t\t<ol class="breadcrumb">\r\n\t\t\t<!-- This is auto generated -->\r\n\t\t</ol>\r\n\t\t<!-- end breadcrumb -->\r\n\r\n\t\t<!-- You can also add more buttons to the\r\n\t\t\t\tribbon for further usability\r\n\r\n\t\t\t\tExample below:\r\n\r\n\t\t\t\t<span class="ribbon-button-alignment pull-right" style="margin-right:25px">\r\n\t\t\t\t\t<a href="#" id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa fa-grid"></i> Change Grid</a>\r\n\t\t\t\t\t<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa fa-plus"></i> Add</span>\r\n\t\t\t\t\t<button id="search" class="btn btn-ribbon" data-title="search"><i class="fa fa-search"></i> <span class="hidden-mobile">Search</span></button>\r\n\t\t\t\t</span> -->\r\n\r\n\t</div>\r\n\t<!-- END RIBBON -->\r\n\r\n\t<!-- #MAIN CONTENT -->\r\n\t<div id="content">\r\n\t\t<div class="page-host">\r\n\t\t\t<!--ko router: { transition:\'entrance\', cacheViews:false }-->\r\n\t\t\t<!--/ko-->\r\n\t\t</div>\r\n\r\n\t</div>\r\n\r\n\r\n\t<!-- END #MAIN CONTENT -->\r\n\r\n\r\n\t<!-- END #MAIN PANEL -->\r\n\r\n\t<!-- #PAGE FOOTER \r\n<div class="page-footer">\r\n\t<div class="row">\r\n\t\t<div class="col-xs-12 col-sm-6">\r\n\t\t\t<span class="txt-color-white">SmartAdmin 1.8.x <span class="hidden-xs"> - Web Application Framework</span> © 2014-2016</span>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n</div>\r\n END FOOTER -->\r\n\r\n\t<!-- #SHORTCUT AREA : With large tiles (activated via clicking user name tag)\r\n\t\t\t Note: These tiles are completely responsive, you can add as many as you like -->\r\n\t<div id="shortcut">\r\n\t\t<ul>\r\n\t\t\t<li>\r\n\t\t\t\t<a href="" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span>\r\n\t\t\t\t\t</span>\r\n\t\t\t\t</a>\r\n\t\t\t</li>\r\n\t\t</ul>\r\n\t</div>\r\n\t<!-- END SHORTCUT AREA -->\r\n\t<!-- MAIN APP JS FILE -->';});
+define('text!shell.html',[],function () { return '<!-- #HEADER -->\n<header id="header">\n\t<div id="logo-group">\n\n\t\t<!-- PLACE YOUR LOGO HERE -->\n\t\t<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>\n\t\t<!-- END LOGO PLACEHOLDER -->\n\n\t</div>\n\n\t\n\n\t<!-- #TOGGLE LAYOUT BUTTONS -->\n\t<!-- pulled right: nav area -->\n\t<div class="pull-right">\n\n\t\t<!-- collapse menu button -->\n\t\t<div id="hide-menu" class="btn-header pull-right">\n\t\t\t<span> <a href="javascript:void(0);" data-bind="click:toggleMenu" data-action="toggleMenu" title="菜单"><i class="fa fa-reorder"></i></a> </span>\n\t\t</div>\n\t\t<!-- end collapse menu -->\n\n\t\t<!-- #MOBILE -->\n\t\t<!-- Top menu profile link : this shows only when top menu is active -->\n\t\t<ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">\n\t\t\t<li class="">\n\t\t\t\t<a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">\n\t\t\t\t\t<img src="img/avatars/sunny.png" alt="John Doe" class="online" />\n\t\t\t\t</a>\n\t\t\t\t<ul class="dropdown-menu pull-right">\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i> Setting</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class="divider"></li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a href="#ajax/profile.html" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i>\n\t\t\t\t\t\t\t<u>P</u>rofile</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class="divider"></li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class="divider"></li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class="divider"></li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</li>\n\t\t</ul>\n\n\n\t\t<!-- logout button -->\n\t\t<div id="logout" class="btn-header transparent pull-right" data-bind="click:logoutClick">\n\t\t\t<span> <a href="#login" title="登出" ><i class="fa fa-sign-out"></i></a> </span>\n\t\t</div>\n\t\t<!-- end logout button -->\n\n\t\t<!-- change password button -->\n\t\t<div id="logout" class="btn-header transparent pull-right" data-bind="click:changePassWord">\n\t\t\t<span> <a href="#" title="修改密码" ><i class="fa fa-key"></i></a> </span>\n\t\t</div>\n\t\t<!-- end change password button -->\n\n\t\t<!-- search mobile button (this is hidden till mobile view port) -->\n\t\t<div id="search-mobile" style="display: none" class="btn-header transparent pull-right">\n\t\t\t<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>\n\t\t</div>\n\t\t<!-- end search mobile button -->\n\n\n\t\t<!-- fullscreen button -->\n\t\t<div id="fullscreen" class="btn-header transparent pull-right">\n\t\t\t<span> <a href="javascript:void(0);" data-action="launchFullscreen" title="全屏"><i class="fa fa-arrows-alt"></i></a> </span>\n\t\t</div>\n\t\t<!-- end fullscreen button -->\n\n\n\n\t</div>\n\t<!-- end pulled right: nav area -->\n\n</header>\n<!-- END HEADER -->\n\n<!-- #NAVIGATION -->\n<!-- Left panel : Navigation area -->\n<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->\n<aside id="left-panel">\n\n\t<!-- User info -->\n\t<div class="login-info">\n\t\t<span> <!-- User image size is adjusted inside CSS, it should stay as is --> \n\t\t\t\t\t\n\t\t\t\t\t<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">\n\t\t\t\t\t\t<!--<img src="img/avatars/sunny.png" alt="me" class="online" /> -->\n\t\t\t\t\t\t<span id="userName" data-bind="text:data.userName">\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</span>\n\t\t<!--<i class="fa fa-angle-down"></i>-->\n\t\t</a>\n\n\t\t</span>\n\t</div>\n\t<!-- end user info -->\n\n\t<!-- NAVIGATION : This navigation is also responsive\n\n\t\t\tTo make this navigation dynamic please make sure to link the node\n\t\t\t(the reference to the nav > ul) after page load. Or the navigation\n\t\t\twill not initialize.\n\t\t\t-->\n\t<nav>\n\t\t<!-- \n\t\t\t\tNOTE: Notice the gaps after each icon usage <i></i>..\n\t\t\t\tPlease note that these links work a bit different than\n\t\t\t\ttraditional href="" links. See documentation for details.\n\t\t\t\t-->\n\n\t\t<ul>\n\t\t\t<!--<li class="">\n\t\t\t\t<a href="#" title="blank_"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Blank</span></a>\n\t\t\t</li>-->\n\t\t\t<!--ko foreach: routersModel -->\n\t\t\t<li>\n\t\t\t\t<!--<a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent" data-bind="text:$data[0].type">Outlook</span> <span class="badge pull-right inbox-badge margin-right-13">14</span></a>-->\n\t\t\t\t<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent" data-bind="text:$data[0].type">Tables</span></a>\n\t\t\t\t<ul data-bind="foreach: $data">\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<a data-bind="attr: { href: $data.hash },text: $data.title">Inbox </a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</li>\n\t\t\t<!-- /ko -->\n\n\t\t</ul>\n\t</nav>\n\n\t<span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>\n\n</aside>\n<!-- END NAVIGATION -->\n\n<!-- #MAIN PANEL -->\n<div id="main" role="main">\n\n\t<!-- RIBBON -->\n\t<div id="ribbon">\n\n\t\t<!-- breadcrumb -->\n\t\t<ol class="breadcrumb">\n\t\t\t<!-- This is auto generated -->\n\t\t</ol>\n\t\t<!-- end breadcrumb -->\n\n\t\t<!-- You can also add more buttons to the\n\t\t\t\tribbon for further usability\n\n\t\t\t\tExample below:\n\n\t\t\t\t<span class="ribbon-button-alignment pull-right" style="margin-right:25px">\n\t\t\t\t\t<a href="#" id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa fa-grid"></i> Change Grid</a>\n\t\t\t\t\t<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa fa-plus"></i> Add</span>\n\t\t\t\t\t<button id="search" class="btn btn-ribbon" data-title="search"><i class="fa fa-search"></i> <span class="hidden-mobile">Search</span></button>\n\t\t\t\t</span> -->\n\n\t</div>\n\t<!-- END RIBBON -->\n\n\t<!-- #MAIN CONTENT -->\n\t<div id="content">\n\t\t<div class="page-host">\n\t\t\t<!--ko router: { transition:\'entrance\', cacheViews:false }-->\n\t\t\t<!--/ko-->\n\t\t</div>\n\n\t</div>\n\n\n\t<!-- END #MAIN CONTENT -->\n\n\n\t<!-- END #MAIN PANEL -->\n\n\t<!-- #PAGE FOOTER \n<div class="page-footer">\n\t<div class="row">\n\t\t<div class="col-xs-12 col-sm-6">\n\t\t\t<span class="txt-color-white">SmartAdmin 1.8.x <span class="hidden-xs"> - Web Application Framework</span> © 2014-2016</span>\n\t\t</div>\n\t</div>\n\t\n</div>\n END FOOTER -->\n\n\t<!-- #SHORTCUT AREA : With large tiles (activated via clicking user name tag)\n\t\t\t Note: These tiles are completely responsive, you can add as many as you like -->\n\t<div id="shortcut">\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href="" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span>\n\t\t\t\t\t</span>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n\t<!-- END SHORTCUT AREA -->\n\t<!-- MAIN APP JS FILE -->';});
 
 
 require(["main"]);

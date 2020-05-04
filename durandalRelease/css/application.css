@@ -901,7 +901,9 @@ pre {
   .col-sm-offset-4 {
     margin-left: 33.3333333333%; }
   .col-sm-offset-5 {
-    margin-left: 41.6666666667%; }
+    /* margin-left: 41.6666666667%;  */
+    margin-left:32%; 
+  }
   .col-sm-offset-6 {
     margin-left: 50%; }
   .col-sm-offset-7 {
