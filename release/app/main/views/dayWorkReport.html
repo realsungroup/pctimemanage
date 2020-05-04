@@ -96,7 +96,7 @@
               <input
                 class="form-control"
                 type="checkbox"
-                data-bind="checked:selected"
+                data-bind="checked:selected,event:{change:function(a,e){$root.kvoCheck($data,e)}}"
               />
             </td>
             <td rowspan="8" data-bind="text:班组名称"></td>

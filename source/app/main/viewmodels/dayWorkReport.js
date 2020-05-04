@@ -118,6 +118,20 @@ define([
     selfVM.getData(0);
   };
 
+  selfVM.kvoCheck = function (data, e) {
+    // const checked = e.currentTarget.checked;
+    // if (checked) {
+    //   const employee = selfVM.model.data().find((item) => {
+    //     return item[0].selected && item[0].pnid !== data.pnid;
+    //   });
+    //   if (employee) {
+    //     console.log(employee);
+    //     employee[0].selected = false;
+    //   }
+    // } else {
+    // }
+  };
+
   selfVM.model.selectDate.subscribe(function (newVal) {
     selfVM.model.pageIndex = 0;
     selfVM.getData(0);
@@ -169,13 +183,22 @@ define([
     );
   };
   selfVM.syncRecords = function () {
-    selfVM.model.isLoading = true;
-    const employee = selfVM.model.data().find((data) => {
+    const employee = selfVM.model.data().filter((data) => {
       return data[0].selected;
     });
+    if (!employee.length) {
+      return cmAlert("请选择一条记录");
+    }
+    if (employee.length > 1) {
+      return cmAlert("只能选择一条记录");
+    }
     const param = {
-      cmswhere: `YEARMONTH = '${employee[0].考勤月份}' and PNID = ${employee[0].pnid}`,
+      cmswhere: `YEARMONTH = '${employee[0][0].考勤月份}' and PNID = ${employee[0][0].pnid}`,
     };
+    if (selfVM.model.isLoading) {
+      return cmAlert("正在同步中");
+    }
+    selfVM.model.isLoading = true;
     httpService.getEmployeeDayWorkReportData(
       param,
       function (data) {
@@ -198,6 +221,7 @@ define([
               DAYTYPE: item.DAYTYPE,
             };
           });
+          selfVM.model.isLoading = true;
           httpService.syncDailyData(
             {
               data: dataArr,
@@ -205,9 +229,7 @@ define([
             },
             function (data) {
               selfVM.model.isLoading = false;
-              if (data && data.data) {
-                dataArr = data.data;
-              }
+              return cmAlert("同步完成");
             },
             function () {
               selfVM.model.isLoading = false;
