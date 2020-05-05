@@ -3,6 +3,7 @@
     "path": {
       "baseUrl": "https://finisar.realsun.me:9092/",
       "loginBaseUrl": "http://ngrok5.realsun.me:6060/",
+      "batchAuditApplication":"api/200/Attendance/BatchAuditApplication",
       "extranetBaseUrl": "http://kingofdinner.realsun.me:9091/",
       "getData": "api/100/table/Retrieve",
       "getSubData": "api/100/table/RetrieveRelTableByHostRecord",
