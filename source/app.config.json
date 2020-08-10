@@ -1,13 +1,15 @@
 {
   "app": {
     "path": {
-      "baseUrl": "https://finisar.realsun.me:9092/",
-      "loginBaseUrl": "http://ngrok5.realsun.me:6060/",
-      "batchAuditApplication":"api/200/Attendance/BatchAuditApplication",
+      "baseUrl": "http://finisar.realsun.me:1001/",
+      "loginBaseUrl": "http://finisar.realsun.me:1001/",
+      "batchAuditApplication": "api/200/Attendance/BatchAuditApplication",
       "extranetBaseUrl": "http://kingofdinner.realsun.me:9091/",
       "getData": "api/100/table/Retrieve",
       "getSubData": "api/100/table/RetrieveRelTableByHostRecord",
       "batchAuditApplication": "api/200/Attendance/BatchAuditApplication",
+      "startSaveTask": "api/tablethread/StartSaveTask",
+      "retrieveSaveTask": "api/tablethread/RetrieveSaveTask",
       "saveData": "api/100/table/Save",
       "login": "api/Account/Login",
       "changePassWrod": "api/user/ChangePassword",

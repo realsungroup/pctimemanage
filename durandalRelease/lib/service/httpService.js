@@ -279,6 +279,25 @@ define(["untilRE"], function (until) {
     baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
+  //开始批量审批
+  function startApprove(param, doSuccess, doFail) {
+    var params = {
+      resid: 541518842754,
+      data: param,
+    };
+    var url = path.baseUrl + path.startSaveTask;
+    baseRequest("POST", url, params, 5, doSuccess, doFail);
+  }
+
+  //获取审批进度
+  function getApprove(param, doSuccess, doFail) {
+    var params = {
+      taskid: param.taskid,
+    };
+    var url = path.baseUrl + path.retrieveSaveTask;
+    baseRequest("GET", url, params, 5, doSuccess, doFail);
+  }
+
   //已审批数据
   function getPendedData(params, doSuccess, doFail) {
     params.resid = 541518986783;
@@ -469,6 +488,8 @@ define(["untilRE"], function (until) {
     getFixSubmitData: getFixSubmitData,
     getApplyHistoryData: getApplyHistoryData,
     approveDataArr: approveDataArr,
+    startApprove: startApprove,
+    getApprove: getApprove,
     getPendedData: getPendedData,
     getPendedRefuseData: getPendedRefuseData,
     getPendedHistoryData: getPendedHistoryData,

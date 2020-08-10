@@ -17309,14 +17309,15 @@ ko.components.register('cellReasonEdit', {
 });
 define("components/cellEditCpt", function(){});
 
-var ko = require('knockout');
+var ko = require("knockout");
 
-ko.components.register('cellMainCategory', {
-    viewModel: function (params) {
-        this.colspan = params && params.colspan || '2';
-        this.isPend = params && params.isPend || false;
-    },
-    template: "<thead>\
+ko.components.register("cellMainCategory", {
+  viewModel: function (params) {
+    this.colspan = (params && params.colspan) || "2";
+    this.isPend = (params && params.isPend) || false;
+  },
+  template:
+    "<thead>\
 				<tr>\
 					<th>类型</th>\
                     <th>员工工号</th>\
@@ -17330,16 +17331,17 @@ ko.components.register('cellMainCategory', {
 					<th>审批状态</th>\
 					<th data-bind='attr:{colspan:colspan}' >操作</th>\
 				</tr>\
-			</thead>"
+			</thead>",
 });
 
-ko.components.register('cellMainFilter', {
-    viewModel: function (params) {
-        this.title = params && params.title || '';
-        this.subTitle = params && params.subTitle || '';
-        this.isAdd = params && params.isAdd || '';
-    },
-    template: '<thead>\
+ko.components.register("cellMainFilter", {
+  viewModel: function (params) {
+    this.title = (params && params.title) || "";
+    this.subTitle = (params && params.subTitle) || "";
+    this.isAdd = (params && params.isAdd) || "";
+  },
+  template:
+    '<thead>\
 				<tr>\
 					<th>\
 						<!-- Single button -->\
@@ -17361,16 +17363,17 @@ ko.components.register('cellMainFilter', {
 					<th></th>\
 					<th><button type="button" class="btn btn-default btn-block" data-bind="click:$root.goToAddApplying,visible:isAdd">新增</button></th>\
 				</tr>\
-			</thead>'
+			</thead>',
 });
 
 //data主体
-ko.components.register('cellMainData', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-        this.isPend = params && params.isPend || '';
-    },
-    template: "<td data-bind='text:item.C3_533398158705'></td>\
+ko.components.register("cellMainData", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+    this.isPend = (params && params.isPend) || "";
+  },
+  template:
+    "<td data-bind='text:item.C3_533398158705'></td>\
                     <td data-bind='text:item.C3_546777382153'></td>\
                     <td data-bind='text:item.C3_533143303788'></td>\
 					<td data-bind='text:item.C3_555171774775 + \"月\" + item.C3_541449959569 + \"日\" + item.C3_541450006047 + item.C3_541450072499 + \":\" + item.C3_541450107087'></td>\
@@ -17379,76 +17382,77 @@ ko.components.register('cellMainData', {
                     <!-- ko if:isPend-->\
                     <td data-bind='text:item.C3_541451111065'></td>\
                     <!-- /ko -->\
-					<td data-bind='text:item.C3_533407351131'></td>"
-
-
+					<td data-bind='text:item.C3_533407351131'></td>",
 });
 
-ko.components.register('cellMainSubmitBtn', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-    },
-    template: "<td>\
-						<button class='btn btn-primary btn-block' data-bind='visible:((!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\") && item.C3_545927244809 == \"Y\" ),click:function(){$root.showAttach($index)}'>附件</button>\
-                            <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.submit($index)}'>提交</button>\
+ko.components.register("cellMainSubmitBtn", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+  },
+  template:
+    '<td>\
+						<button class=\'btn btn-primary btn-block\' data-bind=\'visible:((!(item.C3_541449606438=="Y")&&item.C3_541449538456=="Y") && item.C3_545927244809 == "Y" ),click:function(){$root.showAttach($index)}\'>附件</button>\
+                            <button class=\'btn btn-primary btn-block\' data-bind=\'visible:(item.C3_541449606438=="Y"||(item.C3_541449538456==null||item.C3_541449538456=="N")),click:function(){$root.submit($index)}\'>提交</button>\
 						</td>\
 					<td>\
-                    <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.delete($index)}'>删除</button>\
-						<button class='btn btn-primary btn-block' data-bind='visible:(!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\"),click:function(){$root.goToApplyDetailPage($index)}'>详情</button>\
-                            <button class='btn btn-primary btn-block' data-bind='visible:(item.C3_541449606438==\"Y\"||(item.C3_541449538456==null||item.C3_541449538456==\"N\")),click:function(){$root.goToEditPage($index)}'>修改</button>\
-					</td>"
+                    <button class=\'btn btn-primary btn-block\' data-bind=\'visible:(item.C3_541449606438=="Y"||(item.C3_541449538456==null||item.C3_541449538456=="N")),click:function(){$root.delete($index)}\'>删除</button>\
+						<button class=\'btn btn-primary btn-block\' data-bind=\'visible:(!(item.C3_541449606438=="Y")&&item.C3_541449538456=="Y"),click:function(){$root.goToApplyDetailPage($index)}\'>详情</button>\
+                            <button class=\'btn btn-primary btn-block\' data-bind=\'visible:(item.C3_541449606438=="Y"||(item.C3_541449538456==null||item.C3_541449538456=="N")),click:function(){$root.goToEditPage($index)}\'>修改</button>\
+					</td>',
 });
 
 // 附件详情
-ko.components.register('cellMainAttachBtn', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-    },
-    template: "<td>\
+ko.components.register("cellMainAttachBtn", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+  },
+  template:
+    "<td>\
 						<button class='btn btn-primary btn-block' data-bind='visible:((!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\") && item.C3_545927244809 == \"Y\" ),click:function(){$root.showAttach($index)}'>附件</button>\
 						</td>\
 					<td>\
 						<button class='btn btn-primary btn-block' data-bind='click:function(){$root.goToApplyDetailPage($index)}'>详情</button>\
-					</td>"
+					</td>",
 });
 
 // 修改并提交
-ko.components.register('cellMainFixSubmitBtn', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-    },
-    template: "<td colspan='2'>\
+ko.components.register("cellMainFixSubmitBtn", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+  },
+  template:
+    "<td colspan='2'>\
 						<button class='btn btn-primary btn-block' data-bind='click:function(){$root.goToFixSubmitPage($index)}'>修改</button>\
-					</td>"
+					</td>",
 });
 
 // 历史记录状态
-ko.components.register('cellMainHistoryState', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-    },
-    template: "<td colspan='2' data-bind='text:item.C3_545948501137'>\
-					</td>"
+ko.components.register("cellMainHistoryState", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+  },
+  template: "<td colspan='2' data-bind='text:item.C3_545948501137'>\
+					</td>",
 });
 
-
 // 审批中搜索栏
-ko.components.register('cellMainFilterSearch', {
-    viewModel: function (params) {
-        // this.isNotPending = params && params.isNotPending || true;
-        this.title = params && params.title || '';
-        this.subTitle = params && params.subTitle || '';
-        this.inputVal = params && params.inputVal || '';
-        this.allSelected = params && params.allSelected || '';
-        this.isPend = params && params.isPend || '';
-        var tmpThCount = params && params.thCount || 6;
-        var tmpThCountArr = [];
-        for(var i = 0 ; i < tmpThCount ; i ++){
-            tmpThCountArr.push('');
-        }
-        this.thCount = tmpThCountArr;
-    },
-    template: '<thead>\
+ko.components.register("cellMainFilterSearch", {
+  viewModel: function (params) {
+    // this.isNotPending = params && params.isNotPending || true;
+    this.title = (params && params.title) || "";
+    this.subTitle = (params && params.subTitle) || "";
+    this.inputVal = (params && params.inputVal) || "";
+    this.allSelected = (params && params.allSelected) || "";
+    this.isPend = (params && params.isPend) || "";
+    var tmpThCount = (params && params.thCount) || 6;
+    var tmpThCountArr = [];
+    for (var i = 0; i < tmpThCount; i++) {
+      tmpThCountArr.push("");
+    }
+    this.thCount = tmpThCountArr;
+  },
+  template:
+    '<thead>\
 				<tr>\
 					<th>\
 						<!-- Single button -->\
@@ -17470,15 +17474,16 @@ ko.components.register('cellMainFilterSearch', {
 					<th ><input class="form-control" type="checkbox" data-bind="checked:allSelected,event:{change:$root.selectAllChange}" /></th>\
                     <!-- /ko -->\
 				</tr>\
-			</thead>'
+			</thead>',
 });
 
 // 审判中退回按钮组
-ko.components.register('cellMainRefuseBtn', {
-    viewModel: function (params) {
-        this.item = params && params.item || '';
-    },
-    template: "<td>\
+ko.components.register("cellMainRefuseBtn", {
+  viewModel: function (params) {
+    this.item = (params && params.item) || "";
+  },
+  template:
+    "<td>\
                 <button class='btn btn-primary btn-block' data-bind='visible:((!(item.C3_541449606438==\"Y\")&&item.C3_541449538456==\"Y\") && item.C3_545927244809 == \"Y\" ),click:function(){$root.showAttach($index)}'>附件</button>\
                 </td>\
             <td>\
@@ -17486,20 +17491,17 @@ ko.components.register('cellMainRefuseBtn', {
             </td>\
             <td class='width-min-50'>\
                 <input class='form-control' type='checkbox' data-bind='checked:item.selected' />\
-            </td>"
+            </td>",
 });
 
-
-
 //分页
-ko.components.register('pageSelectCpt', {
-    viewModel: function (params) {
-        this.pageMark = params && params.pageMark || '';
-        this.pageFirstClick = params && params.pageFirstClick || '';
-
-
-    },
-    template: '<div><nav class="page-control-nav" aria-label="Page navigation">\
+ko.components.register("pageSelectCpt", {
+  viewModel: function (params) {
+    this.pageMark = (params && params.pageMark) || "";
+    this.pageFirstClick = (params && params.pageFirstClick) || "";
+  },
+  template:
+    '<div><nav class="page-control-nav" aria-label="Page navigation">\
                         <ul class="pagination">\
                             <li data-bind="click:pageFirstClick">\
                                 <a href="#" onclick="return false;" aria-label="Previous">\
@@ -17522,7 +17524,7 @@ ko.components.register('pageSelectCpt', {
                                 </a>\
                             </li>\
                         </ul>\
-                    </nav></div>'
+                    </nav></div>',
 });
 
 define("components/cellMainCpt", function(){});
@@ -18161,6 +18163,25 @@ define('httpServiceRE',["untilRE"], function (until) {
     baseRequest("POST", url, params, 5, doSuccess, doFail);
   }
 
+  //开始批量审批
+  function startApprove(param, doSuccess, doFail) {
+    var params = {
+      resid: 541518842754,
+      data: param,
+    };
+    var url = path.baseUrl + path.startSaveTask;
+    baseRequest("POST", url, params, 5, doSuccess, doFail);
+  }
+
+  //获取审批进度
+  function getApprove(param, doSuccess, doFail) {
+    var params = {
+      taskid: param.taskid,
+    };
+    var url = path.baseUrl + path.retrieveSaveTask;
+    baseRequest("GET", url, params, 5, doSuccess, doFail);
+  }
+
   //已审批数据
   function getPendedData(params, doSuccess, doFail) {
     params.resid = 541518986783;
@@ -18351,6 +18372,8 @@ define('httpServiceRE',["untilRE"], function (until) {
     getFixSubmitData: getFixSubmitData,
     getApplyHistoryData: getApplyHistoryData,
     approveDataArr: approveDataArr,
+    startApprove: startApprove,
+    getApprove: getApprove,
     getPendedData: getPendedData,
     getPendedRefuseData: getPendedRefuseData,
     getPendedHistoryData: getPendedHistoryData,
@@ -20115,177 +20138,230 @@ define('main/viewmodels/changePassWord',['durandal/app',
 
         return selfVM
     }); 
-define('dayWorkReportModel',['untilRE'],function () {
-    var workDefaultTime = '166.66';
-    var typeArr = ['排班出勤', '加班', '年假', '事假', '病假', '调休', '欠班', '其他'];
-    var countProp = ['A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28', 'A29', 'A30', 'A31', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'];
-    var workOnVacationProp = ['A21', 'A22','A28', 'A29', 'A30','B03', 'B04', 'B10', 'B11'];
+define('dayWorkReportModel',["untilRE"], function () {
+  var workDefaultTime = "166.66";
+  var typeArr = [
+    "排班出勤",
+    "加班",
+    "年假",
+    "事假",
+    "病假",
+    "调休",
+    "欠班",
+    "其他",
+  ];
+  var countProp = [
+    "A16",
+    "A17",
+    "A18",
+    "A19",
+    "A20",
+    "A21",
+    "A22",
+    "A23",
+    "A24",
+    "A25",
+    "A26",
+    "A27",
+    "A28",
+    "A29",
+    "A30",
+    "A31",
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "B07",
+    "B08",
+    "B09",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+  ];
+  var workOnVacationProp = [
+    "A21",
+    "A22",
+    "A28",
+    "A29",
+    "A30",
+    "B03",
+    "B04",
+    "B10",
+    "B11",
+  ];
 
-    function sumForArr(dataArr,filterArr){
-        var sumNum = 0;
-        dataArr.forEach(function (data) {
-            for (var key in data) {
-                var valOfFloat = parseFloat(data[key]);
-                if (filterArr.indexOf(key) == -1 || isNaN(valOfFloat)) continue;
-                sumNum = sumNum + valOfFloat;
+  function sumForArr(dataArr, filterArr) {
+    var sumNum = 0;
+    dataArr.forEach(function (data) {
+      for (var key in data) {
+        var valOfFloat = parseFloat(data[key]);
+        if (filterArr.indexOf(key) == -1 || isNaN(valOfFloat)) continue;
+        sumNum = sumNum + valOfFloat;
+      }
+    });
+    return sumNum;
+  }
+
+  //计算月排班工时
+  function calMonthWorkTime(dataArr) {
+    dataArr = dataArr.filter(function (item) {
+      return item["考勤项目"] != typeArr[1];
+    });
+    return sumForArr(dataArr, countProp);
+  }
+
+  //一条A16到B15的和
+  function sumForOne(dataArr, index) {
+    dataArr = dataArr.filter(function (item) {
+      return item["考勤项目"] == typeArr[index];
+    });
+    return sumForArr(dataArr, countProp);
+  }
+
+  //休息日加班次数
+  function sumForWorkOnVacation(dataArr) {
+    dataArr = dataArr.filter(function (item) {
+      return item["考勤项目"] == typeArr[1];
+    });
+    return sumForArr(dataArr, workOnVacationProp);
+  }
+
+  //empty model
+  function returnEmptyModelByTitle(model, title) {
+    return {
+      班组名称: model["班组名称"],
+      员工工号: model["员工工号"],
+      员工姓名: model["员工姓名"],
+      考勤项目: title,
+      考勤月份: model["考勤月份"],
+      pnid: model.pnid,
+      A16: "",
+      A17: "",
+      A18: "",
+      A19: "",
+      A20: "",
+      A21: "",
+      A22: "",
+      A23: "",
+      A24: "",
+      A25: "",
+      A26: "",
+      A27: "",
+      A28: "",
+      A29: "",
+      A30: "",
+      A31: "",
+      B01: "",
+      B02: "",
+      B03: "",
+      B04: "",
+      B05: "",
+      B06: "",
+      B07: "",
+      B08: "",
+      B09: "",
+      B10: "",
+      B11: "",
+      B12: "",
+      B13: "",
+      B14: "",
+      B15: "",
+    };
+  }
+
+  return function (dataArr) {
+    var arrayForMap = [];
+    if (Array.isArray(dataArr)) {
+      var map = {};
+      dataArr.forEach(function (item) {
+        var workerNum = item["员工工号"];
+        if (map.hasOwnProperty(workerNum)) map[workerNum].push(item);
+        else map[workerNum] = [item];
+      });
+
+      for (var key in map) {
+        var val = map[key];
+
+        var newVal = [];
+        typeArr.forEach(function (title) {
+          var isHave = false;
+          val.forEach(function (item) {
+            if (item["考勤项目"] == title) {
+              // console.log("----------->" + title);
+              newVal.push(item);
+              isHave = true;
             }
-        })
-        return sumNum;
-    }   
+          });
 
-    //计算月排班工时
-    function calMonthWorkTime(dataArr) {
-        dataArr = dataArr.filter(function (item) {
-           return item['考勤项目'] != typeArr[1];
-        })
-        return sumForArr(dataArr,countProp);
-    }
-
-    //一条A16到B15的和
-    function sumForOne(dataArr,index){
-        dataArr = dataArr.filter(function (item) {
-           return item['考勤项目'] == typeArr[index];
+          if (!isHave) {
+            var emptyM = returnEmptyModelByTitle(val[0], title);
+            newVal.push(emptyM);
+          }
         });
-        return sumForArr(dataArr,countProp);
-    }
 
-    //休息日加班次数
-    function sumForWorkOnVacation(dataArr){
-        dataArr = dataArr.filter(function (item) {
-           return item['考勤项目'] == typeArr[1];
+        var workTime = calMonthWorkTime(newVal);
+        var workOverTime = sumForOne(newVal, 1);
+        var yearVacation = sumForOne(newVal, 2);
+        var thingVacation = sumForOne(newVal, 3);
+        var sickVacation = sumForOne(newVal, 4);
+        var dateChangeVacation = sumForOne(newVal, 5);
+        var noWorkVacation = sumForOne(newVal, 6);
+        var otherVacation = sumForOne(newVal, 7);
+        var workOnVacationCount = sumForWorkOnVacation(newVal, 1);
+        newVal.forEach(function (item) {
+          //月排班工时
+          item.workTime = workTime;
+          //月标准工时
+          item.workDefaultTime = workDefaultTime;
+          //月超出工时
+          item.workExtraTime = fixFloatNum(
+            parseFloat(workTime) - parseFloat(workDefaultTime)
+          );
+          //加班工时
+          item.workOverTime = workOverTime;
+          //年假
+          item.yearVacation = yearVacation;
+          //事假
+          item.thingVacation = thingVacation;
+          //病假
+          item.sickVacation = sickVacation;
+          //调休
+          item.dateChangeVacation = dateChangeVacation;
+          //欠班
+          item.noWorkVacation = noWorkVacation;
+          //其他
+          item.otherVacation = otherVacation;
+
+          item.middleWorkTypeCount = 0;
+
+          item.littleNightWorkTypeCount = 0;
+
+          item.bigNightWorkTypeCount = 0;
+          //休息日加班次数
+          item.workOnVacationCount = workOnVacationCount;
+
+          //备注(总加班工时）
+          item.allWorkTime = fixFloatNum(
+            item.workExtraTime +
+              item.workOverTime -
+              item.dateChangeVacation -
+              item.noWorkVacation -
+              item.thingVacation
+          );
         });
-        return sumForArr(dataArr,workOnVacationProp);
+
+        arrayForMap.push(newVal);
+      }
     }
-
-    //empty model
-    function returnEmptyModelByTitle(model, title) {
-        return {
-            '班组名称': model['班组名称'],
-            '员工工号': model['员工工号'],
-            '员工姓名': model['员工姓名'],
-            '考勤项目': title,
-            'A16': "",
-            'A17': "",
-            'A18': "",
-            'A19': "",
-            'A20': "",
-            'A21': "",
-            'A22': "",
-            'A23': "",
-            'A24': "",
-            'A25': "",
-            'A26': "",
-            'A27': "",
-            'A28': "",
-            'A29': "",
-            'A30': "",
-            'A31': "",
-            'B01': "",
-            'B02': "",
-            'B03': "",
-            'B04': "",
-            'B05': "",
-            'B06': "",
-            'B07': "",
-            'B08': "",
-            'B09': "",
-            'B10': "",
-            'B11': "",
-            'B12': "",
-            'B13': "",
-            'B14': "",
-            'B15': "",
-        }
-    }
-
-    return function (dataArr) {
-
-        var arrayForMap = [];
-        if (Array.isArray(dataArr)) {
-            var map = {};
-            dataArr.forEach(function (item) {
-                var workerNum = item['员工工号']
-                if (map.hasOwnProperty(workerNum)) map[workerNum].push(item)
-                else map[workerNum] = [item];
-            })
-
-
-            for (var key in map) {
-                var val = map[key];
-
-                var newVal = [];
-                typeArr.forEach(function (title) {
-                    var isHave = false;
-                    val.forEach(function (item) {
-                        if (item['考勤项目'] == title) {
-                            // console.log("----------->" + title);
-                            newVal.push(item);
-                            isHave = true;
-                        }
-                    })
-
-                    if (!isHave) {
-                        var emptyM = returnEmptyModelByTitle(val[0], title);
-                        newVal.push(emptyM);
-                    }
-                })
-
-                
-                var workTime = calMonthWorkTime(newVal);
-                var workOverTime = sumForOne(newVal,1);
-                var yearVacation = sumForOne(newVal,2);
-                var thingVacation = sumForOne(newVal,3);
-                var sickVacation = sumForOne(newVal,4);
-                var dateChangeVacation = sumForOne(newVal,5);
-                var noWorkVacation = sumForOne(newVal,6);
-                var otherVacation = sumForOne(newVal,7);
-                var workOnVacationCount = sumForWorkOnVacation(newVal,1);
-                newVal.forEach(function(item){
-                    //月排班工时
-                    item.workTime = workTime;
-                    //月标准工时
-                    item.workDefaultTime = workDefaultTime;
-                    //月超出工时
-                    item.workExtraTime = fixFloatNum(parseFloat(workTime) - parseFloat(workDefaultTime));
-                    //加班工时
-                    item.workOverTime = workOverTime;
-                    //年假
-                    item.yearVacation = yearVacation;
-                    //事假
-                    item.thingVacation = thingVacation;
-                    //病假
-                    item.sickVacation =sickVacation;
-                    //调休
-                    item.dateChangeVacation = dateChangeVacation;
-                    //欠班
-                    item.noWorkVacation = noWorkVacation;
-                    //其他
-                    item.otherVacation = otherVacation;
-
-                    item.middleWorkTypeCount = 0;
-
-                    item.littleNightWorkTypeCount = 0;
-
-                    item.bigNightWorkTypeCount = 0;
-                    //休息日加班次数
-                    item.workOnVacationCount = workOnVacationCount;
-
-                    //备注(总加班工时）
-                    item.allWorkTime = fixFloatNum(item.workExtraTime + item.workOverTime -item.dateChangeVacation - item.noWorkVacation -item.thingVacation)
-                })
-
-                
-
-                arrayForMap.push(newVal);
-            }
-
-
-        }
-        return arrayForMap;
-
-
-    }
+    return arrayForMap;
+  };
 });
+
 /*! FileSaver.js v1.3.6
  *
  * A saveAs() FileSaver implementation.
@@ -21344,120 +21420,170 @@ define('main/viewmodels/pended',['durandal/app',
 
 
   });
-define('main/viewmodels/pending',['durandal/app',
-  'knockout',
-  'plugins/router',
-  'httpServiceRE',
-  'components/headerCpt',
-  'components/cellMainCpt',
-  'untilRE', 'baseVM'],
-  function (app, ko, router, httpService, headerCpt, cellMainCpt, ut, baseVM) {
-    var selfVM = new baseVM();
-    var self = selfVM;
-    selfVM.model.subTitle = '审批中';
-    selfVM.model.allSelected = ko.observable(false),
+define('main/viewmodels/pending',[
+  "durandal/app",
+  "knockout",
+  "plugins/router",
+  "httpServiceRE",
+  "components/headerCpt",
+  "components/cellMainCpt",
+  "untilRE",
+  "baseVM",
+], function (app, ko, router, httpService, headerCpt, cellMainCpt, ut, baseVM) {
+  var selfVM = new baseVM();
+  var self = selfVM;
+  selfVM.model.subTitle = "审批中";
+  (selfVM.model.allSelected = ko.observable(false)),
+    //获取数据
+    (selfVM.getData = function (type) {
+      var keyStr = "";
+      keyStr = self.model.selectedCategory();
+      keyStr = keyStr == "全部" ? "" : "C3_533398158705 ='" + keyStr + "'";
 
+      var param = {
+        subresid: "",
+        cmswhere: keyStr,
+        key: self.model.inputVal() ? self.model.inputVal() : "",
+      };
 
-      //获取数据
-      selfVM.getData = function (type) {
-        
-        var keyStr = '';
-        keyStr = self.model.selectedCategory();
-        keyStr = keyStr == '全部' ? '' : "C3_533398158705 ='" + keyStr + "'"
+      param.pageSize = 200;
+      if (!type) {
+        //刷新
+        param.pageIndex = 0;
+      } else {
+        //加载
+        param.pageIndex = self.model.pageIndex;
+      }
 
-        var param = {
-          'subresid': '',
-          'cmswhere': keyStr,
-          'key': self.model.inputVal() ? self.model.inputVal() : ''
-        }
-
-        param.pageSize = 200;
-        if (!type) {//刷新
-          param.pageIndex = 0;
-
-        } else {//加载
-          param.pageIndex = self.model.pageIndex;
-        }
-
-
-        selfVM.model.isLoading = true;
-        httpService.getPendingData(param, function (data) {
-
+      selfVM.model.isLoading = true;
+      httpService.getPendingData(
+        param,
+        function (data) {
           if (data && data.data) {
             var dataArr = data.data;
             dataArr.forEach(function (val) {
-              val.selected = false
-            })
+              val.selected = false;
+            });
             self.model.data(dataArr);
             //设置页标（base中）
-            self.setPageMark(param,data);
+            self.setPageMark(param, data);
 
             if (dataArr.length < param.pageSize) self.model.noMore = true;
             else self.model.noMore = false;
-
           }
           selfVM.model.isLoading = false;
-        }, function () {
+        },
+        function () {
           selfVM.model.isLoading = false;
-        });
-      }
-
-    selfVM.goToApplyDetailPage = function (index) {
-      var tmpData = self.model.data()[index()];
-      // var tmpJsonData = JSON.stringify(tmpData);
-      // router.navigate("#applyDetail?data=" + tmpJsonData + '&willRefuse=true');
-
-      globSingleData = JSON.stringify(tmpData);
-      router.navigate("#applyDetail?willRefuse=true");
-    }
-
-
-    //全选
-    selfVM.selectAllChange = function (e) {
-       
-      var tmpDataArr = self.model.data();
-      for (var i = 0; i < tmpDataArr.length; i++) {
-        if (self.model.allSelected()) tmpDataArr[i].selected = true;
-        else tmpDataArr[i].selected = false;
-      }
-      self.model.data([])
-      self.model.data(tmpDataArr)
-    }
-
-    //审批
-    selfVM.approve = function () {
-       
-      // for(var i = 0 ; i < self.data.selectMap.le)
-      var submitArr = [];
-      self.model.data().forEach(function (item) {
-        if (item.selected) {
-          var i = {
-            REC_ID: item.REC_ID,
-            _id: 1,
-            _state: "modified",
-            C3_541454801460: 'Y'
-          };
-
-          submitArr.push(i);
         }
-      })
-      if (!submitArr.length) {
-        cmAlert("请勾选至少一个事件");
-        return;
-      }
+      );
+    });
 
+  selfVM.goToApplyDetailPage = function (index) {
+    var tmpData = self.model.data()[index()];
+    // var tmpJsonData = JSON.stringify(tmpData);
+    // router.navigate("#applyDetail?data=" + tmpJsonData + '&willRefuse=true');
 
-      // common.customLoading();
-      httpService.approveDataArr(submitArr, function (data) {
-        cmAlert('审批成功');
-        self.getData(1);
-      }, function () {
-        cmAlert('审批失败');
-      });
+    globSingleData = JSON.stringify(tmpData);
+    router.navigate("#applyDetail?willRefuse=true");
+  };
 
+  //全选
+  selfVM.selectAllChange = function (e) {
+    var tmpDataArr = self.model.data();
+    for (var i = 0; i < tmpDataArr.length; i++) {
+      if (self.model.allSelected()) tmpDataArr[i].selected = true;
+      else tmpDataArr[i].selected = false;
     }
-    return selfVM;
-  }); 
+    self.model.data([]);
+    self.model.data(tmpDataArr);
+  };
+
+  //审批
+  selfVM.approve = function () {
+    // for(var i = 0 ; i < self.data.selectMap.le)
+    var submitArr = [];
+    self.model.data().forEach(function (item) {
+      if (item.selected) {
+        var i = {
+          REC_ID: item.REC_ID,
+          _id: 1,
+          _state: "modified",
+          C3_541454801460: "Y",
+        };
+
+        submitArr.push(i);
+      }
+    });
+    if (!submitArr.length) {
+      cmAlert("请勾选至少一个事件");
+      return;
+    }
+
+    // common.customLoading();
+    let taskid, timer;
+    function getTaskInfo(taskid) {
+      httpService.getApprove(
+        { taskid, includeData: true },
+        function (data) {
+          if (data.IsCompleted) {
+            // 当前任务已完成
+            cmAlert(`<div style='text-align:center'>
+                  <h3>审批已完成</h3>
+                  <div>
+                    <div style='position:relative;height:8px;border-radius:4px;border:1px #000 solid '>
+                      <div style='position:absolute;width:100%;height:100%;background:#000;height:100%'></div>
+                    </div>
+                  </div>
+                  <div>
+                    ${data.data.intCurrent} / ${submitArr.length}
+                  </div>
+                 <div/>`);
+            self.getData(1);
+          } else {
+            // 当前任务未完成
+            timer = setTimeout(() => {
+              getTaskInfo(taskid);
+            }, 1000);
+            cmAlert(`<div style='text-align:center'>
+                  <h3>审批中</h3>
+                  <div>
+                    <div style='position:relative;height:8px;border-radius:4px;border:1px #000 solid '>
+                      <div style='position:absolute;width:${(
+                        (data.data.intCurrent / submitArr.length) *
+                        100
+                      ).toFixed(
+                        2
+                      )}%;height:100%;background:#000;height:100%'></div>
+                    </div>
+                  </div>
+                  <div>
+                    ${data.data.intCurrent} / ${submitArr.length}
+                  </div>
+                 <div/>`);
+          }
+        },
+        function () {
+          console.log(err);
+          timer = setTimeout(() => {
+            getTaskInfo(taskid);
+          }, 1000);
+        }
+      );
+    }
+    httpService.startApprove(
+      submitArr,
+      function (data) {
+        getTaskInfo(data.taskid);
+      },
+      function () {
+        cmAlert("审批失败");
+      }
+    );
+  };
+  return selfVM;
+});
+
 define('main/viewmodels/queryDayReportDetail',['durandal/app', 'knockout', 'plugins/router', 'components/headerCpt'],
     function (app, ko, router, headerCpt) {
 
