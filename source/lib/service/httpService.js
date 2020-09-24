@@ -395,6 +395,12 @@ define(["untilRE"], function (until) {
     var url = path.loginBaseUrl + path.saveData;
     baseRequest("POST", url, params, 4, doSuccess, doFail);
   }
+  //撤销微信考勤申请记录
+  function saveApplyDataForWX(params, doSuccess, doFail) {
+    params.resid = "552993482400";
+    var url = path.loginBaseUrl + path.saveData;
+    baseRequest("POST", url, params, 4, doSuccess, doFail);
+  }
 
   //获取考勤员日报数据
   function getEmployeeDayWorkReportData(params, doSuccess, doFail) {
@@ -504,6 +510,7 @@ define(["untilRE"], function (until) {
     getApplyDataForWX: getApplyDataForWX,
     getApplyPendDataForWX: getApplyPendDataForWX,
     cancelApplyDataForWX: cancelApplyDataForWX,
+    saveApplyDataForWX: saveApplyDataForWX,
     getDayWorkReportData: getDayWorkReportData,
     getReadBookListData: getReadBookListData,
     getReadBookData: getReadBookData,
