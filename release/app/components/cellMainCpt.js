@@ -18,6 +18,7 @@ ko.components.register("cellMainCategory", {
                     <th>审批人</th>\
                     <!-- /ko-->\
 					<th>审批状态</th>\
+					<th>申请原因</th>\
 					<th data-bind='attr:{colspan:colspan}' >操作</th>\
 				</tr>\
 			</thead>",
@@ -71,7 +72,8 @@ ko.components.register("cellMainData", {
                     <!-- ko if:isPend-->\
                     <td data-bind='text:item.C3_541451111065'></td>\
                     <!-- /ko -->\
-					<td data-bind='text:item.C3_533407351131'></td>",
+          <td data-bind='text:item.C3_533407351131'></td>\
+          <td data-bind='text:item.C3_533143291117'></td>",
 });
 
 ko.components.register("cellMainSubmitBtn", {
@@ -159,7 +161,7 @@ ko.components.register("cellMainFilterSearch", {
                     <!-- /ko -->\
 					<th data-bind="attr:{colspan:isPend ? \'2\' : \'3\'}" ><input data-bind="textInput:inputVal,event:{change:$root.kvoInput}" class="form-control" /></th>\
                     <!-- ko if:isPend -->\
-					<th ><button class="btn btn-primary btn-block" data-bind="click:$root.approve">审批</button></th>\
+					<th colspan="2"><button class="btn btn-primary btn-block" data-bind="click:$root.approve">审批</button></th>\
 					<th ><input class="form-control" type="checkbox" data-bind="checked:allSelected,event:{change:$root.selectAllChange}" /></th>\
                     <!-- /ko -->\
 				</tr>\

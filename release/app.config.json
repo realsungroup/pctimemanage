@@ -2,7 +2,7 @@
   "app": {
     "path": {
       "baseUrl": "http://kingofdinner.realsun.me:9091/",
-      "loginBaseUrl": "http://ngrok81.realsun.me/",
+      "loginBaseUrl": "http://10.108.2.66:9091/",
       "batchAuditApplication": "api/200/Attendance/BatchAuditApplication",
       "extranetBaseUrl": "http://kingofdinner.realsun.me:9091/",
       "getData": "api/100/table/Retrieve",
