@@ -1,8 +1,8 @@
 {
   "app": {
     "path": {
-      "baseUrl": "http://finisar.realsun.me:1001/",
-      "loginBaseUrl": "http://finisar.realsun.me:1001/",
+      "baseUrl": "http://kingofdinner.realsun.me:9091/",
+      "loginBaseUrl": "http://10.108.2.66:9091/",
       "batchAuditApplication": "api/200/Attendance/BatchAuditApplication",
       "extranetBaseUrl": "http://kingofdinner.realsun.me:9091/",
       "getData": "api/100/table/Retrieve",
