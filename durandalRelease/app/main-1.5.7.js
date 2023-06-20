@@ -22056,8 +22056,20 @@ define('main/viewmodels/wxApply',['durandal/app', 'knockout', 'plugins/router', 
                     
 
                     dataArr.forEach(function(item){
-                        item.C3_546778248258 = new Date(item.C3_546778248258).format("yyyy-MM-dd hh:mm:ss");
-                        item.C3_546778254638 = new Date(item.C3_546778254638).format("yyyy-MM-dd hh:mm:ss");
+                        if (item.C3_546778248258) {
+              item.C3_546778248258 = new Date(item.C3_546778248258).format(
+                "yyyy-MM-dd hh:mm:ss"
+              );
+            } else {
+              item.C3_546778248258 = "";
+            }
+            if (item.C3_546778254638) {
+              item.C3_546778254638 = new Date(item.C3_546778254638).format(
+                "yyyy-MM-dd hh:mm:ss"
+              );
+            } else {
+              item.C3_546778254638 = "";
+            }
                     })
 
 
